@@ -32,13 +32,13 @@
     <style>
         body { background-color: #030712; }
         .glass-panel { background-color: #111827; border: 1px solid #1F2937; backdrop-filter: blur(12px); }
-        .glow-blue { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.2); }
+        .glow-blue { box-shadow: 0 0 40px -5px rgba(59, 130, 246, 0.25); }
         /* Hide scrollbars elegantly */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="text-gray-200 font-sans min-h-screen antialiased selection:bg-blue-600 selection:text-white">
+<body class="text-gray-200 font-sans min-h-screen antialiased selection:bg-blue-600 selection:text-white pb-20 sm:pb-0">
 
     <div role="status" class="w-full bg-gray-950/80 border-b border-bordercolor text-center py-2.5 px-4 text-xs tracking-wider text-gray-400 font-medium z-50 sticky top-0 backdrop-blur-md">
         <span class="inline-flex items-center gap-2">
@@ -50,34 +50,46 @@
         </span>
     </div>
 
-    <header class="relative overflow-hidden pt-12 pb-20 border-b border-gray-950">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+    <header id="hero-anchor" class="relative overflow-hidden pt-12 pb-16 border-b border-gray-950">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/10 blur-[130px] rounded-full pointer-events-none"></div>
         
         <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
             <div class="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full mb-8">
                 Global Infrastructure Active
             </div>
             
-            <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase max-w-4xl mx-auto leading-[1.1]">
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase max-w-4xl mx-auto leading-[1.1]">
                 DISCOVER HIGH-MOMENTUM PRODUCTS <span class="text-blue-500">BEFORE THE MARKET DOES.</span>
             </h1>
             
-            <p class="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p class="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
                 OmniCatch uses advanced trend intelligence to identify emerging product opportunities across global marketplaces, advertising ecosystems, and consumer demand signals. Discover opportunities earlier and act with confidence.
             </p>
 
-            <div class="glass-panel p-6 sm:p-10 rounded-2xl max-w-lg mx-auto text-left shadow-2xl relative border-t border-t-gray-700/30 glow-blue">
+            <div class="flex flex-wrap justify-center gap-3 mb-12 max-w-2xl mx-auto text-xs font-semibold tracking-wide">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-300">
+                    <span class="text-blue-400">⚡</span> Discover trends before competitors
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-300">
+                    <span class="text-emerald-400">📈</span> Analyze profit opportunities
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-300">
+                    <span class="text-purple-400">🚀</span> Launch products faster
+                </span>
+            </div>
+
+            <div class="glass-panel p-6 sm:p-10 rounded-2xl max-w-lg mx-auto text-left relative border border-blue-500/40 glow-blue shadow-2xl">
                 <h2 class="text-xl font-bold text-white mb-1.5">Join the Creator Waitlist</h2>
                 <p class="text-xs text-gray-400 mb-6">Secure your founding member status before registrations close.</p>
                 
-                <form id="waitlistForm" onsubmit="triggerSuccessModal(event)" class="space-y-4">
+                <form onsubmit="triggerSuccessModal(event)" class="space-y-4">
                     <div class="relative">
                         <label for="userEmail" class="sr-only">Email Address</label>
                         <input id="userEmail" type="email" required placeholder="Enter your professional email" 
-                            class="w-full bg-gray-950 border border-bordercolor rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all focus:ring-1 focus:ring-blue-500">
+                            class="w-full bg-gray-950 border border-gray-700 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all focus:ring-1 focus:ring-blue-500">
                     </div>
                     <button type="submit" 
-                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-[0.99]">
+                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-[0.99]">
                         Join the Creator Waitlist →
                     </button>
                 </form>
@@ -91,70 +103,13 @@
         </div>
     </header>
 
-    <section class="max-w-6xl mx-auto px-6 py-20">
-        <h2 class="text-center text-xs font-bold tracking-widest text-blue-400 uppercase mb-12">Why Creators Choose OmniCatch</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
-                <div class="text-blue-500 font-bold text-xl mb-3">🤖</div>
-                <h3 class="text-sm font-bold text-white mb-2">AI-Powered Trend Discovery</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Continuously analyzes emerging product demand signals and market activity.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
-                <div class="text-blue-500 font-bold text-xl mb-3">🌍</div>
-                <h3 class="text-sm font-bold text-white mb-2">Global Marketplace Intelligence</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Tracks opportunities across leading marketplaces and digital ecosystems.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
-                <div class="text-blue-500 font-bold text-xl mb-3">🛡️</div>
-                <h3 class="text-sm font-bold text-white mb-2">Verified Supplier Insights</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Connects opportunities with reliable, high-integrity sourcing intelligence.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
-                <div class="text-blue-500 font-bold text-xl mb-3">⚡</div>
-                <h3 class="text-sm font-bold text-white mb-2">Real-Time Opportunity Alerts</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Receive critical trend notifications instantly as strategic opportunities emerge.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto px-6 py-12">
-        <h2 class="text-xl font-black tracking-wide text-gray-400 uppercase mb-10 border-b border-gray-900 pb-3">Core Platform Capabilities</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                    <div class="text-lg mb-3">🌐</div>
-                    <h3 class="text-base font-bold text-white mb-1">Global Trend Intelligence</h3>
-                    <p class="text-xs text-blue-400 font-medium mb-3">Discover Demand Before It Peaks</p>
-                    <p class="text-xs text-gray-400 leading-relaxed">Our intelligence systems continuously analyze product demand patterns, consumer behavior, and marketplace activity worldwide.</p>
-                </div>
-            </div>
-            <div class="glass-panel p-6 rounded-xl border-blue-500/20 relative flex flex-col justify-between">
-                <span class="absolute top-4 right-4 bg-blue-500/10 text-blue-400 font-mono text-[9px] uppercase px-2 py-0.5 rounded border border-blue-500/20 font-bold tracking-widest">Pro</span>
-                <div>
-                    <div class="text-lg mb-3">⚡</div>
-                    <h3 class="text-base font-bold text-white mb-1">Instant Opportunity Alerts</h3>
-                    <p class="text-xs text-blue-400 font-medium mb-3">Be First. Not Faster.</p>
-                    <p class="text-xs text-gray-400 leading-relaxed">Receive immediate notifications through integrated messaging streams the exact moment emerging alpha opportunities are detected.</p>
-                </div>
-            </div>
-            <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                    <div class="text-lg mb-3">📈</div>
-                    <h3 class="text-base font-bold text-white mb-1">Predictive Profit Analytics</h3>
-                    <p class="text-xs text-blue-400 font-medium mb-3">Decisions Powered by Data</p>
-                    <p class="text-xs text-gray-400 leading-relaxed">Analyze metrics, trend trajectories, wholesale profit potential, and critical market velocity benchmarks through a centralized system canvas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto px-6 py-20">
-        <div class="text-center mb-12">
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="text-center mb-10">
             <h2 class="text-2xl sm:text-3xl font-black text-white uppercase mb-2">Inside the OmniCatch Command Center</h2>
-            <p class="text-sm text-gray-400 max-w-xl mx-auto">See how trend intelligence, profitability metrics, and supplier insights come together in one streamlined dashboard layout.</p>
+            <p class="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto">See how trend intelligence, profitability metrics, and supplier insights come together in one streamlined dashboard layout.</p>
         </div>
 
-        <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border-t border-t-gray-800/40 glow-blue max-w-4xl mx-auto">
+        <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border border-gray-800 glow-blue max-w-4xl mx-auto">
             <div class="bg-gray-950/60 px-4 py-3 border-b border-bordercolor flex items-center justify-between">
                 <div class="flex items-center gap-1.5">
                     <div class="w-2.5 h-2.5 rounded-full bg-gray-800"></div>
@@ -168,23 +123,23 @@
             <div class="p-4 sm:p-6 bg-gray-950/20 space-y-6">
                 <div class="grid grid-cols-3 gap-3 sm:gap-4">
                     <div class="bg-gray-950/50 p-3 sm:p-4 rounded-xl border border-bordercolor">
-                        <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Total Items Monitored</div>
+                        <div class="text-[9px] sm:text-[10px] uppercase font-bold text-gray-500 tracking-wider">Total Items Monitored</div>
                         <div class="text-base sm:text-2xl font-black text-white mt-1">24,581</div>
                     </div>
                     <div class="bg-gray-950/50 p-3 sm:p-4 rounded-xl border border-bordercolor">
-                        <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Breakout Trends</div>
+                        <div class="text-[9px] sm:text-[10px] uppercase font-bold text-gray-500 tracking-wider">Breakout Trends</div>
                         <div class="text-base sm:text-2xl font-black text-blue-500 mt-1">127</div>
                     </div>
                     <div class="bg-gray-950/50 p-3 sm:p-4 rounded-xl border border-bordercolor">
-                        <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Avg Margin</div>
+                        <div class="text-[9px] sm:text-[10px] uppercase font-bold text-gray-500 tracking-wider">Avg Margin</div>
                         <div class="text-base sm:text-2xl font-black text-emerald-400 mt-1">64.2%</div>
                     </div>
                 </div>
 
-                <div class="bg-gray-900/40 border border-bordercolor rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="bg-gray-900/40 border border-bordercolor rounded-xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div class="space-y-1">
                         <span class="inline-block bg-blue-500/10 text-blue-400 text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded">Breakout Trend</span>
-                        <h4 class="text-base font-bold text-white">Portable High-Velocity Blender</h4>
+                        <h4 class="text-sm sm:text-base font-bold text-white">Portable High-Velocity Blender</h4>
                         <p class="text-xs text-gray-500">Target Segment: Fitness & Home Electronics</p>
                     </div>
 
@@ -212,7 +167,7 @@
                         </div>
                     </div>
 
-                    <div class="flex sm:flex-col gap-2 w-full sm:w-auto text-[10px] font-semibold">
+                    <div class="flex sm:flex-row md:flex-col gap-2 w-full md:w-auto text-[10px] font-semibold">
                         <button disabled class="flex-1 bg-gray-900 border border-bordercolor text-gray-400 px-3 py-2 rounded-md cursor-not-allowed text-center whitespace-nowrap">Access Supplier</button>
                         <button disabled class="flex-1 bg-blue-600/10 text-blue-400 px-3 py-2 rounded-md cursor-not-allowed text-center whitespace-nowrap">Generate AI Script</button>
                     </div>
@@ -221,27 +176,84 @@
         </div>
     </section>
 
+    <section class="max-w-6xl mx-auto px-6 py-12">
+        <h2 class="text-center text-xs font-bold tracking-widest text-blue-400 uppercase mb-12">Why Creators Choose OmniCatch</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
+                <div class="text-blue-500 font-bold text-xl mb-3">🤖</div>
+                <h3 class="text-sm font-bold text-white mb-2">AI-Powered Trend Discovery</h3>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Continuously analyzes emerging product demand signals and market activity.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
+                <div class="text-blue-500 font-bold text-xl mb-3">🌍</div>
+                <h3 class="text-sm font-bold text-white mb-2">Global Marketplace Intelligence</h3>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Tracks opportunities across leading marketplaces and digital ecosystems.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
+                <div class="text-blue-500 font-bold text-xl mb-3">🛡️</div>
+                <h3 class="text-sm font-bold text-white mb-2">Verified Supplier Insights</h3>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Connects opportunities with reliable, high-integrity sourcing intelligence.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-xl hover:border-gray-700 transition-colors">
+                <div class="text-blue-500 font-bold text-xl mb-3">⚡</div>
+                <h3 class="text-sm font-bold text-white mb-2">Real-Time Opportunity Alerts</h3>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Receive critical trend notifications instantly as strategic opportunities emerge.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 py-12">
+        <h2 class="text-xl font-black tracking-wide text-gray-400 uppercase mb-10 border-b border-gray-900 pb-3">Core Platform Capabilities</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="text-lg mb-3">🌐</div>
+                    <h3 class="text-base font-bold text-white mb-1">Global Trend Intelligence</h3>
+                    <p class="text-xs text-blue-400 font-medium mb-3">Discover Demand Before It Peaks</p>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Our intelligence systems continuously analyze product demand patterns, consumer behavior, and marketplace activity worldwide.</p>
+                </div>
+            </div>
+            <div class="glass-panel p-6 rounded-xl border-blue-500/20 relative flex flex-col justify-between">
+                <span class="absolute top-4 right-4 bg-blue-500/10 text-blue-400 font-mono text-[9px] uppercase px-2 py-0.5 rounded border border-blue-500/20 font-bold tracking-widest">Pro</span>
+                <div>
+                    <div class="text-lg mb-3">⚡</div>
+                    <h3 class="text-base font-bold text-white mb-1">Instant Opportunity Alerts</h3>
+                    <p class="text-xs text-blue-400 font-medium mb-3">Be First. Not Faster.</p>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Receive immediate notifications through integrated messaging streams the exact moment emerging alpha opportunities are detected.</p>
+                </div>
+            </div>
+            <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="text-lg mb-3">📈</div>
+                    <h3 class="text-base font-bold text-white mb-1">Predictive Profit Analytics</h3>
+                    <p class="text-xs text-blue-400 font-medium mb-3">Decisions Powered by Data</p>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Analyze metrics, trend trajectories, wholesale profit potential, and critical market velocity benchmarks through a centralized system canvas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="max-w-4xl mx-auto px-6 py-12 text-center">
         <h2 class="text-xl font-black text-white uppercase mb-2">Trusted by Early Adopters</h2>
-        <p class="text-sm text-gray-400 mb-10 max-w-lg mx-auto">Creators, marketers, and entrepreneurs are already securing access to OmniCatch before public launch.</p>
+        <p class="text-xs sm:text-sm text-gray-400 mb-10 max-w-lg mx-auto">Creators, marketers, and entrepreneurs are already securing access to OmniCatch before public launch.</p>
         
         <div class="grid grid-cols-3 gap-4 font-mono">
             <div class="p-4 bg-gray-950/40 border border-bordercolor rounded-xl">
-                <div class="text-xl sm:text-3xl font-black text-white">412+</div>
-                <div class="text-[9px] sm:text-xs text-gray-500 uppercase mt-1">Waitlist Members</div>
+                <div class="text-lg sm:text-3xl font-black text-white">412+</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase mt-1">Creators & Marketers Joined</div>
             </div>
             <div class="p-4 bg-gray-950/40 border border-bordercolor rounded-xl">
-                <div class="text-xl sm:text-3xl font-black text-blue-500">24K+</div>
+                <div class="text-lg sm:text-3xl font-black text-blue-500">24K+</div>
                 <div class="text-[9px] sm:text-xs text-gray-500 uppercase mt-1">Products Analyzed</div>
             </div>
             <div class="p-4 bg-gray-950/40 border border-bordercolor rounded-xl">
-                <div class="text-xl sm:text-3xl font-black text-emerald-400">64%</div>
+                <div class="text-lg sm:text-3xl font-black text-emerald-400">64%</div>
                 <div class="text-[9px] sm:text-xs text-gray-500 uppercase mt-1">Avg Opportunity Margin</div>
             </div>
         </div>
     </section>
 
-    <section class="max-w-4xl mx-auto px-6 py-20">
+    <section class="max-w-4xl mx-auto px-6 py-16">
         <h2 class="text-center text-xl font-black text-white uppercase mb-12">Choose Your Competitive Advantage</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
             
@@ -249,7 +261,7 @@
                 <div>
                     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider">Starter Access</h3>
                     <div class="text-3xl font-black text-white my-4">₹0 <span class="text-xs text-gray-600 font-normal">/ Lifetime</span></div>
-                    <ul class="text-xs text-gray-400 space-y-3 mb-8">
+                    <ul class="text-xs sm:text-sm text-gray-400 space-y-3 mb-8">
                         <li class="flex items-center gap-2"><span>•</span> Daily curated product spotlight</li>
                         <li class="flex items-center gap-2"><span>•</span> Basic market overview</li>
                         <li class="flex items-center gap-2"><span>•</span> Curated descriptions</li>
@@ -265,24 +277,9 @@
                 <div>
                     <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wider">OmniCatch Pro</h3>
                     <div class="text-3xl font-black text-white my-4">₹99 <span class="text-xs text-gray-500 font-normal">/ Month</span></div>
-                    <ul class="text-xs text-gray-200 space-y-3 mb-8">
+                    <ul class="text-xs sm:text-sm text-gray-200 space-y-3 mb-8">
                         <li class="flex items-center gap-2 text-white font-medium"><span>✓</span> Unlimited real-time product discoveries</li>
                         <li class="flex items-center gap-2 text-white font-medium"><span>✓</span> Instant Telegram alerts</li>
                         <li class="flex items-center gap-2 text-white font-medium"><span>✓</span> Instant WhatsApp alerts</li>
                         <li class="flex items-center gap-2"><span>✓</span> AI-powered supplier matching</li>
-                        <li class="flex items-center gap-2"><span>✓</span> Automated ad copy generation</li>
-                        <li class="flex items-center gap-2"><span>✓</span> Predictive profit forecasting</li>
-                        <li class="flex items-center gap-2"><span>✓</span> Advanced trend analytics</li>
-                        <li class="flex items-center gap-2"><span>✓</span> Early-access opportunity signals</li>
-                    </ul>
-                </div>
-                <button disabled class="w-full bg-blue-600/10 border border-blue-500/30 text-blue-400 font-bold text-xs py-3 rounded-lg cursor-not-allowed">Unlocks Post-Launch</button>
-            </div>
-        </div>
-        <p class="text-center text-[11px] text-gray-600 font-medium mt-6">Note: Early access pricing may increase after public launch sequence concludes.</p>
-    </section>
-
-    <section class="max-w-4xl mx-auto px-6 py-12">
-        <h2 class="text-center text-xl font-black text-white uppercase mb-12">Development Roadmap</h2>
-        <div class="space-y-4 max-w-lg mx-auto">
-            <div class="glass-pa
+                        <li c
