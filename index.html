@@ -105,31 +105,6 @@
         </div>
     </section>
 
-    <section id="capabilities" class="max-w-6xl mx-auto px-6 py-12">
-        <h2 class="text-xl font-black tracking-wide text-gray-400 uppercase mb-10 border-b border-gray-900 pb-3">Core Platform Capabilities</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-6 rounded-xl">
-                <div class="text-lg mb-3">🌐</div>
-                <h3 class="text-base font-bold text-white mb-1">Global Trend Intelligence</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Discover Demand Before It Peaks</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Our infrastructure background layer processes ongoing consumer parameters and market volumes to track breakout patterns globally.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl border-blue-500/20 relative">
-                <span class="absolute top-4 right-4 bg-blue-500/10 text-blue-400 font-mono text-[9px] uppercase px-2 py-0.5 rounded border border-blue-500/20 font-bold tracking-widest">Pro</span>
-                <div class="text-lg mb-3">⚡</div>
-                <h3 class="text-base font-bold text-white mb-1">Instant Opportunity Alerts</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Be First. Not Faster.</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Integrated API webhooks push emerging alert trajectories directly into your private messaging communication feeds instantly.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl">
-                <div class="text-lg mb-3">📈</div>
-                <h3 class="text-base font-bold text-white mb-1">Predictive Profit Analytics</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Decisions Powered by Data</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Track precise operational cost factors, expected wholesale margins, and revenue trajectory indexes through an absolute control module.</p>
-            </div>
-        </div>
-    </section>
-
     <section id="pricing" class="max-w-4xl mx-auto px-6 py-12">
         <h2 class="text-center text-xl font-black text-white uppercase mb-10">Choose Your Advantage</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -201,7 +176,7 @@
 
     <script>
         const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
-        const SUPABASE_KEY = "eyJhYmdjOiI1IuZ1I1N+IsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YXZjbHRocHJ0ZHRpbWpxanN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwNDQ3NzgsImV4cCI6MjA1NTYyMDc3OH0.S69Z2b_s5fP7nIq8pQ4J9y2l1O9B5d5x4y3z2w1v0u8";
+        const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
 
         async function submitToWaitlist(e) {
             e.preventDefault();
@@ -230,7 +205,7 @@
                     emailInput.value = '';
                     document.getElementById('successModal').classList.replace('hidden', 'flex');
                 } else {
-                    alert("Submission issue. Please make sure your Supabase waitlist table Row Level Security (RLS) is fully Disabled.");
+                    alert("Network configuration synced incorrectly. Please verify your data pipeline headers.");
                 }
             } catch (err) {
                 alert("Network communication error. Please try again.");
