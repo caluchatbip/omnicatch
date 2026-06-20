@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OmniCatch | Global Trend Intelligence Platform</title>
-    <meta name="description" content="Discover high-momentum product opportunities before the market does. OmniCatch delivers trend intelligence.">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #030712; }
@@ -15,7 +14,7 @@
 </head>
 <body class="text-gray-200 font-sans min-h-screen antialiased selection:bg-blue-600 selection:text-white pb-20 sm:pb-0">
 
-    <div class="w-full bg-gray-950/80 border-b border-bordercolor text-center py-2.5 px-4 text-xs tracking-wider text-gray-400 font-medium sticky top-0 backdrop-blur-md z-50">
+    <div class="w-full bg-gray-950/80 border-b border-gray-800 text-center py-2.5 px-4 text-xs tracking-wider text-gray-400 font-medium sticky top-0 backdrop-blur-md z-50">
         📊 System Status: Live • 412+ Early Access Members • Waitlist Open
     </div>
 
@@ -83,6 +82,27 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                        <div>
+                            <div class="text-[9px] uppercase text-gray-500 font-bold">Trend Stability Status</div>
+                            <div id="trendStability" class="text-xs font-bold text-emerald-400 mt-1">🛡️ STABLE WINNER (Low Risk)</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                        <div>
+                            <div class="text-[9px] uppercase text-gray-500 font-bold">Estimated Tenure Index</div>
+                            <div id="trendTenure" class="text-xs font-bold text-white mt-1">📆 8 - 12 Months High Demand</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                        <div>
+                            <div class="text-[9px] uppercase text-gray-500 font-bold">Net Profit/Loss Risk Ratio</div>
+                            <div id="profitRiskRatio" class="text-xs font-bold text-blue-400 mt-1">📈 High Profit / Low Loss</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div class="space-y-1">
                         <span class="text-[9px] bg-blue-500/10 text-blue-400 font-bold uppercase px-2 py-0.5 rounded">Target Focus</span>
@@ -140,7 +160,7 @@
                     <div class="text-2xl font-black text-white my-3">₹0 <span class="text-xs text-gray-500 font-normal">/ Lifetime</span></div>
                     <p class="text-xs text-gray-400 mb-4">Daily spotlight, description previews, manual supplier lookup.</p>
                 </div>
-                <button disabled class="w-full bg-gray-950 border border-gray-800 text-gray-500 text-xs py-2.5 rounded-lg cursor-not-allowed">Active in Waitlist</button>
+                <button onclick="alert('You are already registered for early starter access!')" class="w-full bg-gray-900 hover:bg-gray-850 text-blue-400 border border-gray-800 text-xs py-2.5 rounded-lg font-bold transition-all">Active in Waitlist ✓</button>
             </div>
             <div class="glass-panel p-6 rounded-xl border-2 border-blue-500 glow-pro flex flex-col justify-between relative shadow-2xl">
                 <span class="absolute -top-3 left-4 bg-blue-600 text-white font-mono text-[9px] uppercase px-2 py-0.5 rounded-full font-bold">★ MOST POPULAR</span>
@@ -149,7 +169,7 @@
                     <div class="text-2xl font-black text-white my-3">₹99 <span class="text-xs text-gray-500 font-normal">/ Month</span></div>
                     <p class="text-xs text-gray-300 mb-4 font-medium">Unlimited trends, instant WhatsApp & OmniChannel push alerts, automated AI copy generator.</p>
                 </div>
-                <button disabled class="w-full bg-blue-600 text-white border border-blue-400 font-bold text-xs py-2.5 rounded-lg cursor-not-allowed">Unlocks Post-Launch</button>
+                <button onclick="openProModal()" class="w-full bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 font-bold text-xs py-2.5 rounded-lg shadow-lg shadow-blue-600/30 transition-all">Unlock Pro Account →</button>
             </div>
         </div>
     </section>
@@ -186,11 +206,49 @@
         </div>
     </div>
 
+    <div id="proModal" class="fixed inset-0 bg-black/90 z-[100] backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-blue-500/40 shadow-2xl relative glow-pro">
+            <button onclick="closeProModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-sm">✕</button>
+            
+            <div class="text-center mb-6">
+                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Premium Sandbox checkout</span>
+                <h3 class="text-xl font-black text-white mt-3 uppercase tracking-tight">Upgrade to OmniCatch Pro</h3>
+                <p class="text-xs text-gray-400 mt-1">Get instant webhook alert parameters and high-stability trend vectors.</p>
+            </div>
+
+            <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 mb-6 space-y-3">
+                <div class="flex justify-between text-xs"><span class="text-gray-400">Subscription Tier</span><span class="text-blue-400 font-bold">OmniCatch Pro Monthly</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-400">Billing Cycle</span><span class="text-white">Recurring Monthly</span></div>
+                <hr class="border-gray-800">
+                <div class="flex justify-between text-sm font-bold"><span class="text-white">Total Cost Due</span><span class="text-emerald-400">₹99.00 INR</span></div>
+            </div>
+
+            <div class="space-y-3 text-left mb-6">
+                <div>
+                    <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Dummy Card Number</label>
+                    <input disabled type="text" value="4111 •••• •••• 2026" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Expiry Date</label>
+                        <input disabled type="text" value="12/29" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Security Code</label>
+                        <input disabled type="text" value="***" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="triggerMockPayment(this)" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20">
+                Simulate Secure Payment Execution →
+            </button>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
         const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
-        
-        // YOUR LIVE DISCORD WEBHOOK TUNNEL LINK
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
 
         let globalSavedEmail = "";
@@ -205,7 +263,6 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "Securing account...";
 
-            // Pipeline 1: Save data to Supabase Database
             try {
                 const response = await fetch(SUPABASE_URL, {
                     method: 'POST',
@@ -222,57 +279,42 @@
                     globalSavedEmail = email;
                     emailInput.value = '';
                     document.getElementById('successModal').classList.replace('hidden', 'flex');
-                    
-                    // Pipeline 2: Trigger Instant Discord Notification Ping
                     sendDiscordNotification(email);
                 }
             } catch (err) {
-                alert("Connection problem.");
+                console.error("Supabase route bypas
+                                          console.error("Supabase route bypassed.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Join the Creator Waitlist →";
             }
         }
 
-        // BACKGROUND DISCORD BOT CONTROLLER ENGINE
         async function sendDiscordNotification(userEmail) {
             const payload = {
                 username: "OmniCatch Engine Bot",
                 avatar_url: "https://cdn-icons-png.flaticon.com/512/873/873120.png",
                 embeds: [{
                     title: "🚀 New Waitlist Signup Received!",
-                    color: 3447003, // Premium blue brand theme border
+                    color: 3447003,
                     fields: [
                         { name: "👤 User Email Address", value: `\`${userEmail}\``, inline: false },
-                        { name: "🌐 Registration Platform", value: "GitHub Pages (Production Live Site)", inline: true },
-                        { name: "📊 Target Funnel", value: "Creator Early Access Plan", inline: true }
+                        { name: "🌐 Registration Platform", value: "GitHub Live Production", inline: true }
                     ],
-                    footer: { text: "OmniCatch Analytics Protocol • 2026" },
+                    footer: { text: "OmniCatch Analytics Protocol" },
                     timestamp: new Date().toISOString()
                 }]
             };
-
             try {
-                await fetch(DISCORD_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (e) {
-                console.error("Webhook notification route bypassed.");
-            }
+                await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            } catch (e) { console.error("Webhook route bypassed."); }
         }
 
         function handleModalClose() {
             document.getElementById('successModal').classList.replace('flex', 'hidden');
             if (globalSavedEmail) {
                 const hero = document.getElementById('heroSection');
-                hero.style.maxHeight = "0px";
-                hero.style.overflow = "hidden";
-                hero.style.paddingTop = "0px";
-                hero.style.paddingBottom = "0px";
-                hero.style.opacity = "0";
-
+                hero.style.maxHeight = "0px"; hero.style.overflow = "hidden"; hero.style.paddingTop = "0px"; hero.style.paddingBottom = "0px"; hero.style.opacity = "0";
                 document.getElementById('activeUserEmail').innerText = globalSavedEmail;
                 document.getElementById('sessionBadge').classList.remove('hidden');
                 window.scrollTo({ top: 100, behavior: 'smooth' });
@@ -301,10 +343,30 @@
                 const retail = Math.floor(cost * (Math.random() * (3.5 - 2.1) + 2.1));
                 const netMargin = Math.floor(((retail - cost) / retail) * 100);
 
+                const stabilityOptions = [
+                    "🛡️ STABLE WINNER (High Demand / Zero Fall)",
+                    "💎 EVERGREEN ASSET (Consistent Scaling)",
+                    "⚠️ HIGH MOMENTUM (Volatile Trend Cycle)"
+                ];
+                const tenureOptions = [
+                    "📆 12+ Months Long-term Horizon",
+                    "📆 6 - 8 Months Seasonal Spike",
+                    "📆 3 - 5 Months Rapid Burn Cycle"
+                ];
+                const riskOptions = [
+                    "📈 94% Profit Prob. / 6% Loss Risk",
+                    "📈 88% Profit Prob. / 12% Loss Risk",
+                    "📈 79% Profit Prob. / 21% Loss Risk"
+                ];
+
                 document.getElementById('metricMonitored').innerText = volume;
                 document.getElementById('metricMomentum').innerText = momentum;
                 document.getElementById('metricMargin').innerText = netMargin + "%";
                 
+                document.getElementById('trendStability').innerText = stabilityOptions[Math.floor(Math.random() * stabilityOptions.length)];
+                document.getElementById('trendTenure').innerText = tenureOptions[Math.floor(Math.random() * tenureOptions.length)];
+                document.getElementById('profitRiskRatio').innerText = riskOptions[Math.floor(Math.random() * riskOptions.length)];
+
                 document.getElementById('costVal').innerText = "₹" + cost;
                 document.getElementById('retailVal').innerText = "₹" + retail;
                 document.getElementById('marginPercent').innerText = netMargin + "%";
@@ -314,12 +376,32 @@
                     bars[i].style.height = Math.floor(Math.random() * (100 - 20) + 20) + "%";
                 }
 
-                display.style.opacity = "1";
-                display.style.filter = "none";
-                scanBtn.disabled = false;
-                scanBtn.innerText = "⚡ Analyze Trend";
+                display.style.opacity = "1"; display.style.filter = "none";
+                scanBtn.disabled = false; scanBtn.innerText = "⚡ Analyze Trend";
                 keywordInput.value = '';
             }, 1000);
         }
 
-  
+        function openProModal() { document.getElementById('proModal').classList.replace('hidden', 'flex'); }
+        function closeProModal() { document.getElementById('proModal').classList.replace('flex', 'hidden'); }
+
+        function triggerMockPayment(btn) {
+            btn.disabled = true;
+            btn.innerText = "🔒 Authenticating with Stripe/Visa Gateway...";
+            setTimeout(() => {
+                btn.innerText = "✨ Payment Successful! Sandbox Account Upgraded.";
+                btn.className = "w-full bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl cursor-default";
+                setTimeout(() => { closeProModal(); alert("OmniCatch Pro Simulation Complete! This button mockup works 100% flawlessly."); }, 1200);
+            }, 1500);
+        }
+
+        function toggleFaq(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = btn.getAttribute('aria-expanded') === 'true';
+            document.querySelectorAll('[aria-expanded="true"]').forEach(openBtn => { if (openBtn !== btn) { openBtn.setAttribute('aria-expanded', 'false'); openBtn.nextElementSibling.style.maxHeight = null; } });
+            if (isOpen) { btn.setAttribute('aria-expanded', 'false'); body.style.maxHeight = null; } 
+            else { btn.setAttribute('aria-expanded', 'true'); body.style.maxHeight = body.scrollHeight + "px"; }
+        }
+    </script>
+</body>
+</html>
