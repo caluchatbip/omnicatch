@@ -12,7 +12,7 @@
         .glow-pro { box-shadow: 0 0 50px -2px rgba(59, 130, 246, 0.35); }
     </style>
 </head>
-<body class="text-gray-200 font-sans min-h-screen antialiased selection:bg-blue-600 selection:text-white pb-20 sm:pb-0">
+<body class="text-gray-200 font-sans min-h-screen antialiased pb-20 sm:pb-0">
 
     <div class="w-full bg-gray-950/80 border-b border-gray-800 text-center py-2.5 px-4 text-xs tracking-wider text-gray-400 font-medium sticky top-0 backdrop-blur-md z-50">
         📊 System Status: Live • 412+ Early Access Members • Waitlist Open
@@ -20,13 +20,11 @@
 
     <nav class="w-full max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-blue-600/20">🌐</div>
+            <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm">🌐</div>
             <span class="text-lg font-black tracking-wider text-white">OmniCatch</span>
         </div>
-        <div class="flex items-center gap-4 text-[11px] sm:text-xs font-semibold text-gray-400">
-            <a href="#capabilities" class="hover:text-white transition-colors">Capabilities</a>
-            <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
-            <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+        <div class="flex items-center gap-4 text-xs font-semibold text-gray-400">
+            <a href="#pricing" class="hover:text-white">Pricing</a>
         </div>
     </nav>
 
@@ -41,14 +39,13 @@
             <form onsubmit="submitToWaitlist(event)" class="space-y-4">
                 <input id="userEmail" type="email" required placeholder="Enter your professional email" 
                     class="w-full bg-gray-950 border border-gray-700 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3.5 rounded-xl transition-all">
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3.5 rounded-xl">
                     Join the Creator Waitlist →
                 </button>
             </form>
         </div>
     </header>
-
-    <section class="max-w-6xl mx-auto px-6 py-10">
+        <section class="max-w-6xl mx-auto px-6 py-10">
         <div class="text-center mb-4 flex flex-col items-center justify-center gap-2">
             <div id="sessionBadge" class="hidden bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full animate-bounce">
                 ✓ Early Access Session Active: <span id="activeUserEmail" class="text-white lowercase font-mono"></span>
@@ -124,9 +121,8 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <section id="capabilities" class="max-w-6xl mx-auto px-6 py-12">
+        </section>
+            <section id="capabilities" class="max-w-6xl mx-auto px-6 py-12">
         <h2 class="text-xl font-black tracking-wide text-gray-400 uppercase mb-10 border-b border-gray-900 pb-3">Core Platform Capabilities</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="glass-panel p-6 rounded-xl">
@@ -174,23 +170,6 @@
         </div>
     </section>
 
-    <section id="faq" class="max-w-2xl mx-auto px-6 py-16">
-        <h2 class="text-center text-xl font-black text-white uppercase mb-10">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-            <div class="glass-panel rounded-xl overflow-hidden">
-                <button onclick="toggleFaq(this)" aria-expanded="false" class="w-full text-left px-5 py-4 text-xs sm:text-sm font-bold text-white flex justify-between items-center bg-gray-950/20 hover:bg-gray-950/40 transition-colors">
-                    <span>How does OmniCatch identify trends?</span>
-                    <span class="text-xs text-gray-500 font-mono pointer-events-none">+</span>
-                </button>
-                <div class="max-h-0 overflow-hidden transition-all duration-300 bg-gray-950/10">
-                    <p class="p-5 text-xs sm:text-sm text-gray-400 leading-relaxed border-t border-gray-900">
-                        OmniCatch processes structural analytics from major marketplaces, advertising ecosystems, and consumer demand signals to identify emerging product opportunities early.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <footer class="w-full border-t border-gray-800 py-6 px-6 mt-12 bg-black/40 text-center text-xs text-gray-500">
         <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <span>&copy; 2026 OmniCatch. All rights reserved.</span>
@@ -205,8 +184,7 @@
             <button onclick="handleModalClose()" class="w-full bg-blue-600 text-white font-bold text-xs py-2.5 rounded-xl">Close</button>
         </div>
     </div>
-
-    <div id="proModal" class="fixed inset-0 bg-black/90 z-[100] backdrop-blur-md hidden items-center justify-center p-4">
+        <div id="proModal" class="fixed inset-0 bg-black/90 z-[100] backdrop-blur-md hidden items-center justify-center p-4">
         <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-blue-500/40 shadow-2xl relative glow-pro">
             <button onclick="closeProModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-sm">✕</button>
             
@@ -244,9 +222,8 @@
                 Simulate Secure Payment Execution →
             </button>
         </div>
-    </div>
-
-    <script>
+        </div>
+            <script>
         const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
         const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
@@ -282,8 +259,7 @@
                     sendDiscordNotification(email);
                 }
             } catch (err) {
-                console.error("Supabase route bypas
-                                          console.error("Supabase route bypassed.");
+                console.error("Database connection issue.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Join the Creator Waitlist →";
@@ -393,14 +369,6 @@
                 btn.className = "w-full bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl cursor-default";
                 setTimeout(() => { closeProModal(); alert("OmniCatch Pro Simulation Complete! This button mockup works 100% flawlessly."); }, 1200);
             }, 1500);
-        }
-
-        function toggleFaq(btn) {
-            const body = btn.nextElementSibling;
-            const isOpen = btn.getAttribute('aria-expanded') === 'true';
-            document.querySelectorAll('[aria-expanded="true"]').forEach(openBtn => { if (openBtn !== btn) { openBtn.setAttribute('aria-expanded', 'false'); openBtn.nextElementSibling.style.maxHeight = null; } });
-            if (isOpen) { btn.setAttribute('aria-expanded', 'false'); body.style.maxHeight = null; } 
-            else { btn.setAttribute('aria-expanded', 'true'); body.style.maxHeight = body.scrollHeight + "px"; }
         }
     </script>
 </body>
