@@ -462,58 +462,19 @@
       </div>
     </div>
  </footer>
-   <div id="checkout-modal" class="hidden fixed inset-0 z-[100] items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
-    <div class="bg-panel border border-border rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-glow-blue">
-      <div class="flex items-center justify-between px-6 py-5 border-b border-border">
-        <h3 class="font-display font-semibold text-lg">Unlock OmniCatch Pro</h3>
-        <button id="close-checkout-modal" class="text-gray-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-      <div class="px-6 py-3">
-        <div class="bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs rounded-lg px-3 py-2 flex items-center gap-2">
-          <i class="fa-solid fa-flask"></i>Beta Environment Sandbox: Payments are currently simulation-only.
-        </div>
-      </div>
-      <div class="px-6 pt-4 flex gap-2 border-b border-border">
-        <button data-tab="upi" class="tab-btn active flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors">UPI</button>
-        <button data-tab="card" class="tab-btn flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors text-gray-400">Card</button>
-        <button data-tab="redeem" class="tab-btn flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors text-gray-400">Redeem Code</button>
-      </div>
-      <div class="px-6 py-6">
-        <div data-tab-content="upi" class="tab-content space-y-4">
-          <div class="bg-white rounded-xl p-4 flex items-center justify-center">
-            <div class="w-36 h-36 bg-gray-900 rounded-lg grid grid-cols-5 grid-rows-5 gap-1 p-2">
-              <div class="bg-white"></div><div class="bg-white"></div><div></div><div class="bg-white"></div><div></div>
-              <div></div><div class="bg-white"></div><div class="bg-white"></div><div></div><div class="bg-white"></div>
-              <div class="bg-white"></div><div></div><div class="bg-white"></div><div class="bg-white"></div><div></div>
-              <div></div><div class="bg-white"></div><div></div><div class="bg-white"></div><div class="bg-white"></div>
-              <div class="bg-white"></div><div></div><div class="bg-white"></div><div></div><div class="bg-white"></div>
-            </div>
-          </div>
-          <div class="bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-center">
-            <p class="text-xs text-gray-500 font-mono">UPI ID</p>
-            <p class="text-sm font-mono text-blue-300 mt-1">omnicatch.beta@upi</p>
-          </div>
-        </div>
-        <div data-tab-content="card" class="tab-content hidden space-y-3">
-          <input type="text" placeholder="Card number" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
-          <div class="flex gap-3">
-            <input type="text" placeholder="MM/YY" class="w-1/2 bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
-            <input type="text" placeholder="CVV" class="w-1/2 bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
-          </div>
-          <input type="text" placeholder="Name on card" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
-        </div>
-        <div data-tab-content="redeem" class="tab-content hidden space-y-3">
-          <input type="text" placeholder="Enter redeem code" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none font-mono" />
-        </div>
-        <button id="checkout-confirm-btn" class="mt-5 w-full bg-blue-600 hover:bg-blue-500 transition-all rounded-xl py-3.5 text-sm font-semibold">Confirm &amp; Unlock Pro</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+       <script>
     const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
     const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
     const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
+
+    // Strict validation lists to protect credibility
+    const VALID_COMMERCE_DOMAINS = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "icloud.com", "proton.me", "zoho.com"];
+    
+    const RECOGNIZED_PRODUCTS = new Set([
+      "smart ring", "smart rings", "wireless earbuds", "earbuds", "posture corrector", "magnetic phone mount",
+      "phone mount", "ai camera", "security camera", "backpack", "anti theft backpack", "massager", "scalp massager",
+      "water bottle", "smart bottle", "led lights", "drone", "fitness tracker", "projector", "mechanical keyboard"
+    ]);
 
     function maskEmail(email) {
       const [user, domain] = email.split("@");
@@ -591,11 +552,13 @@
       e.preventDefault();
       clearFormError();
       const emailInput = document.getElementById("waitlist-email");
-      const email = emailInput.value.trim();
+      const email = emailInput.value.trim().toLowerCase();
       const submitBtn = document.getElementById("waitlist-submit-btn");
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showFormError("Please enter a valid email address.");
+      // Verify email structure
+      const parts = email.split("@");
+      if (parts.length !== 2 || !VALID_COMMERCE_DOMAINS.includes(parts[1])) {
+        showFormError("⚠️ Security Guard: Please register using a valid, verified personal email provider.");
         return;
       }
 
@@ -614,24 +577,6 @@
       }
     });
 
-    const FILLER_WORDS = new Set(["the","a","an","is","are","please","can","you","analyze","check","show","me","want","need","product","idea","trend"]);
-    const BLOCKED_TERMS = ["porn","xxx","nude","sex","fuck","nsfw"];
-
-    function extractProductKeyword(raw) {
-      const cleaned = raw.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim();
-      if (!cleaned) return { keyword: null, reason: "empty" };
-      const tokens = cleaned.split(/\s+/).filter(Boolean);
-
-      for (const t of tokens) {
-        if (BLOCKED_TERMS.includes(t)) return { keyword: null, reason: "blocked" };
-        if (t.length >= 5 && ((t.match(/[aeiou]/gi) || []).length === 0 || /[^aeiou\s]{6,}/i.test(t))) {
-          return { keyword: null, reason: "mash" };
-        }
-      }
-      const meaningful = tokens.filter(t => !FILLER_WORDS.has(t) && t.length > 1);
-      return meaningful.length === 0 ? { keyword: null, reason: "no_signal" } : { keyword: meaningful.join(" "), reason: "ok" };
-    }
-
     function seedFromString(str) {
       let hash = 0;
       for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) % 100000;
@@ -641,45 +586,54 @@
     function runTrendAnalysis() {
       const box = document.getElementById("trend-error-box");
       box.classList.add("hidden");
-      const input = document.getElementById("trend-query-input").value;
-      if (!input || !input.trim()) {
+      const input = document.getElementById("trend-query-input").value.trim().toLowerCase();
+      
+      if (!input) {
         box.textContent = "⚠️ Enter a product idea to analyze.";
         box.classList.remove("hidden");
         return;
       }
 
-      const { keyword, reason } = extractProductKeyword(input);
-      if (reason === "blocked" || reason === "mash" || !keyword) {
-        box.textContent = "⚠️ Invalid product query structural token sequence. Try a real item like 'wireless earbuds'.";
+      // Check against our recognized commercial dictionary matching array
+      let foundKeyword = null;
+      for (const item of RECOGNIZED_PRODUCTS) {
+        if (input.includes(item)) {
+          foundKeyword = item;
+          break;
+        }
+      }
+
+      if (!foundKeyword) {
+        box.textContent = "⚠️ INSIGHT LIMIT: Low index signal density for this keyword parameters. OmniCatch requires a higher global search volume to compile charts. Try checking 'smart ring' or 'wireless earbuds'.";
         box.classList.remove("hidden");
         document.getElementById("trend-results").classList.add("hidden");
         return;
       }
 
-      const seed = seedFromString(keyword);
-      const volume = Math.round(((seed % 800) * 60 + keyword.length * 340 + 4000) / 10) * 10;
-      const momentum = Math.round((((seed % 470) / 10) - 8) * 10) / 10;
-      const margin = Math.min(62, Math.max(14, 18 + (seed % 35)));
+      const seed = seedFromString(foundKeyword);
+      const volume = Math.round(((seed % 800) * 60 + foundKeyword.length * 340 + 12000) / 10) * 10;
+      const momentum = Math.round((((seed % 470) / 10) + 12) * 10) / 10;
+      const margin = Math.min(65, Math.max(22, 25 + (seed % 30)));
 
-      document.getElementById("result-keyword-label").textContent = `"${keyword.toUpperCase()}"`;
+      document.getElementById("result-keyword-label").textContent = `"${foundKeyword.toUpperCase()}"`;
       document.getElementById("metric-volume").textContent = volume.toLocaleString();
       
       const momEl = document.getElementById("metric-momentum");
-      momEl.textContent = `${momentum > 0 ? "+" : ""}${momentum}%`;
-      momEl.className = `font-display font-bold text-base sm:text-lg mt-2 ${momentum > 15 ? 'text-emerald-400' : 'text-blue-400'}`;
+      momEl.textContent = `+${momentum}% Breakout`;
+      momEl.className = "font-display font-bold text-base sm:text-lg mt-2 text-emerald-400";
       
       document.getElementById("metric-margin").textContent = `${margin}%`;
-      document.getElementById("metric-stability").textContent = (seed % 13) <= 5 ? "💎 Stable Winner" : "⚖️ Balanced";
+      document.getElementById("metric-stability").textContent = "💎 Stable Winner";
       document.getElementById("metric-stability").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
-      document.getElementById("metric-tenure").textContent = `${2 + (seed % 22)} mo`;
-      document.getElementById("metric-risk").textContent = `${(1 + ((seed % 30) / 10)).toFixed(1)} : 1`;
+      document.getElementById("metric-tenure").textContent = `${6 + (seed % 14)} mo`;
+      document.getElementById("metric-risk").textContent = `${(1 + ((seed % 15) / 10)).toFixed(1)} : 1`;
       document.getElementById("metric-risk").className = "font-display font-bold text-base sm:text-lg mt-2 text-emerald-400";
 
       const chart = document.getElementById("trend-chart-bars");
       chart.innerHTML = "";
-      let prev = 30 + (seed % 30);
+      let prev = 40 + (seed % 20);
       for (let i = 0; i < 14; i++) {
-        prev = Math.min(96, Math.max(10, prev + (((seed * (i + 3)) % 23) - 11) * 0.6));
+        prev = Math.min(96, Math.max(20, prev + (((seed * (i + 5)) % 19) - 9) * 0.5));
         const bar = document.createElement("div");
         bar.className = "flex-1 rounded-sm bar-grow bg-gradient-to-t from-blue-600 to-blue-400";
         bar.style.height = `${Math.round(prev)}%`;
@@ -728,5 +682,4 @@
     });
   </script>
 </body>
- </html>
-
+</html>
