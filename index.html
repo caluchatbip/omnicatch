@@ -170,8 +170,8 @@
           </div>
         </div>
       </div>
-    </div>
-       <div class="relative max-w-5xl mx-auto mt-16 sm:mt-20 z-10">
+    </div> 
+        <div class="relative max-w-5xl mx-auto mt-16 sm:mt-20 z-10">
       <div class="absolute -inset-10 bg-gradient-to-tr from-blue-600/20 via-emerald-500/10 to-blue-500/20 rounded-[2rem] ambient-blob-slow pointer-events-none"></div>
       <div class="glass border border-blue-500/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 glow-border-anim float-anim relative">
         <div class="flex items-center justify-between mb-4 px-1">
@@ -228,9 +228,23 @@
         <p class="text-gray-400 mt-3 max-w-xl mx-auto">Type any product idea. OmniCatch's simulation engine models momentum, margin, and risk in real time.</p>
       </div>
 
-      <div class="bg-panel border border-border rounded-2xl p-5 sm:p-8">
+      <div class="bg-panel border border-border rounded-2xl p-5 sm:p-8 space-y-6">
+        <div class="bg-gray-900/50 border border-border rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-400"><i class="fa-solid fa-wallet"></i></div>
+            <div>
+              <p class="text-xs text-gray-500 font-mono font-medium">YOUR SOURCING BUDGET</p>
+              <p id="budget-display-text" class="text-sm font-semibold text-white mt-0.5">₹10,000 max investment limit</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <input type="number" id="budget-input-field" value="10000" class="hidden w-28 bg-panel border border-border rounded-lg px-2.5 py-1.5 text-xs text-white outline-none focus:border-blue-500 font-mono" />
+            <button id="toggle-budget-edit-btn" class="bg-gray-800 hover:bg-gray-750 text-gray-300 font-medium text-xs rounded-lg px-3 py-1.5 border border-border transition-colors">⚙️ Edit Limit</button>
+          </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row gap-3">
-          <input type="text" id="trend-query-input" placeholder="e.g. magnetic phone mount, smart ring, posture corrector..." class="flex-1 bg-gray-900/70 border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
+          <input type="text" id="trend-query-input" placeholder="e.g. smart ring, wireless earbuds, luxury watch..." class="flex-1 bg-gray-900/70 border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
           <button id="analyze-trend-btn" class="bg-blue-600 hover:bg-blue-500 transition-all shadow-glow-blue rounded-xl px-6 py-3.5 text-sm font-semibold whitespace-nowrap">⚡ Analyze Trend</button>
         </div>
         <p id="trend-error-box" class="hidden mt-4 bg-red-500/10 border border-red-500/30 text-red-300 text-sm rounded-xl px-4 py-3"></p>
@@ -256,11 +270,11 @@
               <p id="metric-stability" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
             </div>
             <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">TENURE INDEX</p>
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">MAX ACQUISITION</p>
               <p id="metric-tenure" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
             </div>
             <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">P/L RISK RATIO</p>
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">EST UNIT COST</p>
               <p id="metric-risk" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
             </div>
           </div>
@@ -269,11 +283,12 @@
             <p class="text-xs font-mono text-gray-500 mb-3">14-DAY MOMENTUM SIMULATION</p>
             <div id="trend-chart-bars" class="flex items-end gap-1 sm:gap-1.5 h-32 sm:h-40"></div>
           </div>
-          <p class="text-[11px] text-gray-500 mt-3 italic">*Calculations reflect real-time live-simulation market estimation parameters.</p>
+          <p class="text-[11px] text-gray-500 mt-3 italic">*Calculations reflect real-time live-simulation market estimation parameters based on target investment capacity ceilings.</p>
         </div>
       </div>
     </div>
- </section>
+  </section>
+  
    <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border bg-gradient-to-b from-transparent via-blue-950/10 to-transparent">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12">
@@ -462,19 +477,46 @@
       </div>
     </div>
  </footer>
-       <script>
+
+    <script>
     const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
     const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
     const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
 
-    // Strict validation lists to protect credibility
     const VALID_COMMERCE_DOMAINS = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "icloud.com", "proton.me", "zoho.com"];
     
+    // Upgraded dictionary to now completely accept Rolex and watch terms!
     const RECOGNIZED_PRODUCTS = new Set([
       "smart ring", "smart rings", "wireless earbuds", "earbuds", "posture corrector", "magnetic phone mount",
       "phone mount", "ai camera", "security camera", "backpack", "anti theft backpack", "massager", "scalp massager",
-      "water bottle", "smart bottle", "led lights", "drone", "fitness tracker", "projector", "mechanical keyboard"
+      "water bottle", "smart bottle", "led lights", "drone", "fitness tracker", "projector", "mechanical keyboard",
+      "rolex", "watch", "watches", "luxury watch", "smart watch"
     ]);
+
+    let userConfigBudget = 10000;
+
+    // Budget Editor Functionality
+    document.getElementById("toggle-budget-edit-btn").addEventListener("click", function() {
+      const inputEl = document.getElementById("budget-input-field");
+      const textEl = document.getElementById("budget-display-text");
+      
+      if (inputEl.classList.contains("hidden")) {
+        inputEl.classList.remove("hidden");
+        this.innerText = "💾 Save";
+      } else {
+        const parsedVal = parseInt(inputEl.value);
+        if (parsedVal > 0) {
+          userConfigBudget = parsedVal;
+          textEl.innerText = `₹${userConfigBudget.toLocaleString()} max investment limit`;
+        }
+        inputEl.classList.add("hidden");
+        this.innerText = "⚙️ Edit Limit";
+        
+        // If results are open, refresh calculations instantly!
+        const inputQuery = document.getElementById("trend-query-input").value.trim();
+        if (inputQuery) runTrendAnalysis();
+      }
+    });
 
     function maskEmail(email) {
       const [user, domain] = email.split("@");
@@ -555,7 +597,6 @@
       const email = emailInput.value.trim().toLowerCase();
       const submitBtn = document.getElementById("waitlist-submit-btn");
 
-      // Verify email structure
       const parts = email.split("@");
       if (parts.length !== 2 || !VALID_COMMERCE_DOMAINS.includes(parts[1])) {
         showFormError("⚠️ Security Guard: Please register using a valid, verified personal email provider.");
@@ -594,7 +635,6 @@
         return;
       }
 
-      // Check against our recognized commercial dictionary matching array
       let foundKeyword = null;
       for (const item of RECOGNIZED_PRODUCTS) {
         if (input.includes(item)) {
@@ -604,7 +644,7 @@
       }
 
       if (!foundKeyword) {
-        box.textContent = "⚠️ INSIGHT LIMIT: Low index signal density for this keyword parameters. OmniCatch requires a higher global search volume to compile charts. Try checking 'smart ring' or 'wireless earbuds'.";
+        box.textContent = "⚠️ INSIGHT LIMIT: Low index signal density for this keyword parameters. OmniCatch requires a higher global search volume to compile charts. Try checking 'rolex' or 'smart ring'.";
         box.classList.remove("hidden");
         document.getElementById("trend-results").classList.add("hidden");
         return;
@@ -614,6 +654,10 @@
       const volume = Math.round(((seed % 800) * 60 + foundKeyword.length * 340 + 12000) / 10) * 10;
       const momentum = Math.round((((seed % 470) / 10) + 12) * 10) / 10;
       const margin = Math.min(65, Math.max(22, 25 + (seed % 30)));
+      
+      // Dynamic Sourcing calculations based on user's live configured investment limit input!
+      const unitCost = Math.round(150 + (seed % 450));
+      const maxAcquisitionUnits = Math.floor(userConfigBudget / unitCost);
 
       document.getElementById("result-keyword-label").textContent = `"${foundKeyword.toUpperCase()}"`;
       document.getElementById("metric-volume").textContent = volume.toLocaleString();
@@ -625,9 +669,11 @@
       document.getElementById("metric-margin").textContent = `${margin}%`;
       document.getElementById("metric-stability").textContent = "💎 Stable Winner";
       document.getElementById("metric-stability").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
-      document.getElementById("metric-tenure").textContent = `${6 + (seed % 14)} mo`;
-      document.getElementById("metric-risk").textContent = `${(1 + ((seed % 15) / 10)).toFixed(1)} : 1`;
-      document.getElementById("metric-risk").className = "font-display font-bold text-base sm:text-lg mt-2 text-emerald-400";
+      
+      // Load interactive calculations into cells!
+      document.getElementById("metric-tenure").textContent = `${maxAcquisitionUnits.toLocaleString()} units`;
+      document.getElementById("metric-risk").textContent = `₹${unitCost}`;
+      document.getElementById("metric-risk").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
 
       const chart = document.getElementById("trend-chart-bars");
       chart.innerHTML = "";
@@ -683,3 +729,5 @@
   </script>
 </body>
 </html>
+
+       
