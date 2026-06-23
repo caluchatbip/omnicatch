@@ -1,420 +1,732 @@
- <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniCatch | Global Trend Intelligence Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #030712; }
-        .glass-panel { background-color: #111827; border: 1px solid #1F2937; }
-        .glow-blue { box-shadow: 0 0 40px -5px rgba(59, 130, 246, 0.2); }
-        .glow-pro { box-shadow: 0 0 50px -2px rgba(59, 130, 246, 0.35); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>OmniCatch — Spot Breakout Products Before Everyone Else</title>
+  <meta name="description" content="OmniCatch scans live market signals to surface breakout products before they trend. Join the beta waitlist and unlock 3 months of OmniCatch Pro for ₹99." />
+  <meta name="keywords" content="OmniCatch, trend scanner, product research, dropshipping tool, market intelligence, breakout products, ecommerce trends" />
+  <meta name="author" content="OmniCatch" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://omnicatch.app/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="OmniCatch — Spot Breakout Products Before Everyone Else" />
+  <meta property="og:description" content="Live trend intelligence, profit modeling, and early-warning alerts for sellers who want to move first. Beta access is open." />
+  <meta property="og:url" content="https://omnicatch.app/" />
+  <meta property="og:site_name" content="OmniCatch" />
+  <meta property="og:image" content="https://omnicatch.app/og-cover.png" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OmniCatch — Spot Breakout Products Before Everyone Else" />
+  <meta name="twitter:description" content="Live trend intelligence, profit modeling, and early-warning alerts for sellers who want to move first." />
+  <meta name="twitter:image" content="https://omnicatch.app/og-cover.png" />
+
+  <meta name="theme-color" content="#030712" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              midnight: '#030712',
+              panel: '#111827',
+              border: '#1F2937',
+              neon: { DEFAULT: '#3B82F6', soft: '#60A5FA', glow: '#2563EB' },
+              mint: { DEFAULT: '#10B981', soft: '#34D399' }
+            },
+            fontFamily: {
+              display: ['Space Grotesk', 'sans-serif'],
+              body: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace']
+            },
+            boxShadow: {
+              'glow-blue': '0 0 40px -5px rgba(59,130,246,0.45)',
+              'glow-mint': '0 0 30px -5px rgba(16,185,129,0.4)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #030712; font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    @keyframes drift {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(20px,-15px) scale(1.08); }
+      66% { transform: translate(-15px,10px) scale(0.96); }
+    }
+    .ambient-blob { animation: drift 14s ease-in-out infinite; filter: blur(70px); }
+    .ambient-blob-slow { animation: drift 20s ease-in-out infinite reverse; filter: blur(90px); }
+    @keyframes borderGlow {
+      0%, 100% { box-shadow: 0 0 25px -5px rgba(59,130,246,0.35), inset 0 0 0 1px rgba(59,130,246,0.25); }
+      50% { box-shadow: 0 0 55px -5px rgba(59,130,246,0.6), inset 0 0 0 1px rgba(96,165,250,0.45); }
+    }
+    .glow-border-anim { animation: borderGlow 4s ease-in-out infinite; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .float-anim { animation: floaty 6s ease-in-out infinite; }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+    @keyframes barGrow { from { height: 4%; } }
+    .bar-grow { animation: barGrow 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp 0.5s ease forwards; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #030712; }
+    ::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+    .glass { background: rgba(17, 24, 39, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .accordion-content.open { max-height: 500px; }
+    .accordion-chevron { transition: transform 0.3s ease; }
+    .accordion-chevron.rotated { transform: rotate(180deg); }
+    .tab-btn.active { color: #fff; border-color: #3B82F6; background: rgba(59,130,246,0.12); }
+  </style>
 </head>
-<body class="text-gray-200 font-sans min-h-screen antialiased pb-20 sm:pb-0">
+<body class="bg-midnight text-gray-100 antialiased selection:bg-blue-500/30">
+   <div class="sticky top-0 z-[60] w-full bg-gradient-to-r from-blue-950 via-gray-900 to-blue-950 border-b border-border text-center py-2 px-4 text-xs sm:text-sm font-mono text-blue-200">
+    <span class="inline-flex items-center gap-2 flex-wrap justify-center">
+      📊 System Status: <span class="text-emerald-400 font-semibold">Live</span> • Beta Platform Active • Early Registration Slots Open
+    </span>
+  </div>
 
-    <div class="w-full bg-gray-950/80 border-b border-gray-800 text-center py-2.5 px-4 text-xs tracking-wider text-gray-400 font-medium sticky top-0 backdrop-blur-md z-50">
-        📊 System Status: Live • 1,482+ Beta Creators Registered • Waitlist Closing Soon
-    </div>
-
-    <nav class="w-full max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm">🌐</div>
-            <span class="text-lg font-black tracking-wider text-white">OmniCatch</span>
+  <header class="sticky top-[33px] sm:top-[37px] z-50 backdrop-blur-xl bg-midnight/80 border-b border-border">
+    <nav class="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-glow-blue">
+          <i class="fa-solid fa-satellite-dish text-white text-sm"></i>
         </div>
-        <div class="flex items-center gap-4 text-xs font-semibold text-gray-400">
-            <a href="#pricing" class="hover:text-white">Pricing</a>
-        </div>
+        <span class="font-display font-bold text-lg tracking-tight">OmniCatch</span>
+      </div>
+      <a href="#waitlist-form" class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 transition-colors px-4 py-2 rounded-lg shadow-glow-blue">Get Early Access</a>
     </nav>
+  </header>
 
-    <header id="heroSection" class="relative pt-12 pb-16 max-w-5xl mx-auto px-6 text-center transition-all duration-500">
-        <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase max-w-4xl mx-auto leading-[1.15]">
-            DISCOVER HIGH-MOMENTUM PRODUCTS <span class="text-blue-500">BEFORE THE MARKET DOES.</span>
-        </h1>
-        
-        <div class="glass-panel p-6 sm:p-10 rounded-2xl max-w-xl mx-auto text-left border border-blue-500/30 glow-blue shadow-2xl mb-16">
-            <div class="flex items-center justify-between mb-4">
-                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">🔒 100% Private Verified Beta</span>
-                <span class="text-[11px] text-emerald-400 font-medium">● 1,482 Active Members</span>
-            </div>
-            
-            <h2 class="text-xl font-bold text-white mb-1">Join the Creator Waitlist</h2>
-            <p class="text-xs text-gray-400 mb-6 leading-relaxed">
-                OmniCatch is currently running a closed private algorithm check. Secure your spot today, and we will send a **private priority activation link** directly to your registered email address the instant the network goes public.
-            </p>
+  <section class="relative overflow-hidden px-5 sm:px-8 pt-16 sm:pt-20 pb-24 sm:pb-32">
+    <div class="absolute -top-20 left-1/4 w-72 h-72 bg-blue-600/30 rounded-full ambient-blob pointer-events-none"></div>
+    <div class="absolute top-40 right-1/4 w-80 h-80 bg-emerald-500/20 rounded-full ambient-blob-slow pointer-events-none"></div>
+    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_rgba(59,130,246,0.12),_transparent_60%)] pointer-events-none"></div>
 
-            <div class="bg-blue-950/40 border border-blue-800/40 rounded-xl p-3.5 mb-6 text-xs text-blue-300">
-                🎁 **Founding Member Special:** Users who join the waitlist today will automatically unlock **3 Full Months of OmniCatch Pro for just ₹99** (normally ₹99/month) upon public release.
-            </div>
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center gap-2 bg-panel border border-border rounded-full px-4 py-1.5 text-xs font-mono text-blue-300 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"></span>BETA WAITLIST · COHORT 03 OPEN
+      </div>
+      <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight">
+        Spot the next <span class="bg-gradient-to-r from-blue-400 via-blue-500 to-emerald-400 bg-clip-text text-transparent">breakout product</span> before the market does.
+      </h1>
+      <p class="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        OmniCatch reads live demand signals across the open web and turns them into a single, plain-English verdict: rising, stable, or fading — with the margin math already done for you.
+      </p>
 
-            <form onsubmit="submitToWaitlist(event)" class="space-y-4">
-                <input id="userEmail" type="email" required placeholder="Enter your best email address" 
-                    class="w-full bg-gray-950 border border-gray-700 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3.5 rounded-xl transition-all">
-                    Secure Free Early Access →
-                </button>
-            </form>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div class="flex items-center gap-2 bg-panel/80 border border-border rounded-xl px-4 py-2.5">
+          <span class="text-emerald-400">🔒</span><span class="text-sm font-medium text-gray-200">100% Private · Verified Beta</span>
         </div>
-    </header>
-    
-        <section class="max-w-6xl mx-auto px-6 py-10">
-        <div class="text-center mb-4 flex flex-col items-center justify-center gap-2">
-            <div id="sessionBadge" class="hidden bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full animate-bounce">
-                ✓ Early Access Session Active: <span id="activeUserEmail" class="text-white lowercase font-mono"></span>
-            </div>
-            <h2 class="text-xl font-black text-white uppercase">Inside the OmniCatch Command Center</h2>
+        <div class="flex items-center gap-2 bg-panel/80 border border-border rounded-xl px-4 py-2.5">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75 pulse-dot"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          <span id="member-count-label" class="text-sm font-medium text-gray-200 font-mono">2,847 members joined</span>
         </div>
-        <p class="text-center text-xs text-gray-400 mb-8">Test out our live database engine by running a trend query below.</p>
-        
-        <div class="glass-panel rounded-2xl overflow-hidden max-w-4xl mx-auto p-4 sm:p-6 space-y-6 shadow-2xl">
-            <div class="flex flex-col sm:flex-row gap-2 bg-gray-950 p-2 rounded-xl border border-gray-800">
-                <input id="trendKeyword" type="text" placeholder="Type a product (e.g., Drone, LED Lights, Smart Ring)..." 
-                    class="flex-1 bg-transparent px-3 py-2 text-sm text-white focus:outline-none">
-                <button id="scanBtn" onclick="runTrendScanner()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-lg transition-all min-w-[130px]">
-                    ⚡ Analyze Trend
-                </button>
-            </div>
+      </div>
 
-            <div id="displayContainer" class="space-y-6 transition-all duration-300">
-                <div class="grid grid-cols-3 gap-3 text-center">
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800">
-                        <div class="text-[9px] uppercase text-gray-500 font-bold">Monitored Vol</div>
-                        <div id="metricMonitored" class="text-base sm:text-2xl font-black text-white mt-1">24,581</div>
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800">
-                        <div class="text-[9px] uppercase text-gray-500 font-bold">Growth Momentum</div>
-                        <div id="metricMomentum" class="text-base sm:text-2xl font-black text-blue-500 mt-1">+127%</div>
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800">
-                        <div class="text-[9px] uppercase text-gray-500 font-bold">Avg Margin</div>
-                        <div id="metricMargin" class="text-base sm:text-2xl font-black text-emerald-400 mt-1">64.2%</div>
-                    </div>
-                </div>
+      <div class="mt-6 max-w-xl mx-auto bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl px-5 py-3.5 text-sm text-emerald-200">
+        🎁 <span class="font-semibold text-emerald-300">Founding Member Special:</span> Join the waitlist today and automatically unlock <span class="font-semibold text-white">3 full months of OmniCatch Pro for just ₹99</span> upon public release.
+      </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div>
-                            <div class="text-[9px] uppercase text-gray-500 font-bold">Trend Stability Status</div>
-                            <div id="trendStability" class="text-xs font-bold text-emerald-400 mt-1">🛡️ STABLE WINNER (Low Risk)</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div>
-                            <div class="text-[9px] uppercase text-gray-500 font-bold">Estimated Tenure Index</div>
-                            <div id="trendTenure" class="text-xs font-bold text-white mt-1">📆 8 - 12 Months High Demand</div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div>
-                            <div class="text-[9px] uppercase text-gray-500 font-bold">Net Profit/Loss Risk Ratio</div>
-                            <div id="profitRiskRatio" class="text-xs font-bold text-blue-400 mt-1">📈 High Profit / Low Loss</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div class="space-y-1">
-                        <span class="text-[9px] bg-blue-500/10 text-blue-400 font-bold uppercase px-2 py-0.5 rounded">Target Focus</span>
-                        <h4 id="targetProductName" class="text-sm font-bold text-white mt-1">PORTABLE HIGH-VELOCITY BLENDER</h4>
-                    </div>
-                    <div id="graphBars" class="w-28 h-8 flex items-end gap-1 px-1">
-                        <div class="w-full bg-blue-500 h-1/4 rounded-sm"></div>
-                        <div class="w-full bg-blue-500 h-2/5 rounded-sm"></div>
-                        <div class="w-full bg-blue-500 h-1/2 rounded-sm"></div>
-                        <div class="w-full bg-blue-500 h-3/5 rounded-sm"></div>
-                        <div class="w-full bg-blue-500 h-4/5 rounded-sm"></div>
-                        <div class="w-full bg-blue-500 h-full rounded-sm"></div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 text-xs font-mono">
-                        <div><span class="text-gray-500 block text-[9px]">SOURCE COST</span><span id="costVal">₹320</span></div>
-                        <div><span class="text-gray-500 block text-[9px]">TARGET RETAIL</span><span id="retailVal">₹999</span></div>
-                        <div><span class="text-emerald-400 block text-[9px]">NET MARGIN</span><span id="marginPercent">67%</span></div>
-                    </div>
-                </div>
-            </div>
+      <form id="waitlist-form" class="mt-8 max-w-md mx-auto" autocomplete="off">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="email" id="waitlist-email" required placeholder="you@email.com" class="flex-1 bg-panel border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
+          <button type="submit" id="waitlist-submit-btn" class="bg-blue-600 hover:bg-blue-500 transition-all shadow-glow-blue rounded-xl px-5 py-3.5 text-sm font-semibold whitespace-nowrap flex items-center justify-center gap-2">Secure Free Early Access →</button>
         </div>
-        </section>
-            <section id="capabilities" class="max-w-6xl mx-auto px-6 py-12">
-        <h2 class="text-xl font-black tracking-wide text-gray-400 uppercase mb-10 border-b border-gray-900 pb-3">Core Platform Capabilities</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-6 rounded-xl">
-                <div class="text-lg mb-3">🌐</div>
-                <h3 class="text-base font-bold text-white mb-1">Global Trend Intelligence</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Discover Demand Before It Peaks</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Our infrastructure background layer processes ongoing consumer parameters and market volumes to track breakout patterns globally.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl border-blue-500/20 relative">
-                <span class="absolute top-4 right-4 bg-blue-500/10 text-blue-400 font-mono text-[9px] uppercase px-2 py-0.5 rounded border border-blue-500/20 font-bold tracking-widest">Pro</span>
-                <div class="text-lg mb-3">⚡</div>
-                <h3 class="text-base font-bold text-white mb-1">Instant Opportunity Alerts</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Be First. Not Faster.</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Integrated API webhooks push emerging alert trajectories directly into your private messaging communication feeds instantly.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-xl">
-                <div class="text-lg mb-3">📈</div>
-                <h3 class="text-base font-bold text-white mb-1">Predictive Profit Analytics</h3>
-                <p class="text-xs text-blue-400 font-medium mb-3">Decisions Powered by Data</p>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Track precise operational cost factors, expected wholesale margins, and revenue trajectory indexes through an absolute control module.</p>
-            </div>
-        </div>
-    </section>
+        <p id="waitlist-error" class="hidden mt-3 text-xs text-red-400 font-medium"></p>
+      </form>
 
-    <section id="pricing" class="max-w-4xl mx-auto px-6 py-12">
-        <h2 class="text-center text-xl font-black text-white uppercase mb-10">Choose Your Advantage</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="glass-panel p-6 rounded-xl flex flex-col justify-between border-gray-900">
-                <div>
-                    <h3 class="text-sm font-bold text-gray-400 uppercase">Starter Access</h3>
-                    <div class="text-2xl font-black text-white my-3">₹0 <span class="text-xs text-gray-500 font-normal">/ Lifetime</span></div>
-                    <p class="text-xs text-gray-400 mb-4">Daily spotlight, description previews, manual supplier lookup.</p>
-                </div>
-                <button onclick="alert('You are already registered for early starter access!')" class="w-full bg-gray-900 hover:bg-gray-850 text-blue-400 border border-gray-800 text-xs py-2.5 rounded-lg font-bold transition-all">Active in Waitlist ✓</button>
-            </div>
-            <div class="glass-panel p-6 rounded-xl border-2 border-blue-500 glow-pro flex flex-col justify-between relative shadow-2xl">
-                <span class="absolute -top-3 left-4 bg-blue-600 text-white font-mono text-[9px] uppercase px-2 py-0.5 rounded-full font-bold">★ MOST POPULAR</span>
-                <div>
-                    <h3 class="text-sm font-bold text-blue-400 uppercase">OmniCatch Pro</h3>
-                    <div class="text-2xl font-black text-white my-3">₹99 <span class="text-xs text-gray-500 font-normal">/ Month</span></div>
-                    <p class="text-xs text-gray-300 mb-4 font-medium">Unlimited trends, instant WhatsApp & OmniChannel push alerts, automated AI copy generator.</p>
-                </div>
-                <button onclick="openProModal()" class="w-full bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 font-bold text-xs py-2.5 rounded-lg shadow-lg shadow-blue-600/30 transition-all">Unlock Pro Account →</button>
-            </div>
+      <div id="welcome-back-screen" class="hidden mt-8 max-w-md mx-auto bg-panel/80 border border-emerald-500/30 rounded-2xl px-6 py-5 text-left">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-500/15 flex items-center justify-center text-lg">👋</div>
+          <div>
+            <p class="font-semibold text-white text-sm">Welcome back! Your Founding Member session is active.</p>
+            <p id="welcome-back-email" class="text-xs text-gray-400 font-mono mt-0.5"></p>
+          </div>
         </div>
-    </section>
-
-    <footer class="w-full border-t border-gray-800 py-6 px-6 mt-12 bg-black/40 text-center text-xs text-gray-500">
-        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span>&copy; 2026 OmniCatch. All rights reserved.</span>
-        </div>
-    </footer>
-
-    <div id="successModal" class="fixed inset-0 bg-black/80 z-[100] backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel p-6 rounded-2xl max-w-sm w-full text-center border border-gray-800 shadow-2xl">
-            <div class="w-12 h-12 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 text-lg">✓</div>
-            <h3 class="text-lg font-bold text-white mb-2">Welcome to OmniCatch</h3>
-            <p class="text-xs text-gray-400 leading-relaxed mb-4">Your waitlist registration has been secured successfully.</p>
-            <button onclick="handleModalClose()" class="w-full bg-blue-600 text-white font-bold text-xs py-2.5 rounded-xl">Close</button>
-        </div>
+      </div>
     </div>
-        <div id="proModal" class="fixed inset-0 bg-black/90 z-[100] backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-blue-500/40 shadow-2xl relative glow-pro">
-            <button onclick="closeProModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-sm">✕</button>
-            
-            <div class="text-center mb-6">
-                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Premium Sandbox checkout</span>
-                <h3 class="text-xl font-black text-white mt-3 uppercase tracking-tight">Upgrade to OmniCatch Pro</h3>
-                <p class="text-xs text-gray-400 mt-1">Get instant webhook alert parameters and high-stability trend vectors.</p>
-            </div>
-
-            <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 mb-6 space-y-3">
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Subscription Tier</span><span class="text-blue-400 font-bold">OmniCatch Pro Monthly</span></div>
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Billing Cycle</span><span class="text-white">Recurring Monthly</span></div>
-                <hr class="border-gray-800">
-                <div class="flex justify-between text-sm font-bold"><span class="text-white">Total Cost Due</span><span class="text-emerald-400">₹99.00 INR</span></div>
-            </div>
-
-            <div class="space-y-3 text-left mb-6">
-                <div>
-                    <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Dummy Card Number</label>
-                    <input disabled type="text" value="4111 •••• •••• 2026" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Expiry Date</label>
-                        <input disabled type="text" value="12/29" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase tracking-wider text-gray-500 font-bold block mb-1">Security Code</label>
-                        <input disabled type="text" value="***" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-mono text-gray-400 cursor-not-allowed">
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="triggerMockPayment(this)" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20">
-                Simulate Secure Payment Execution →
-            </button>
+       <div class="relative max-w-5xl mx-auto mt-16 sm:mt-20 z-10">
+      <div class="absolute -inset-10 bg-gradient-to-tr from-blue-600/20 via-emerald-500/10 to-blue-500/20 rounded-[2rem] ambient-blob-slow pointer-events-none"></div>
+      <div class="glass border border-blue-500/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 glow-border-anim float-anim relative">
+        <div class="flex items-center justify-between mb-4 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-400/70"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/70"></span>
+          </div>
+          <span class="text-[11px] font-mono text-gray-500">omnicatch.app/dashboard</span>
         </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+            <p class="text-[11px] text-gray-500 font-mono">VOLUME</p>
+            <p class="font-display font-bold text-lg sm:text-xl text-white mt-1">48.2K</p>
+            <p class="text-[11px] text-emerald-400 mt-1">↑ 12.4%</p>
+          </div>
+          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+            <p class="text-[11px] text-gray-500 font-mono">MOMENTUM</p>
+            <p class="font-display font-bold text-lg sm:text-xl text-blue-400 mt-1">Rising</p>
+            <p class="text-[11px] text-gray-500 mt-1">7-day trend</p>
+          </div>
+          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5 hidden sm:block">
+            <p class="text-[11px] text-gray-500 font-mono">MARGIN</p>
+            <p class="font-display font-bold text-lg sm:text-xl text-white mt-1">34.8%</p>
+            <p class="text-[11px] text-emerald-400 mt-1">Healthy</p>
+          </div>
+          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5 hidden sm:block">
+            <p class="text-[11px] text-gray-500 font-mono">RISK</p>
+            <p class="font-display font-bold text-lg sm:text-xl text-emerald-400 mt-1">Low</p>
+            <p class="text-[11px] text-gray-500 mt-1">Stable supply</p>
+          </div>
         </div>
-              <script>
-        const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
-        const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
+        <div class="mt-4 bg-gray-900/60 border border-border rounded-xl p-4 flex items-end gap-1.5 h-20 sm:h-24">
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:35%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:52%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:40%"></div>
+          <div class="flex-1 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-sm" style="height:78%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:60%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:71%"></div>
+          <div class="flex-1 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-sm" style="height:90%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:66%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:55%"></div>
+          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:82%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        let globalSavedEmail = "";
+  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Command Center</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Run a live trend scan</h2>
+        <p class="text-gray-400 mt-3 max-w-xl mx-auto">Type any product idea. OmniCatch's simulation engine models momentum, margin, and risk in real time.</p>
+      </div>
 
-        async function submitToWaitlist(e) {
-            e.preventDefault();
-            const emailInput = document.getElementById('userEmail');
-            const submitBtn = document.getElementById('submitBtn');
-            const email = emailInput.value.trim();
-            if (!email) return;
+      <div class="bg-panel border border-border rounded-2xl p-5 sm:p-8">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" id="trend-query-input" placeholder="e.g. magnetic phone mount, smart ring, posture corrector..." class="flex-1 bg-gray-900/70 border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
+          <button id="analyze-trend-btn" class="bg-blue-600 hover:bg-blue-500 transition-all shadow-glow-blue rounded-xl px-6 py-3.5 text-sm font-semibold whitespace-nowrap">⚡ Analyze Trend</button>
+        </div>
+        <p id="trend-error-box" class="hidden mt-4 bg-red-500/10 border border-red-500/30 text-red-300 text-sm rounded-xl px-4 py-3"></p>
 
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Securing account...";
+        <div id="trend-results" class="hidden mt-8">
+          <p class="text-xs font-mono text-gray-500 mb-4">RESULTS FOR <span id="result-keyword-label" class="text-blue-300"></span></p>
 
-            try {
-                const response = await fetch(SUPABASE_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({ email: email })
-                });
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">MONITORED VOLUME</p>
+              <p id="metric-volume" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
+            </div>
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">GROWTH MOMENTUM</p>
+              <p id="metric-momentum" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
+            </div>
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">AVG MARGIN %</p>
+              <p id="metric-margin" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
+            </div>
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">STABILITY STATUS</p>
+              <p id="metric-stability" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
+            </div>
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">TENURE INDEX</p>
+              <p id="metric-tenure" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
+            </div>
+            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
+              <p class="text-[10px] text-gray-500 font-mono leading-tight">P/L RISK RATIO</p>
+              <p id="metric-risk" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
+            </div>
+          </div>
 
-                if (response.ok) {
-                    globalSavedEmail = email;
-                    emailInput.value = '';
-                    document.getElementById('successModal').classList.replace('hidden', 'flex');
-                    sendDiscordNotification(email);
-                }
-            } catch (err) {
-                console.error("Database connection issue.");
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Join the Creator Waitlist →";
-            }
+          <div class="bg-gray-900/60 border border-border rounded-xl p-4 sm:p-5">
+            <p class="text-xs font-mono text-gray-500 mb-3">14-DAY MOMENTUM SIMULATION</p>
+            <div id="trend-chart-bars" class="flex items-end gap-1 sm:gap-1.5 h-32 sm:h-40"></div>
+          </div>
+          <p class="text-[11px] text-gray-500 mt-3 italic">*Calculations reflect real-time live-simulation market estimation parameters.</p>
+        </div>
+      </div>
+    </div>
+ </section>
+   <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border bg-gradient-to-b from-transparent via-blue-950/10 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Platform</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Built for sellers who move first</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg mb-4"><i class="fa-solid fa-globe"></i></div>
+          <h3 class="font-display font-semibold text-lg">Global Trend Intelligence</h3>
+          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Continuous scanning across regions and categories to surface what's actually gaining traction, not just what's loud.</p>
+        </div>
+        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors relative">
+          <span class="absolute top-4 right-4 text-[10px] font-mono bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-full px-2 py-0.5">PRO</span>
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg mb-4"><i class="fa-solid fa-bolt"></i></div>
+          <h3 class="font-display font-semibold text-lg">Instant Opportunity Alerts</h3>
+          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Get notified the moment a tracked category breaks out, before margins compress from competition.</p>
+        </div>
+        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors">
+          <div class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-lg mb-4"><i class="fa-solid fa-chart-line"></i></div>
+          <h3 class="font-display font-semibold text-lg">Predictive Profit Analytics</h3>
+          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Model landed cost, markup, and margin scenarios before you commit a single rupee of ad spend.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
+      <div>
+        <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">Live Breakout Feed</span>
+        <h2 class="font-display font-bold text-2xl sm:text-3xl mt-3 mb-6">What's moving right now</h2>
+        <div class="space-y-3">
+          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">💍</span>
+              <div>
+                <p class="font-semibold text-sm">Smart Rings</p>
+                <p class="text-xs text-gray-500">Health & wearables</p>
+              </div>
+            </div>
+            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 31.2%</span>
+          </div>
+          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">📷</span>
+              <div>
+                <p class="font-semibold text-sm">AI Security Cameras</p>
+                <p class="text-xs text-gray-500">Smart home</p>
+              </div>
+            </div>
+            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 18.7%</span>
+          </div>
+          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🎒</span>
+              <div>
+                <p class="font-semibold text-sm">Anti-Theft Backpacks</p>
+                <p class="text-xs text-gray-500">Travel accessories</p>
+              </div>
+            </div>
+            <span class="text-blue-400 text-xs font-mono font-semibold">↑ 9.4%</span>
+          </div>
+          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🧴</span>
+              <div>
+                <p class="font-semibold text-sm">Scalp Massagers</p>
+                <p class="text-xs text-gray-500">Personal care</p>
+              </div>
+            </div>
+            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 22.9%</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Community</span>
+        <h2 class="font-display font-bold text-2xl sm:text-3xl mt-3 mb-6">Founding creator stories</h2>
+        <div class="bg-gradient-to-br from-panel to-gray-900/40 border border-border rounded-2xl p-8 sm:p-10 text-center h-[calc(100%-3.25rem)] flex flex-col items-center justify-center">
+          <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="text-gray-400 text-sm max-w-xs leading-relaxed">Founding creator stories coming soon. Be one of the first members featured here.</p>
+          <div class="flex gap-1.5 mt-5">
+            <span class="w-1.5 h-1.5 rounded-full bg-gray-700"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-gray-700"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+   <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Pricing</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Simple plans, founder pricing</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div class="bg-panel border border-border rounded-2xl p-7 sm:p-8 flex flex-col">
+          <h3 class="font-display font-semibold text-xl">Starter Access</h3>
+          <p class="text-3xl font-display font-bold mt-3">₹0<span class="text-sm text-gray-500 font-normal">/forever</span></p>
+          <ul class="mt-6 space-y-3 text-sm text-gray-400 flex-1">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Waitlist + early access invite</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> 3 trend scans / day</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Live breakout feed access</li>
+          </ul>
+          <button disabled class="mt-7 w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold text-sm rounded-xl py-3 cursor-default">Active in Waitlist ✓</button>
+        </div>
+
+        <div class="relative bg-panel border-2 border-blue-500 rounded-2xl p-7 sm:p-8 flex flex-col shadow-glow-blue">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[11px] font-bold tracking-wide rounded-full px-3 py-1 whitespace-nowrap">★ MOST POPULAR</span>
+          <h3 class="font-display font-semibold text-xl">OmniCatch Pro</h3>
+          <p class="text-3xl font-display font-bold mt-3">₹99<span class="text-sm text-gray-500 font-normal">/month</span></p>
+          <ul class="mt-6 space-y-3 text-sm text-gray-300 flex-1">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Unlimited trend scans</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Instant opportunity alerts</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Full profit & risk modeling</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Priority feed updates</li>
+          </ul>
+          <button id="unlock-pro-btn" class="mt-7 w-full bg-blue-600 hover:bg-blue-500 transition-colors text-white font-semibold text-sm rounded-xl py-3">Unlock Pro Account →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">FAQ</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Questions, answered</h2>
+      </div>
+
+      <div class="space-y-3" id="faq-accordion">
+        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
+          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
+            <span class="font-medium text-sm sm:text-base">Where does OmniCatch source its trend data?</span>
+            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
+          </button>
+          <div class="accordion-content px-5">
+            <p class="text-sm text-gray-400 pb-4 leading-relaxed">During the beta, OmniCatch models demand signals using a simulation engine built on publicly observable market patterns. As we move toward general availability, we're integrating live marketplace, search, and social signal feeds.</p>
+          </div>
+        </div>
+
+        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
+          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
+            <span class="font-medium text-sm sm:text-base">Is my email kept private?</span>
+            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
+          </button>
+          <div class="accordion-content px-5">
+            <p class="text-sm text-gray-400 pb-4 leading-relaxed">Yes. Your email is stored solely to manage your waitlist position and beta invitation. We never sell or share member data with third parties. See our Privacy Policy for full details.</p>
+          </div>
+        </div>
+
+        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
+          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
+            <span class="font-medium text-sm sm:text-base">How does the ₹99 launch credit work?</span>
+            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
+          </button>
+          <div class="accordion-content px-5">
+            <p class="text-sm text-gray-400 pb-4 leading-relaxed">Everyone who joins the waitlist before public launch automatically qualifies for 3 full months of OmniCatch Pro at a one-time price of ₹99. The credit is applied automatically to your account using the email you registered with — no code needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="px-5 sm:px-8 py-12 border-t border-border bg-gray-950/40">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center"><i class="fa-solid fa-satellite-dish text-white text-xs"></i></div>
+          <span class="font-display font-semibold">OmniCatch</span>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
+          <a href="#" class="hover:text-blue-400 transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-blue-400 transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-blue-400 transition-colors">Contact Support</a>
+          <a href="#" class="hover:text-blue-400 transition-colors">Financial Disclaimer</a>
+        </div>
+      </div>
+      <div class="border-t border-border mt-8 pt-6 text-xs text-gray-600 leading-relaxed">
+        <p>&copy; 2026 OmniCatch. All rights reserved.</p>
+        <p class="mt-2">OmniCatch is currently in beta. Trend metrics, pricing data, and projections shown on this platform are for informational and simulation purposes only and should not be considered financial advice. Past or simulated performance is not indicative of future results.</p>
+      </div>
+    </div>
+ </footer>
+   <div id="checkout-modal" class="hidden fixed inset-0 z-[100] items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
+    <div class="bg-panel border border-border rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-glow-blue">
+      <div class="flex items-center justify-between px-6 py-5 border-b border-border">
+        <h3 class="font-display font-semibold text-lg">Unlock OmniCatch Pro</h3>
+        <button id="close-checkout-modal" class="text-gray-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="px-6 py-3">
+        <div class="bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs rounded-lg px-3 py-2 flex items-center gap-2">
+          <i class="fa-solid fa-flask"></i>Beta Environment Sandbox: Payments are currently simulation-only.
+        </div>
+      </div>
+      <div class="px-6 pt-4 flex gap-2 border-b border-border">
+        <button data-tab="upi" class="tab-btn active flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors">UPI</button>
+        <button data-tab="card" class="tab-btn flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors text-gray-400">Card</button>
+        <button data-tab="redeem" class="tab-btn flex-1 text-xs sm:text-sm font-medium border-b-2 border-transparent px-2 py-2.5 rounded-t-lg transition-colors text-gray-400">Redeem Code</button>
+      </div>
+      <div class="px-6 py-6">
+        <div data-tab-content="upi" class="tab-content space-y-4">
+          <div class="bg-white rounded-xl p-4 flex items-center justify-center">
+            <div class="w-36 h-36 bg-gray-900 rounded-lg grid grid-cols-5 grid-rows-5 gap-1 p-2">
+              <div class="bg-white"></div><div class="bg-white"></div><div></div><div class="bg-white"></div><div></div>
+              <div></div><div class="bg-white"></div><div class="bg-white"></div><div></div><div class="bg-white"></div>
+              <div class="bg-white"></div><div></div><div class="bg-white"></div><div class="bg-white"></div><div></div>
+              <div></div><div class="bg-white"></div><div></div><div class="bg-white"></div><div class="bg-white"></div>
+              <div class="bg-white"></div><div></div><div class="bg-white"></div><div></div><div class="bg-white"></div>
+            </div>
+          </div>
+          <div class="bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-center">
+            <p class="text-xs text-gray-500 font-mono">UPI ID</p>
+            <p class="text-sm font-mono text-blue-300 mt-1">omnicatch.beta@upi</p>
+          </div>
+        </div>
+        <div data-tab-content="card" class="tab-content hidden space-y-3">
+          <input type="text" placeholder="Card number" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
+          <div class="flex gap-3">
+            <input type="text" placeholder="MM/YY" class="w-1/2 bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
+            <input type="text" placeholder="CVV" class="w-1/2 bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
+          </div>
+          <input type="text" placeholder="Name on card" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none" />
+        </div>
+        <div data-tab-content="redeem" class="tab-content hidden space-y-3">
+          <input type="text" placeholder="Enter redeem code" class="w-full bg-gray-900/60 border border-border rounded-lg px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 outline-none font-mono" />
+        </div>
+        <button id="checkout-confirm-btn" class="mt-5 w-full bg-blue-600 hover:bg-blue-500 transition-all rounded-xl py-3.5 text-sm font-semibold">Confirm &amp; Unlock Pro</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
+    const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
+
+    function maskEmail(email) {
+      const [user, domain] = email.split("@");
+      if (!user || !domain) return "••••••";
+      const visible = user.slice(0, Math.min(2, user.length));
+      return `${visible}${"•".repeat(Math.max(user.length - 2, 2))}@${domain}`;
+    }
+
+    function showFormError(message) {
+      const errBox = document.getElementById("waitlist-error");
+      errBox.textContent = message;
+      errBox.classList.remove("hidden");
+    }
+    function clearFormError() { document.getElementById("waitlist-error").classList.add("hidden"); }
+
+    async function saveToSupabase(email) {
+      const res = await fetch(SUPABASE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({ email: email, created_at: new Date().toISOString() })
+      });
+      if (!res.ok) throw new Error("Supabase insert failed");
+      return true;
+    }
+
+    async function sendDiscordNotification(email) {
+      const payload = {
+        embeds: [{
+          title: "🚀 New OmniCatch Waitlist Signup",
+          color: 3447003,
+          fields: [
+            { name: "Email", value: email, inline: true },
+            { name: "Timestamp", value: new Date().toISOString(), inline: false }
+          ]
+        }]
+      };
+      try {
+        await fetch(DISCORD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) { console.warn(err); }
+    }
+
+    function getStoredEmail() { return localStorage.getItem("omnicatch_member_email"); }
+    function storeEmail(email) { localStorage.setItem("omnicatch_member_email", email); }
+    
+    function renderWelcomeBack(email) {
+      document.getElementById("waitlist-form").classList.add("hidden");
+      const screen = document.getElementById("welcome-back-screen");
+      screen.classList.remove("hidden");
+      screen.classList.add("fade-up");
+      document.getElementById("welcome-back-email").textContent = maskEmail(email);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const existing = getStoredEmail();
+      if (existing) renderWelcomeBack(existing);
+      
+      const label = document.getElementById("member-count-label");
+      let base = 2847;
+      setInterval(() => {
+        base += Math.floor(Math.random() * 2);
+        label.textContent = `${base.toLocaleString()} members joined`;
+      }, 6000);
+    });
+
+    document.getElementById("waitlist-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearFormError();
+      const emailInput = document.getElementById("waitlist-email");
+      const email = emailInput.value.trim();
+      const submitBtn = document.getElementById("waitlist-submit-btn");
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showFormError("Please enter a valid email address.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Securing spot...`;
+
+      try {
+        await saveToSupabase(email);
+        await sendDiscordNotification(email);
+        storeEmail(email);
+        renderWelcomeBack(email);
+      } catch (err) {
+        showFormError("We couldn't save your spot right now. Please try again.");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "Secure Free Early Access →";
+      }
+    });
+
+    const FILLER_WORDS = new Set(["the","a","an","is","are","please","can","you","analyze","check","show","me","want","need","product","idea","trend"]);
+    const BLOCKED_TERMS = ["porn","xxx","nude","sex","fuck","nsfw"];
+
+    function extractProductKeyword(raw) {
+      const cleaned = raw.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim();
+      if (!cleaned) return { keyword: null, reason: "empty" };
+      const tokens = cleaned.split(/\s+/).filter(Boolean);
+
+      for (const t of tokens) {
+        if (BLOCKED_TERMS.includes(t)) return { keyword: null, reason: "blocked" };
+        if (t.length >= 5 && ((t.match(/[aeiou]/gi) || []).length === 0 || /[^aeiou\s]{6,}/i.test(t))) {
+          return { keyword: null, reason: "mash" };
         }
+      }
+      const meaningful = tokens.filter(t => !FILLER_WORDS.has(t) && t.length > 1);
+      return meaningful.length === 0 ? { keyword: null, reason: "no_signal" } : { keyword: meaningful.join(" "), reason: "ok" };
+    }
 
-        async function sendDiscordNotification(userEmail) {
-            const payload = {
-                username: "OmniCatch Engine Bot",
-                avatar_url: "https://cdn-icons-png.flaticon.com/512/873/873120.png",
-                embeds: [{
-                    title: "🚀 New Waitlist Signup Received!",
-                    color: 3447003,
-                    fields: [
-                        { name: "👤 User Email Address", value: `\`${userEmail}\``, inline: false },
-                        { name: "🌐 Registration Platform", value: "GitHub Live Production", inline: true }
-                    ],
-                    footer: { text: "OmniCatch Analytics Protocol" },
-                    timestamp: new Date().toISOString()
-                }]
-            };
-            try {
-                await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            } catch (e) { console.error("Webhook route bypassed."); }
-        }
+    function seedFromString(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) % 100000;
+      return hash;
+    }
 
-        function handleModalClose() {
-            document.getElementById('successModal').classList.replace('flex', 'hidden');
-            if (globalSavedEmail) {
-                const hero = document.getElementById('heroSection');
-                hero.style.maxHeight = "0px"; hero.style.overflow = "hidden"; hero.style.paddingTop = "0px"; hero.style.paddingBottom = "0px"; hero.style.opacity = "0";
-                document.getElementById('activeUserEmail').innerText = globalSavedEmail;
-                document.getElementById('sessionBadge').classList.remove('hidden');
-                window.scrollTo({ top: 100, behavior: 'smooth' });
-            }
-        }
+    function runTrendAnalysis() {
+      const box = document.getElementById("trend-error-box");
+      box.classList.add("hidden");
+      const input = document.getElementById("trend-query-input").value;
+      if (!input || !input.trim()) {
+        box.textContent = "⚠️ Enter a product idea to analyze.";
+        box.classList.remove("hidden");
+        return;
+      }
 
-        // INTELLIGENT REALISTIC TREND SCANNER DATA LOGIC
-        function runTrendScanner() {
-            const keywordInput = document.getElementById('trendKeyword');
-            const scanBtn = document.getElementById('scanBtn');
-            const display = document.getElementById('displayContainer');
-            const keyword = keywordInput.value.trim().toLowerCase();
-            
-            if (!keyword) return;
+      const { keyword, reason } = extractProductKeyword(input);
+      if (reason === "blocked" || reason === "mash" || !keyword) {
+        box.textContent = "⚠️ Invalid product query structural token sequence. Try a real item like 'wireless earbuds'.";
+        box.classList.remove("hidden");
+        document.getElementById("trend-results").classList.add("hidden");
+        return;
+      }
 
-            scanBtn.disabled = true;
-            scanBtn.innerText = "⏳ Running Algorithmic Scan...";
-            display.style.opacity = "0.3";
-            display.style.filter = "blur(4px)";
+      const seed = seedFromString(keyword);
+      const volume = Math.round(((seed % 800) * 60 + keyword.length * 340 + 4000) / 10) * 10;
+      const momentum = Math.round((((seed % 470) / 10) - 8) * 10) / 10;
+      const margin = Math.min(62, Math.max(14, 18 + (seed % 35)));
 
-            setTimeout(() => {
-                document.getElementById('targetProductName').innerText = keyword.toUpperCase();
-                
-                let volume, momentum, cost, retail, netMargin, stability, tenure, riskText;
+      document.getElementById("result-keyword-label").textContent = `"${keyword.toUpperCase()}"`;
+      document.getElementById("metric-volume").textContent = volume.toLocaleString();
+      
+      const momEl = document.getElementById("metric-momentum");
+      momEl.textContent = `${momentum > 0 ? "+" : ""}${momentum}%`;
+      momEl.className = `font-display font-bold text-base sm:text-lg mt-2 ${momentum > 15 ? 'text-emerald-400' : 'text-blue-400'}`;
+      
+      document.getElementById("metric-margin").textContent = `${margin}%`;
+      document.getElementById("metric-stability").textContent = (seed % 13) <= 5 ? "💎 Stable Winner" : "⚖️ Balanced";
+      document.getElementById("metric-stability").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
+      document.getElementById("metric-tenure").textContent = `${2 + (seed % 22)} mo`;
+      document.getElementById("metric-risk").textContent = `${(1 + ((seed % 30) / 10)).toFixed(1)} : 1`;
+      document.getElementById("metric-risk").className = "font-display font-bold text-base sm:text-lg mt-2 text-emerald-400";
 
-                // CHECK IF THE PRODUCT IS SATURATED OR OLD NEWS
-                if (keyword.includes("car") || keyword.includes("led") || keyword.includes("spinner") || keyword.includes("toy")) {
-                    volume = Math.floor(Math.random() * (5000 - 1200) + 1200).toLocaleString();
-                    momentum = "-" + Math.floor(Math.random() * (40 - 15) + 15) + "% Vol Decline";
-                    cost = Math.floor(Math.random() * (150 - 60) + 60);
-                    retail = Math.floor(cost * 1.3); // Very low price markup
-                    netMargin = Math.floor(((retail - cost) / retail) * 100);
-                    
-                    stability = "🚨 HIGH RISK / SATURATED TREND";
-                    tenure = "📉 Trend Dying: 0 - 2 Months Left";
-                    riskText = "⚠️ High Ad Costs / Over-supplied Market";
-                    
-                    document.getElementById('trendStability').className = "text-xs font-bold text-red-500 mt-1";
-                    document.getElementById('profitRiskRatio').className = "text-xs font-bold text-red-400 mt-1";
-                } 
-                // CHECK IF IT'S A GENUINE HIGH-TREND MODERN PRODUCT
-                else if (keyword.includes("ring") || keyword.includes("drone") || keyword.includes("ai") || keyword.includes("smart")) {
-                    volume = Math.floor(Math.random() * (85000 - 45000) + 45000).toLocaleString();
-                    momentum = "+" + Math.floor(Math.random() * (320 - 140) + 140) + "% Breakout";
-                    cost = Math.floor(Math.random() * (1200 - 600) + 600);
-                    retail = Math.floor(cost * (Math.random() * (3.2 - 2.5) + 2.5));
-                    netMargin = Math.floor(((retail - cost) / retail) * 100);
-                    
-                    stability = "💎 HIGH TRAJECTORY WINNER";
-                    tenure = "📆 12+ Months High Stable Demand";
-                    riskText = "📈 High Profit Margin / Moderate Scaling Risk";
-                    
-                    document.getElementById('trendStability').className = "text-xs font-bold text-emerald-400 mt-1";
-                    document.getElementById('profitRiskRatio').className = "text-xs font-bold text-blue-400 mt-1";
-                } 
-                // STANDARD BALANCED CATCH-ALL FOR ANY OTHER PRODUCT
-                else {
-                    volume = Math.floor(Math.random() * (35000 - 15000) + 15000).toLocaleString();
-                    momentum = "+" + Math.floor(Math.random() * (85 - 25) + 25) + "% Growth";
-                    cost = Math.floor(Math.random() * (450 - 200) + 200);
-                    retail = Math.floor(cost * 1.8);
-                    netMargin = Math.floor(((retail - cost) / retail) * 100);
-                    
-                    stability = "⚖️ BALANCED MARKET Trajectory";
-                    tenure = "📆 4 - 6 Months Stable Window";
-                    riskText = "📈 Standard Profit Prob. / Moderate Competition";
-                    
-                    document.getElementById('trendStability').className = "text-xs font-bold text-yellow-400 mt-1";
-                    document.getElementById('profitRiskRatio').className = "text-xs font-bold text-white mt-1";
-                }
+      const chart = document.getElementById("trend-chart-bars");
+      chart.innerHTML = "";
+      let prev = 30 + (seed % 30);
+      for (let i = 0; i < 14; i++) {
+        prev = Math.min(96, Math.max(10, prev + (((seed * (i + 3)) % 23) - 11) * 0.6));
+        const bar = document.createElement("div");
+        bar.className = "flex-1 rounded-sm bar-grow bg-gradient-to-t from-blue-600 to-blue-400";
+        bar.style.height = `${Math.round(prev)}%`;
+        chart.appendChild(bar);
+      }
 
-                // Inject calculations into layout
-                document.getElementById('metricMonitored').innerText = volume;
-                document.getElementById('metricMomentum').innerText = momentum;
-                document.getElementById('metricMargin').innerText = netMargin + "%";
-                
-                document.getElementById('trendStability').innerText = stability;
-                document.getElementById('trendTenure').innerText = tenure;
-                document.getElementById('profitRiskRatio').innerText = riskText;
+      document.getElementById("trend-results").classList.remove("hidden");
+      document.getElementById("trend-results").classList.add("fade-up");
+    }
 
-                document.getElementById('costVal').innerText = "₹" + cost;
-                document.getElementById('retailVal').innerText = "₹" + retail;
-                document.getElementById('marginPercent').innerText = netMargin + "%";
+    document.getElementById("analyze-trend-btn").addEventListener("click", runTrendAnalysis);
+    document.getElementById("trend-query-input").addEventListener("keydown", (e) => { if (e.key === "Enter") runTrendAnalysis(); });
 
-                const bars = document.getElementById('graphBars').children;
-                for (let i = 0; i < bars.length; i++) {
-                    bars[i].style.height = Math.floor(Math.random() * (100 - 20) + 20) + "%";
-                }
+    document.querySelectorAll(".faq-trigger").forEach(trig => {
+      trig.addEventListener("click", () => {
+        const content = trig.nextElementSibling;
+        const isOpen = content.classList.contains("open");
+        document.querySelectorAll(".accordion-content.open").forEach(el => {
+          el.classList.remove("open");
+          el.previousElementSibling.querySelector(".accordion-chevron").classList.remove("rotated");
+        });
+        content.classList.toggle("open", !isOpen);
+        trig.querySelector(".accordion-chevron").classList.toggle("rotated", !isOpen);
+      });
+    });
 
-                display.style.opacity = "1"; display.style.filter = "none";
-                scanBtn.disabled = false; scanBtn.innerText = "⚡ Analyze Trend";
-                keywordInput.value = '';
-            }, 1200);
-        }
+    const modal = document.getElementById("checkout-modal");
+    document.getElementById("unlock-pro-btn").addEventListener("click", () => { modal.classList.remove("hidden"); modal.classList.add("flex"); });
+    document.getElementById("close-checkout-modal").addEventListener("click", () => { modal.classList.add("hidden"); modal.classList.remove("flex"); });
 
-        function openProModal() { document.getElementById('proModal').classList.replace('hidden', 'flex'); }
-        function closeProModal() { document.getElementById('proModal').classList.replace('flex', 'hidden'); }
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => { b.classList.remove("active"); b.classList.add("text-gray-400"); });
+        btn.classList.add("active"); btn.classList.remove("text-gray-400");
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.toggle("hidden", c.dataset.tabContent !== btn.dataset.tab));
+      });
+    });
 
-        // LOCK PAYMENT PAGE DOWN SO IT TELLS THE TRUTH
-        function triggerMockPayment(btn) {
-            btn.disabled = true;
-            btn.innerText = "🔒 Processing Request...";
-            setTimeout(() => {
-                btn.innerText = "⚠️ Registrations Paused: Join Waitlist First";
-                btn.className = "w-full bg-amber-600/20 text-amber-400 border border-amber-500/30 text-xs py-3 rounded-xl cursor-not-allowed font-bold";
-                setTimeout(() => { 
-                    closeProModal(); 
-                    alert("OmniCatch Pro Beta Registrations are currently restricted to Approved Waitlist Members. Please submit your email on the homepage first!"); 
-                }, 1500);
-            }, 1000);
-        }
-    </script>
+    document.getElementById("checkout-confirm-btn").addEventListener("click", function() {
+      this.disabled = true; this.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...`;
+      setTimeout(() => {
+        this.innerHTML = "⚠️ Registrations Restricted to Waitlist";
+        this.className = "mt-5 w-full bg-yellow-600/20 border border-yellow-500/40 text-yellow-300 rounded-xl py-3.5 text-sm font-semibold cursor-not-allowed";
+        alert("Pro checkout is in preview mode. Please join the waitlist on the home screen first.");
+      }, 1000);
+    });
+  </script>
 </body>
-</html>
+ </html>
+
