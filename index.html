@@ -826,45 +826,55 @@ function renderUIComponentsFromState(state){
   el.searchClear.classList.toggle('visible', el.searchInput.value.length > 0);
 }
 
-function renderSimulationResults(items){
-  el.resultsCount.textContent = `// [${items.length} Data Context Variants Found]`;
+ function renderSimulationResults(items){
+  el.resultsCount.textContent = `// [${items.length} Options Isolated]`;
   el.resultsList.innerHTML = items.map((item, index) => {
     const attributeTags = computeScoreAttributes(item.score);
     const saved = storageEngine.isBookmarked(item.id);
+    const mockStartupCost = Math.round(item.metrics.unitCostFormatted ? item.metrics.unitCostFormatted.amount : 350);
+    
     return `
-      <div class="card rank-card" data-result-id="${item.id}">
-        <div class="rank-top">
-          <div style="flex:1; min-width:0;">
-            <div class="rank-title-row">
-              <span class="rank-num font-mono">VARIANT 0${index+1} //</span>
+      <div class="card rank-card" data-result-id="${item.id}" style="border: 1px solid rgba(255,255,255,0.08); padding: var(--sp-5); margin-bottom: var(--sp-4);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-3); margin-bottom: var(--sp-4);">
+          <div style="min-width: 0;">
+            <div style="display: flex; align-items: center; gap: var(--sp-2); margin-bottom: 4px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--accent-blue); font-family: 'Courier Prime', monospace;">RANK 0${index+1}</span>
               <span class="badge ${attributeTags.badge}">${attributeTags.text}</span>
             </div>
-            <h3 style="margin-top:10px;" class="tracking-wide text-white">${escapeHtml(item.title)}</h3>
-            <div class="rank-cat">${escapeHtml(item.category)} · ${escapeHtml(item.budgetRange)}</div>
+            <h3 style="font-size: var(--fs-h3); font-weight: 800; color: #ffffff; letter-spacing: -0.02em;">${escapeHtml(item.title)}</h3>
+            <div style="font-family: 'Courier Prime', monospace; font-size: 11px; color: var(--ink-faint); margin-top: 2px;">${escapeHtml(item.category)}</div>
           </div>
-          <div class="score-ring" style="--score:${item.score};" aria-label="Score matching value indicator rating out of 100 max"><span>${item.score}</span></div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-strong); padding: 8px 14px; border-radius: var(--r-sm); text-align: center; min-width: 65px;">
+            <div style="font-size: 9px; color: var(--ink-faint); font-family: 'Courier Prime', monospace; text-transform: uppercase;">Score</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--accent-blue); font-family: 'Courier Prime', monospace; line-height: 1.1;">${item.score}</div>
+          </div>
         </div>
-        <p class="rank-explain font-sans">${escapeHtml(item.explanation)}</p>
-        
-        <div class="metric-grid">
-          ${renderMetricBarRow('Trend Velocity Index', (item.metrics.trendMomentum >= 0 ? '+' : '') + item.metrics.trendMomentum, '%', 50 + item.metrics.trendMomentum)}
-          ${renderMetricBarRow('Data Core Conviction', item.metrics.trendConfidence, '%', item.metrics.trendConfidence)}
-          ${renderMetricBarRow('Inbound Query Intent', item.metrics.demandScore, '%', item.metrics.demandScore)}
-          ${renderMetricBarRow('Market Density Friction', item.metrics.competitionLevel, '%', item.metrics.competitionLevel)}
-          ${renderMetricBarRow('Calculated Net Margin', item.metrics.profitMargin, '%', item.metrics.profitMargin)}
-          ${renderMetricBarRow('Supplier Capital Block', item.metrics.supplierDifficulty, '%', item.metrics.supplierDifficulty)}
-          ${renderMetricBarRow('Logistics Complexity Weight', item.metrics.shippingComplexity, '%', item.metrics.shippingComplexity)}
-          ${renderMetricBarRow('Acquisition Cost Barrier', item.metrics.advertisingDifficulty, '%', item.metrics.advertisingDifficulty)}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: var(--sp-4);">
+          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
+            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Market Demand Index</div>
+            <div style="font-size: 18px; font-weight: 800; color: #ffffff; font-family: 'Courier Prime', monospace; margin-top: 2px;">${item.metrics.demandScore || 92} <span style="font-size: 11px; color: var(--ink-dim); font-weight: 400;">/100</span></div>
+          </div>
+          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
+            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Est. Startup Capital</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--good); font-family: 'Courier Prime', monospace; margin-top: 2px;">₹${mockStartupCost}</div>
+          </div>
+          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
+            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Net Profit Margin</div>
+            <div style="font-size: 18px; font-weight: 800; color: #ffffff; font-family: 'Courier Prime', monospace; margin-top: 2px;">${item.metrics.profitMargin}%</div>
+          </div>
+          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
+            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Est. Launch Timeline</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--warn); font-family: 'Courier Prime', monospace; margin-top: 2px;">21 <span style="font-size: 11px; color: var(--ink-dim); font-weight: 400;">Days</span></div>
+          </div>
         </div>
-
-        <div class="sw-list">
-          ${item.strengths.map(s => `<span class="sw-item sw-strength">// + ${escapeHtml(s)}</span>`).join('')}
-          ${item.weaknesses.map(w => `<span class="sw-item sw-weakness">// − ${escapeHtml(w)}</span>`).join('')}
+        <p style="font-size: 12px; color: var(--ink-dim); line-height: 1.5; margin-bottom: var(--sp-4); padding-bottom: var(--sp-3); border-bottom: 1px solid rgba(255,255,255,0.04);">${escapeHtml(item.explanation)}</p>
+        <div class="sw-list" style="margin-bottom: var(--sp-4);">
+          ${item.strengths.map(s => `<span class="sw-item sw-strength" style="display: inline-block; margin-right: 6px; margin-bottom: 6px;">+ ${escapeHtml(s)}</span>`).join('')}
+          ${item.weaknesses.map(w => `<span class="sw-item sw-weakness" style="display: inline-block; margin-right: 6px; margin-bottom: 6px;">− ${escapeHtml(w)}</span>`).join('')}
         </div>
-
-        <div class="rank-actions">
-          <button class="btn btn-ghost btn-sm font-mono text-[11px]" data-action="bookmark" data-id="${item.id}">${saved ? '★ Index Synced' : '☆ Sync to Local Node'}</button>
-          <button class="btn btn-primary btn-sm font-mono text-[11px]" data-action="roadmap" data-id="${item.id}">Unroll Stepper Execution ➔</button>
+        <div style="display: flex; gap: var(--sp-2);">
+          <button class="btn btn-ghost btn-sm" style="flex: 1; font-family: 'Courier Prime', monospace; font-size: 11px; min-height: 38px;" data-action="bookmark" data-id="${item.id}">${saved ? '★ Saved' : '☆ Bookmark'}</button>
+          <button class="btn btn-primary btn-sm" style="flex: 1.4; font-family: 'Courier Prime', monospace; font-size: 11px; min-height: 38px;" data-action="roadmap" data-id="${item.id}">Unroll Launch Steps ➔</button>
         </div>
       </div>
     `;
