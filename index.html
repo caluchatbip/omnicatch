@@ -1,737 +1,1079 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>OmniCatch — Premium Trend Intelligence Matrix</title>
+<meta name="description" content="OmniCatch scores and ranks trending product opportunities by budget, category and demand signals — deterministic simulation prototype for solo sellers and micro-brands.">
+<meta property="og:title" content="OmniCatch — Trend Intelligence for Solo Sellers">
+<meta property="og:description" content="Score, rank, and roadmap winning product ideas before you spend a rupee sourcing.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://caluchatbip.github.io/omnicatch/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://caluchatbip.github.io/omnicatch/">
 
-  <title>OmniCatch — Spot Breakout Products Before Everyone Else</title>
-  <meta name="description" content="OmniCatch scans live market signals to surface breakout products before they trend. Join the beta waitlist and unlock 3 months of OmniCatch Pro for ₹99." />
-  <meta name="keywords" content="OmniCatch, trend scanner, product research, dropshipping tool, market intelligence, breakout products, ecommerce trends" />
-  <meta name="author" content="OmniCatch" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://omnicatch.app/" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="OmniCatch — Spot Breakout Products Before Everyone Else" />
-  <meta property="og:description" content="Live trend intelligence, profit modeling, and early-warning alerts for sellers who want to move first. Beta access is open." />
-  <meta property="og:url" content="https://omnicatch.app/" />
-  <meta property="og:site_name" content="OmniCatch" />
-  <meta property="og:image" content="https://omnicatch.app/og-cover.png" />
-  <meta property="og:locale" content="en_US" />
+<style>
+:root {
+  --bg: #000000;
+  --surface: #09090b;
+  --surface-2: #121214;
+  --border: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --ink: #ffffff;
+  --ink-dim: #a1a1aa;
+  --ink-faint: #52525b;
+  --accent-blue: #38bdf8;
+  --accent-lav: #a855f7;
+  --accent-glow: rgba(56, 189, 248, 0.15);
+  --good: #4ade80;
+  --warn: #fbbf24;
+  --bad: #f87171;
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="OmniCatch — Spot Breakout Products Before Everyone Else" />
-  <meta name="twitter:description" content="Live trend intelligence, profit modeling, and early-warning alerts for sellers who want to move first." />
-  <meta name="twitter:image" content="https://omnicatch.app/og-cover.png" />
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-pill: 999px;
 
-  <meta name="theme-color" content="#030712" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>" />
+  --fs-caption: clamp(0.72rem, 0.68rem + 0.15vw, 0.8rem);
+  --fs-body: clamp(0.9rem, 0.86rem + 0.2vw, 0.98rem);
+  --fs-h3: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+  --fs-h2: clamp(1.6rem, 1.4rem + 0.8vw, 2.2rem);
+  --fs-h1: clamp(2.2rem, 1.8rem + 1.6vw, 3.4rem);
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 350ms;
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  color-scheme: dark;
+}
 
-  <script>
-    if (typeof tailwind !== 'undefined') {
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              midnight: '#030712',
-              panel: '#111827',
-              border: '#1F2937',
-              neon: { DEFAULT: '#3B82F6', soft: '#60A5FA', glow: '#2563EB' },
-              mint: { DEFAULT: '#10B981', soft: '#34D399' }
-            },
-            fontFamily: {
-              display: ['Space Grotesk', 'sans-serif'],
-              body: ['Inter', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace']
-            },
-            boxShadow: {
-              'glow-blue': '0 0 40px -5px rgba(59,130,246,0.45)',
-              'glow-mint': '0 0 30px -5px rgba(16,185,129,0.4)'
-            }
-          }
-        }
-      }
-    }
-  </script>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  position: relative;
+}
 
-  <style>
-    html { scroll-behavior: smooth; }
-    body { background-color: #030712; font-family: 'Inter', sans-serif; }
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-    @keyframes drift {
-      0%, 100% { transform: translate(0,0) scale(1); }
-      33% { transform: translate(20px,-15px) scale(1.08); }
-      66% { transform: translate(-15px,10px) scale(0.96); }
-    }
-    .ambient-blob { animation: drift 14s ease-in-out infinite; filter: blur(70px); }
-    .ambient-blob-slow { animation: drift 20s ease-in-out infinite reverse; filter: blur(90px); }
-    @keyframes borderGlow {
-      0%, 100% { box-shadow: 0 0 25px -5px rgba(59,130,246,0.35), inset 0 0 0 1px rgba(59,130,246,0.25); }
-      50% { box-shadow: 0 0 55px -5px rgba(59,130,246,0.6), inset 0 0 0 1px rgba(96,165,250,0.45); }
-    }
-    .glow-border-anim { animation: borderGlow 4s ease-in-out infinite; }
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    .float-anim { animation: floaty 6s ease-in-out infinite; }
-    @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
-    @keyframes barGrow { from { height: 4%; } }
-    .bar-grow { animation: barGrow 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-up { animation: fadeUp 0.5s ease forwards; }
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: #030712; }
-    ::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 8px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
-    .glass { background: rgba(17, 24, 39, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
-    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    .accordion-content.open { max-height: 500px; }
-    .accordion-chevron { transition: transform 0.3s ease; }
-    .accordion-chevron.rotated { transform: rotate(180deg); }
-    .tab-btn.active { color: #fff; border-color: #3B82F6; background: rgba(59,130,246,0.12); }
-  </style>
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.03em; color: #ffffff; }
+h1 { font-size: var(--fs-h1); line-height: 1.1; font-weight: 800; }
+h2 { font-size: var(--fs-h2); line-height: 1.2; }
+h3 { font-size: var(--fs-h3); line-height: 1.3; }
+
+.mono { font-family: 'Courier Prime', monospace; letter-spacing: 0.02em; }
+.caption { font-size: var(--fs-caption); color: var(--ink-dim); }
+
+/* Ambient Liquid Micro Background Glow */
+#mesh-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: 
+    radial-gradient(circle 45vw at 15% 20%, rgba(56, 189, 248, 0.08), transparent 80%),
+    radial-gradient(circle 40vw at 85% 75%, rgba(168, 85, 247, 0.06), transparent 80%);
+  filter: blur(40px);
+}
+
+.wrap { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 0 var(--sp-4) var(--sp-9); }
+
+/* Sticky Premium Navigation Bar */
+header.top {
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.75);
+  border-bottom: 1px solid var(--border);
+}
+.top-inner { max-width: 680px; margin: 0 auto; padding: var(--sp-4); display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: var(--sp-3); }
+.brand-mark { width: 32px; height: 32px; border-radius: var(--r-sm); background: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #000; }
+.brand-name { font-weight: 700; font-size: 0.95rem; tracking-spacing: -0.01em; color: #ffffff; }
+.brand-tag { font-size: 9px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.15em; font-family: 'Courier Prime', monospace; }
+.tier-pill {
+  font-size: 11px; font-weight: 600; padding: var(--sp-1) var(--sp-3); border-radius: var(--r-pill);
+  border: 1px solid var(--border-strong); background: rgba(255,255,255,0.03); color: var(--ink-dim);
+}
+
+/* Base Sections Layout */
+section { padding-top: var(--sp-8); }
+section:first-of-type { padding-top: var(--sp-6); }
+
+/* Hero Text Modules */
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--accent-blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+  background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 6px 14px; border-radius: var(--r-pill); margin-bottom: var(--sp-4);
+}
+.dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--good); box-shadow: 0 0 12px var(--good); }
+.hero p.lede { margin-top: var(--sp-4); color: var(--ink-dim); max-width: 52ch; font-size: 1.05rem; font-weight: 400; }
+
+/* Elegant Minimalist Surface Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  transition: border-color var(--dur) var(--ease);
+}
+
+/* Command Deck Custom Input Rows */
+.command-card { margin-top: var(--sp-6); background: rgba(9, 9, 11, 0.6); backdrop-filter: blur(10px); }
+.search-row { display: flex; gap: var(--sp-3); align-items: center; }
+.search-input-wrap {
+  flex: 1; display: flex; align-items: center; gap: var(--sp-3);
+  background: #000000; border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  padding: 0 var(--sp-4); min-height: 54px;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.search-input-wrap:focus-within { border-color: #ffffff; box-shadow: 0 0 0 1px #ffffff; }
+.search-input-wrap svg { flex-shrink: 0; opacity: 0.4; color: #fff; }
+#search-input {
+  flex: 1; background: transparent; border: 0; outline: 0; color: #ffffff; font-size: var(--fs-body); font-weight: 500;
+}
+#search-input::placeholder { color: var(--ink-faint); }
+#search-clear {
+  display: none; background: transparent; border: 0; color: var(--ink-faint); cursor: pointer;
+  width: 24px; height: 24px;
+}
+#search-clear.visible { display: flex; align-items: center; justify-content: center; }
+
+/* The Ultra-Premium White Pill CTA Buttons */
+.btn {
+  min-height: 54px; padding: 0 var(--sp-5); border-radius: var(--r-pill); border: 1px solid transparent;
+  font-weight: 600; font-size: 0.95rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all var(--dur) var(--ease);
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: #ffffff; color: #000000; font-weight: 700; }
+.btn-primary:hover { background: #e4e4e7; }
+.btn-primary:disabled { background: var(--surface-2); color: var(--ink-faint); border-color: var(--border); cursor: not-allowed; }
+.btn-ghost { background: transparent; color: #ffffff; border: 1px solid var(--border-strong); }
+.btn-ghost:hover { background: rgba(255,255,255,0.03); border-color: #ffffff; }
+.btn-block { width: 100%; }
+.btn-sm { min-height: 40px; padding: 0 var(--sp-4); font-size: var(--fs-caption); border-radius: var(--r-pill); }
+
+/* Quick Suggestion Pill Chips */
+.empty-suggestions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
+.chip {
+  min-height: 36px; padding: 0 14px; border-radius: var(--r-pill); background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border); color: var(--ink-dim); font-size: var(--fs-caption); font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; transition: all var(--dur) var(--ease);
+}
+.chip:hover { border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.05); }
+
+/* Luxury Budget Slider Layout */
+.budget-block { margin-top: var(--sp-6); border-top: 1px solid var(--border); padding-top: var(--sp-5); }
+.budget-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--sp-2); }
+.budget-value { font-weight: 800; font-size: var(--fs-h3); color: #ffffff; }
+#budget-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; margin: 0; cursor: pointer; }
+#budget-slider::-webkit-slider-runnable-track { height: 4px; background: var(--surface-2); border-radius: var(--r-pill); }
+#budget-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; margin-top: -8px;
+  background: #ffffff; border: 2px solid #000000; box-shadow: 0 0 15px rgba(255,255,255,0.3); transition: transform 150ms ease;
+}
+#budget-slider::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+/* Inline Notification Modals */
+.notice { display: flex; gap: var(--sp-3); align-items: flex-start; padding: var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface-2); margin-top: var(--sp-4); }
+.notice-error { border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.02); }
+.notice-error .notice-icon { color: var(--bad); }
+
+/* Simulation Readout Grid Elements */
+.results-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-4); }
+.rank-card { position: relative; overflow: hidden; margin-bottom: var(--sp-4); }
+.rank-top { display: flex; justify-content: space-between; gap: var(--sp-4); }
+.rank-title-row { display: flex; align-items: center; gap: var(--sp-2); }
+.rank-num { font-size: var(--fs-caption); color: var(--ink-faint); font-weight: 700; }
+.badge { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); text-transform: uppercase; letter-spacing: 0.05em; }
+.badge-good { background: rgba(74,222,128,0.08); color: var(--good); border: 1px solid rgba(74,222,128,0.2); }
+.badge-warn { background: rgba(251,191,36,0.08); color: var(--warn); border: 1px solid rgba(251,191,36,0.2); }
+.badge-bad { background: rgba(248,113,113,0.08); color: var(--bad); border: 1px solid rgba(248,113,113,0.2); }
+
+/* Minimal Conic Blur Progress Displays */
+.score-ring {
+  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  background: conic-gradient(var(--accent-blue) calc(var(--score,0)*1%), var(--surface-2) 0);
+}
+.score-ring::before { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--surface); }
+.score-ring span { position: relative; font-weight: 700; font-size: 13px; color: #ffffff; font-family: 'Courier Prime', monospace; }
+
+.rank-cat { font-family: 'Courier Prime', monospace; font-size: var(--fs-caption); color: var(--ink-faint); margin-top: 2px; }
+.rank-explain { color: var(--ink-dim); margin-top: var(--sp-3); font-size: var(--fs-caption); }
+
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); margin-top: var(--sp-4); }
+.metric { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px; }
+.metric-label { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+.metric-value { font-weight: 700; margin-top: 2px; font-size: 0.95rem; color: #ffffff; }
+.metric-bar { height: 2px; background: var(--surface-2); margin-top: 8px; overflow: hidden; }
+.metric-bar-fill { height: 100%; background: #ffffff; }
+
+.sw-list { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); flex-wrap: wrap; }
+.sw-item { font-size: 11px; padding: 4px 12px; border-radius: var(--r-pill); border: 1px solid var(--border); font-weight: 500; }
+.sw-strength { color: var(--good); background: rgba(74,222,128,0.02); border-color: rgba(74,222,128,0.15); }
+.sw-weakness { color: var(--bad); background: rgba(248,113,113,0.02); border-color: rgba(248,113,113,0.15); }
+
+.rank-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
+
+/* Swipeable Chronological Roadmap Timelines */
+.timeline-scroller {
+  display: flex; gap: var(--sp-4); overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: var(--sp-3) 2px; margin: 0 -2px;
+}
+.phase-card {
+  scroll-snap-align: center; flex: 0 0 88%; max-width: 360px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-5);
+}
+.phase-head { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.phase-num {
+  width: 32px; height: 32px; border-radius: var(--r-sm); background: #ffffff; color: #000000;
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; font-family: 'Courier Prime', monospace;
+}
+.phase-obj { color: var(--ink-dim); font-size: var(--fs-caption); line-height: 1.5; }
+.phase-checklist { list-style: none; margin: var(--sp-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); border-top: 1px solid var(--border); padding-top: var(--sp-4); }
+.phase-checklist li { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-caption); color: var(--ink-dim); }
+.phase-checklist li svg { flex-shrink: 0; margin-top: 3px; color: var(--accent-blue); }
+.phase-meta { display: flex; gap: var(--sp-3); margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 1px solid var(--border); }
+.phase-meta-item { flex: 1; }
+.phase-meta-label { font-size: 9px; text-transform: uppercase; color: var(--ink-faint); letter-spacing: 0.05em; font-family: 'Courier Prime', monospace; }
+.phase-meta-value { font-weight: 700; margin-top: 2px; color: #ffffff; }
+.dots-row { display: flex; justify-content: center; gap: 8px; margin-top: var(--sp-3); }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-faint); transition: all 200ms var(--ease); }
+.dot.active { background: #ffffff; transform: scale(1.5); }
+
+/* Premium Value-Anchored Tier Framework Layout */
+.pricing-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+@media (min-width: 580px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
+.price-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 380px; }
+.price-card.highlight { border-color: var(--border-strong); background: rgba(255,255,255,0.01); }
+.price-ribbon {
+  position: absolute; top: var(--sp-4); right: var(--sp-4);
+  background: rgba(255,255,255,0.08); border: 1px solid var(--border-strong); color: #ffffff;
+  font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); text-transform: uppercase; letter-spacing: 0.05em;
+}
+.price-amount { font-size: var(--fs-h2); font-weight: 800; color: #ffffff; margin-top: var(--sp-2); }
+.price-amount sup { font-size: 0.85rem; color: var(--ink-faint); font-weight: 500; top: -0.4em; }
+.price-sub { color: var(--ink-dim); font-size: var(--fs-caption); margin-top: 2px; }
+.price-features { list-style: none; margin: var(--sp-5) 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); flex: 1; }
+.price-features li { display: flex; gap: 10px; font-size: var(--fs-caption); color: var(--ink-dim); align-items: flex-start; }
+.price-features li svg { flex-shrink: 0; margin-top: 3px; }
+.price-future { color: var(--ink); font-weight: 500; }
+.anchor-note { text-align: center; color: var(--ink-faint); font-size: 11px; margin-top: var(--sp-4); font-family: 'Courier Prime', monospace; }
+.anchor-note strong { color: var(--ink-dim); }
+
+.support-widget { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-top: var(--sp-5); background: rgba(255,255,255,0.01); }
+.support-text { font-size: var(--fs-caption); color: var(--ink-dim); }
+
+/* Honest Technical Capability Previews Widget */
+.arch-cols { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+@media (min-width: 580px) { .arch-cols { grid-template-columns: 1fr 1fr; } }
+.arch-col-head { display: flex; align-items: center; gap: 8px; margin-bottom: var(--sp-3); }
+.arch-col-title { font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; font-family: 'Courier Prime', monospace; }
+.arch-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.arch-list li { font-size: var(--fs-caption); color: var(--ink-dim); display: flex; gap: 8px; align-items: center; }
+.dot-live-sm { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+.arch-active .dot-live-sm { background: var(--good); box-shadow: 0 0 8px var(--good); }
+.arch-cloud .dot-live-sm { background: var(--ink-faint); }
+
+/* History Token Displays */
+.hist-row { display: flex; gap: var(--sp-2); overflow-x: auto; padding-bottom: 2px; }
+.hist-chip { flex-shrink: 0; background: transparent; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 6px 12px; font-size: 11px; color: var(--ink-dim); cursor: pointer; transition: all var(--dur) var(--ease); }
+.hist-chip:hover { border-color: #ffffff; color: #ffffff; }
+
+/* Fully Accessible Bottom Sheet Modals */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity var(--dur) var(--ease);
+}
+@media (min-width: 640px) { .modal-overlay { align-items: center; } }
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal-sheet {
+  background: var(--surface); border-top: 1px solid var(--border-strong); border-radius: var(--r-lg) var(--r-lg) 0 0;
+  width: 100%; max-width: 460px; padding: var(--sp-6) var(--sp-5) var(--sp-6);
+  transform: translateY(40px); transition: transform var(--dur) var(--ease);
+  max-height: 80vh; overflow-y: auto;
+}
+@media (min-width: 640px) { .modal-sheet { border: 1px solid var(--border-strong); border-radius: var(--r-lg); padding: var(--sp-6); } }
+.modal-overlay.open .modal-sheet { transform: translateY(0); }
+.modal-handle { width: 32px; height: 4px; background: var(--border-strong); border-radius: 2px; margin: 0 auto var(--sp-4); }
+@media (min-width: 640px) { .modal-handle { display: none; } }
+.modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--sp-4); }
+.modal-close { background: transparent; border: 1px solid var(--border); width: 32px; height: 32px; border-radius: 50%; color: var(--ink-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { border-color: #ffffff; color: #ffffff; }
+.field { margin-top: var(--sp-4); }
+.field label { display: block; font-size: 11px; color: var(--ink-dim); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.field input, .field select {
+  width: 100%; min-height: 46px; background: #000000; border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  padding: 0 14px; color: #ffffff; font-size: var(--fs-body); outline: none; transition: border-color var(--dur) var(--ease);
+}
+.field input:focus, .field select:focus { border-color: #ffffff; }
+
+/* Document Footers Structural Definitions Layout */
+footer { margin-top: var(--sp-8); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-3); }
+.footer-links a { color: var(--ink-faint); font-size: var(--fs-caption); text-decoration: none; transition: color var(--dur) var(--ease); }
+.footer-links a:hover { color: var(--ink-dim); text-decoration: underline; }
+.footer-meta { color: var(--ink-faint); font-size: 10px; margin-top: var(--sp-4); font-family: 'Courier Prime', monospace; line-height: 1.6; }
+
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+.fab-bookmarks {
+  position: fixed; bottom: var(--sp-5); right: var(--sp-5); z-index: 30;
+  width: 48px; height: 48px; border-radius: 50%; background: #ffffff; border: 1px solid #ffffff;
+  display: flex; align-items: center; justify-content: center; color: #000000; cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform var(--dur) var(--ease);
+}
+.fab-bookmarks:active { transform: scale(0.92); }
+.fab-badge {
+  position: absolute; top: -2px; right: -2px; background: var(--accent-lav); color: #ffffff; font-size: 9px; font-weight: 700;
+  min-width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px;
+}
+</style>
 </head>
-<body class="bg-midnight text-gray-100 antialiased selection:bg-blue-500/30">
-   <div class="sticky top-0 z-[60] w-full bg-gradient-to-r from-blue-950 via-gray-900 to-blue-950 border-b border-border text-center py-2 px-4 text-xs sm:text-sm font-mono text-blue-200">
-    <span class="inline-flex items-center gap-2 flex-wrap justify-center">
-      📊 System Status: <span class="text-emerald-400 font-semibold">Live</span> • Beta Platform Active • Early Registration Slots Open
-    </span>
+<body>
+
+<div id="mesh-bg" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">Ω</div>
+      <div>
+        <div class="brand-name">OmniCatch</div>
+        <div class="brand-tag">Matrix Node v1.0</div>
+      </div>
+    </div>
+    <div class="tier-pill" id="tier-pill">Free Starter</div>
   </div>
+</header>
 
-  <header class="sticky top-[33px] sm:top-[37px] z-50 backdrop-blur-xl bg-midnight/80 border-b border-border">
-    <nav class="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-glow-blue">
-          <i class="fa-solid fa-satellite-dish text-white text-sm"></i>
-        </div>
-        <span class="font-display font-bold text-lg tracking-tight">OmniCatch</span>
-      </div>
-      <a href="#waitlist-form" class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 transition-colors px-4 py-2 rounded-lg shadow-glow-blue">Get Early Access</a>
-    </nav>
-  </header>
+<main class="wrap">
 
-  <section class="relative overflow-hidden px-5 sm:px-8 pt-16 sm:pt-20 pb-24 sm:pb-32">
-    <div class="absolute -top-20 left-1/4 w-72 h-72 bg-blue-600/30 rounded-full ambient-blob pointer-events-none"></div>
-    <div class="absolute top-40 right-1/4 w-80 h-80 bg-emerald-500/20 rounded-full ambient-blob-slow pointer-events-none"></div>
-    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_rgba(59,130,246,0.12),_transparent_60%)] pointer-events-none"></div>
-
-    <div class="max-w-5xl mx-auto text-center relative z-10">
-      <div class="inline-flex items-center gap-2 bg-panel border border-border rounded-full px-4 py-1.5 text-xs font-mono text-blue-300 mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"></span>BETA WAITLIST · COHORT 03 OPEN
-      </div>
-      <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight">
-        Spot the next <span class="bg-gradient-to-r from-blue-400 via-blue-500 to-emerald-400 bg-clip-text text-transparent">breakout product</span> before the market does.
-      </h1>
-      <p class="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-        OmniCatch reads live demand signals across the open web and turns them into a single, plain-English verdict: rising, stable, or fading — with the margin math already done for you.
-      </p>
-
-      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <div class="flex items-center gap-2 bg-panel/80 border border-border rounded-xl px-4 py-2.5">
-          <span class="text-emerald-400">🔒</span><span class="text-sm font-medium text-gray-200">100% Private · Verified Beta</span>
-        </div>
-        <div class="flex items-center gap-2 bg-panel/80 border border-border rounded-xl px-4 py-2.5">
-          <span class="relative flex h-2 w-2">
-            <span class="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75 pulse-dot"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-          </span>
-          <span id="member-count-label" class="text-sm font-medium text-gray-200 font-mono">2,847 members joined</span>
-        </div>
-      </div>
-
-      <div class="mt-6 max-w-xl mx-auto bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl px-5 py-3.5 text-sm text-emerald-200">
-        🎁 <span class="font-semibold text-emerald-300">Founding Member Special:</span> Join the waitlist today and automatically unlock <span class="font-semibold text-white">3 full months of OmniCatch Pro for just ₹99</span> upon public release.
-      </div>
-
-      <form id="waitlist-form" class="mt-8 max-w-md mx-auto" autocomplete="off">
-        <div class="flex flex-col sm:flex-row gap-3">
-          <input type="email" id="waitlist-email" required placeholder="you@email.com" class="flex-1 bg-panel border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
-          <button type="submit" id="waitlist-submit-btn" class="bg-blue-600 hover:bg-blue-500 transition-all shadow-glow-blue rounded-xl px-5 py-3.5 text-sm font-semibold whitespace-nowrap flex items-center justify-center gap-2">Secure Free Early Access →</button>
-        </div>
-        <p id="waitlist-error" class="hidden mt-3 text-xs text-red-400 font-medium"></p>
-      </form>
-
-      <div id="welcome-back-screen" class="hidden mt-8 max-w-md mx-auto bg-panel/80 border border-emerald-500/30 rounded-2xl px-6 py-5 text-left">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/15 flex items-center justify-center text-lg">👋</div>
-          <div>
-            <p class="font-semibold text-white text-sm">Welcome back! Your Founding Member session is active.</p>
-            <p id="welcome-back-email" class="text-xs text-gray-400 font-mono mt-0.5"></p>
-          </div>
-        </div>
-      </div>
-    </div> 
-        <div class="relative max-w-5xl mx-auto mt-16 sm:mt-20 z-10">
-      <div class="absolute -inset-10 bg-gradient-to-tr from-blue-600/20 via-emerald-500/10 to-blue-500/20 rounded-[2rem] ambient-blob-slow pointer-events-none"></div>
-      <div class="glass border border-blue-500/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 glow-border-anim float-anim relative">
-        <div class="flex items-center justify-between mb-4 px-1">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-red-400/70"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/70"></span>
-          </div>
-          <span class="text-[11px] font-mono text-gray-500">omnicatch.app/dashboard</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-            <p class="text-[11px] text-gray-500 font-mono">VOLUME</p>
-            <p class="font-display font-bold text-lg sm:text-xl text-white mt-1">48.2K</p>
-            <p class="text-[11px] text-emerald-400 mt-1">↑ 12.4%</p>
-          </div>
-          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-            <p class="text-[11px] text-gray-500 font-mono">MOMENTUM</p>
-            <p class="font-display font-bold text-lg sm:text-xl text-blue-400 mt-1">Rising</p>
-            <p class="text-[11px] text-gray-500 mt-1">7-day trend</p>
-          </div>
-          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5 hidden sm:block">
-            <p class="text-[11px] text-gray-500 font-mono">MARGIN</p>
-            <p class="font-display font-bold text-lg sm:text-xl text-white mt-1">34.8%</p>
-            <p class="text-[11px] text-emerald-400 mt-1">Healthy</p>
-          </div>
-          <div class="bg-gray-900/60 border border-border rounded-xl p-3.5 hidden sm:block">
-            <p class="text-[11px] text-gray-500 font-mono">RISK</p>
-            <p class="font-display font-bold text-lg sm:text-xl text-emerald-400 mt-1">Low</p>
-            <p class="text-[11px] text-gray-500 mt-1">Stable supply</p>
-          </div>
-        </div>
-        <div class="mt-4 bg-gray-900/60 border border-border rounded-xl p-4 flex items-end gap-1.5 h-20 sm:h-24">
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:35%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:52%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:40%"></div>
-          <div class="flex-1 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-sm" style="height:78%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:60%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:71%"></div>
-          <div class="flex-1 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-sm" style="height:90%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:66%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:55%"></div>
-          <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm" style="height:82%"></div>
-        </div>
-      </div>
-    </div>
+  <section class="hero" aria-labelledby="hero-heading">
+    <span class="hero-eyebrow"><span class="dot-live" aria-hidden="true"></span> Simulation Prototype</span>
+    <h1 id="hero-heading">Validate product viability before sourcing assets.</h1>
+    <p class="lede">Input any localized trend query, assign a deployment budget, and calculate risk profiles, margins, and operational roadmaps deterministically via our local core framework engine.</p>
   </section>
 
-  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-10">
-        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Command Center</span>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Run a live trend scan</h2>
-        <p class="text-gray-400 mt-3 max-w-xl mx-auto">Type any product idea. OmniCatch's simulation engine models momentum, margin, and risk in real time.</p>
-      </div>
-
-      <div class="bg-panel border border-border rounded-2xl p-5 sm:p-8 space-y-6">
-        <div class="bg-gray-900/50 border border-border rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-400"><i class="fa-solid fa-wallet"></i></div>
-            <div>
-              <p class="text-xs text-gray-500 font-mono font-medium">YOUR SOURCING BUDGET</p>
-              <p id="budget-display-text" class="text-sm font-semibold text-white mt-0.5">₹10,000 max investment limit</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 w-full sm:w-auto">
-            <input type="number" id="budget-input-field" value="10000" class="hidden w-28 bg-panel border border-border rounded-lg px-2.5 py-1.5 text-xs text-white outline-none focus:border-blue-500 font-mono" />
-            <button id="toggle-budget-edit-btn" class="bg-gray-800 hover:bg-gray-750 text-gray-300 font-medium text-xs rounded-lg px-3 py-1.5 border border-border transition-colors">⚙️ Edit Limit</button>
-          </div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-3">
-          <input type="text" id="trend-query-input" placeholder="e.g. smart ring, wireless earbuds, luxury watch..." class="flex-1 bg-gray-900/70 border border-border rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 outline-none transition-colors" />
-          <button id="analyze-trend-btn" class="bg-blue-600 hover:bg-blue-500 transition-all shadow-glow-blue rounded-xl px-6 py-3.5 text-sm font-semibold whitespace-nowrap">⚡ Analyze Trend</button>
-        </div>
-        <p id="trend-error-box" class="hidden mt-4 bg-red-500/10 border border-red-500/30 text-red-300 text-sm rounded-xl px-4 py-3"></p>
-
-        <div id="trend-results" class="hidden mt-8">
-          <p class="text-xs font-mono text-gray-500 mb-4">RESULTS FOR <span id="result-keyword-label" class="text-blue-300"></span></p>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">MONITORED VOLUME</p>
-              <p id="metric-volume" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
-            </div>
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">GROWTH MOMENTUM</p>
-              <p id="metric-momentum" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
-            </div>
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">AVG MARGIN %</p>
-              <p id="metric-margin" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
-            </div>
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">STABILITY STATUS</p>
-              <p id="metric-stability" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
-            </div>
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">MAX ACQUISITION</p>
-              <p id="metric-tenure" class="font-display font-bold text-base sm:text-lg text-white mt-2">—</p>
-            </div>
-            <div class="bg-gray-900/60 border border-border rounded-xl p-3.5">
-              <p class="text-[10px] text-gray-500 font-mono leading-tight">EST UNIT COST</p>
-              <p id="metric-risk" class="font-display font-bold text-base sm:text-lg mt-2">—</p>
-            </div>
-          </div>
-
-          <div class="bg-gray-900/60 border border-border rounded-xl p-4 sm:p-5">
-            <p class="text-xs font-mono text-gray-500 mb-3">14-DAY MOMENTUM SIMULATION</p>
-            <div id="trend-chart-bars" class="flex items-end gap-1 sm:gap-1.5 h-32 sm:h-40"></div>
-          </div>
-          <p class="text-[11px] text-gray-500 mt-3 italic">*Calculations reflect real-time live-simulation market estimation parameters based on target investment capacity ceilings.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-   <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border bg-gradient-to-b from-transparent via-blue-950/10 to-transparent">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12">
-        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Platform</span>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Built for sellers who move first</h2>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors">
-          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg mb-4"><i class="fa-solid fa-globe"></i></div>
-          <h3 class="font-display font-semibold text-lg">Global Trend Intelligence</h3>
-          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Continuous scanning across regions and categories to surface what's actually gaining traction, not just what's loud.</p>
-        </div>
-        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors relative">
-          <span class="absolute top-4 right-4 text-[10px] font-mono bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-full px-2 py-0.5">PRO</span>
-          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg mb-4"><i class="fa-solid fa-bolt"></i></div>
-          <h3 class="font-display font-semibold text-lg">Instant Opportunity Alerts</h3>
-          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Get notified the moment a tracked category breaks out, before margins compress from competition.</p>
-        </div>
-        <div class="bg-panel border border-border rounded-2xl p-6 hover:border-blue-500/40 transition-colors">
-          <div class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-lg mb-4"><i class="fa-solid fa-chart-line"></i></div>
-          <h3 class="font-display font-semibold text-lg">Predictive Profit Analytics</h3>
-          <p class="text-sm text-gray-400 mt-2 leading-relaxed">Model landed cost, markup, and margin scenarios before you commit a single rupee of ad spend.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
-    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-      <div>
-        <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">Live Breakout Feed</span>
-        <h2 class="font-display font-bold text-2xl sm:text-3xl mt-3 mb-6">What's moving right now</h2>
-        <div class="space-y-3">
-          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">💍</span>
-              <div>
-                <p class="font-semibold text-sm">Smart Rings</p>
-                <p class="text-xs text-gray-500">Health & wearables</p>
-              </div>
-            </div>
-            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 31.2%</span>
-          </div>
-          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">📷</span>
-              <div>
-                <p class="font-semibold text-sm">AI Security Cameras</p>
-                <p class="text-xs text-gray-500">Smart home</p>
-              </div>
-            </div>
-            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 18.7%</span>
-          </div>
-          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">🎒</span>
-              <div>
-                <p class="font-semibold text-sm">Anti-Theft Backpacks</p>
-                <p class="text-xs text-gray-500">Travel accessories</p>
-              </div>
-            </div>
-            <span class="text-blue-400 text-xs font-mono font-semibold">↑ 9.4%</span>
-          </div>
-          <div class="bg-panel border border-border rounded-xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">🧴</span>
-              <div>
-                <p class="font-semibold text-sm">Scalp Massagers</p>
-                <p class="text-xs text-gray-500">Personal care</p>
-              </div>
-            </div>
-            <span class="text-emerald-400 text-xs font-mono font-semibold">↑ 22.9%</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Community</span>
-        <h2 class="font-display font-bold text-2xl sm:text-3xl mt-3 mb-6">Founding creator stories</h2>
-        <div class="bg-gradient-to-br from-panel to-gray-900/40 border border-border rounded-2xl p-8 sm:p-10 text-center h-[calc(100%-3.25rem)] flex flex-col items-center justify-center">
-          <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4"><i class="fa-solid fa-quote-left"></i></div>
-          <p class="text-gray-400 text-sm max-w-xs leading-relaxed">Founding creator stories coming soon. Be one of the first members featured here.</p>
-          <div class="flex gap-1.5 mt-5">
-            <span class="w-1.5 h-1.5 rounded-full bg-gray-700"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-gray-700"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-   <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-12">
-        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Pricing</span>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Simple plans, founder pricing</h2>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-6">
-        <div class="bg-panel border border-border rounded-2xl p-7 sm:p-8 flex flex-col">
-          <h3 class="font-display font-semibold text-xl">Starter Access</h3>
-          <p class="text-3xl font-display font-bold mt-3">₹0<span class="text-sm text-gray-500 font-normal">/forever</span></p>
-          <ul class="mt-6 space-y-3 text-sm text-gray-400 flex-1">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Waitlist + early access invite</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> 3 trend scans / day</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Live breakout feed access</li>
-          </ul>
-          <button disabled class="mt-7 w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold text-sm rounded-xl py-3 cursor-default">Active in Waitlist ✓</button>
-        </div>
-
-        <div class="relative bg-panel border-2 border-blue-500 rounded-2xl p-7 sm:p-8 flex flex-col shadow-glow-blue">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[11px] font-bold tracking-wide rounded-full px-3 py-1 whitespace-nowrap">★ MOST POPULAR</span>
-          <h3 class="font-display font-semibold text-xl">OmniCatch Pro</h3>
-          <p class="text-3xl font-display font-bold mt-3">₹99<span class="text-sm text-gray-500 font-normal">/month</span></p>
-          <ul class="mt-6 space-y-3 text-sm text-gray-300 flex-1">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Unlimited trend scans</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Instant opportunity alerts</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Full profit & risk modeling</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400 text-xs"></i> Priority feed updates</li>
-          </ul>
-          <button id="unlock-pro-btn" class="mt-7 w-full bg-blue-600 hover:bg-blue-500 transition-colors text-white font-semibold text-sm rounded-xl py-3">Unlock Pro Account →</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="px-5 sm:px-8 py-16 sm:py-24 border-t border-border">
-    <div class="max-w-3xl mx-auto">
-      <div class="text-center mb-10">
-        <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">FAQ</span>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-3">Questions, answered</h2>
-      </div>
-
-      <div class="space-y-3" id="faq-accordion">
-        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
-          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
-            <span class="font-medium text-sm sm:text-base">Where does OmniCatch source its trend data?</span>
-            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
+  <section class="command-center" aria-labelledby="command-heading">
+    <h2 id="command-heading" class="sr-only">Query Settings</h2>
+    <div class="card command-card">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <input id="search-input" type="text" inputmode="search" autocomplete="off" placeholder="Enter localized query vector…" aria-label="Trend search term query">
+          <button id="search-clear" aria-label="Clear active criteria input">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
           </button>
-          <div class="accordion-content px-5">
-            <p class="text-sm text-gray-400 pb-4 leading-relaxed">During the beta, OmniCatch models demand signals using a simulation engine built on publicly observable market patterns. As we move toward general availability, we're integrating live marketplace, search, and social signal feeds.</p>
-          </div>
         </div>
+        <button class="btn btn-primary" id="btn-run" aria-label="Execute simulation matrix calculations">
+          <span class="run-label">Execute</span>
+        </button>
+      </div>
 
-        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
-          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
-            <span class="font-medium text-sm sm:text-base">Is my email kept private?</span>
-            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
-          </button>
-          <div class="accordion-content px-5">
-            <p class="text-sm text-gray-400 pb-4 leading-relaxed">Yes. Your email is stored solely to manage your waitlist position and beta invitation. We never sell or share member data with third parties. See our Privacy Policy for full details.</p>
-          </div>
+      <div id="empty-state" class="empty-suggestions" role="group" aria-label="Suggested matrix vectors">
+        <button class="chip" data-suggestion="Smart Ring">Smart Ring</button>
+        <button class="chip" data-suggestion="Notion Templates">Notion Templates</button>
+        <button class="chip" data-suggestion="AI Video Course">AI Video Course</button>
+        <button class="chip" data-suggestion="Micro SaaS">Micro SaaS</button>
+        <button class="chip" data-suggestion="Agency">Agency</button>
+        <button class="chip" data-suggestion="Digital Products">Digital Products</button>
+      </div>
+
+      <div id="history-block" class="hidden" style="margin-top: var(--sp-4);">
+        <div class="caption font-mono text-[10px] uppercase tracking-wider text-neutral-500" style="margin-bottom: 8px;">Cached Queries</div>
+        <div class="hist-row" id="history-row"></div>
+      </div>
+
+      <div class="budget-block">
+        <div class="budget-head">
+          <span class="caption font-mono text-[10px] uppercase tracking-wider text-neutral-500">Allocation Threshold</span>
+          <span class="budget-value font-mono">₹100 – ₹<span id="budget-out">5,000</span></span>
         </div>
-
-        <div class="bg-panel border border-border rounded-xl overflow-hidden faq-item">
-          <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left">
-            <span class="font-medium text-sm sm:text-base">How does the ₹99 launch credit work?</span>
-            <i class="fa-solid fa-chevron-down text-gray-500 text-xs accordion-chevron"></i>
-          </button>
-          <div class="accordion-content px-5">
-            <p class="text-sm text-gray-400 pb-4 leading-relaxed">Everyone who joins the waitlist before public launch automatically qualifies for 3 full months of OmniCatch Pro at a one-time price of ₹99. The credit is applied automatically to your account using the email you registered with — no code needed.</p>
-          </div>
+        <input type="range" id="budget-slider" min="100" max="10000" step="100" value="5000" aria-label="Budget filter allocation limit range tracking slider" aria-valuemin="100" aria-valuemax="10000" aria-valuenow="5000">
+        <div class="budget-ticks">
+          <span class="caption font-mono">₹100</span>
+          <span class="caption font-mono">₹10,000</span>
         </div>
       </div>
+
+      <div id="notice-slot" aria-live="polite"></div>
     </div>
   </section>
 
-  <footer class="px-5 sm:px-8 py-12 border-t border-border bg-gray-950/40">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center"><i class="fa-solid fa-satellite-dish text-white text-xs"></i></div>
-          <span class="font-display font-semibold">OmniCatch</span>
-        </div>
-        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
-          <a href="#" class="hover:text-blue-400 transition-colors">Privacy Policy</a>
-          <a href="#" class="hover:text-blue-400 transition-colors">Terms of Service</a>
-          <a href="#" class="hover:text-blue-400 transition-colors">Contact Support</a>
-          <a href="#" class="hover:text-blue-400 transition-colors">Financial Disclaimer</a>
-        </div>
-      </div>
-      <div class="border-t border-border mt-8 pt-6 text-xs text-gray-600 leading-relaxed">
-        <p>&copy; 2026 OmniCatch. All rights reserved.</p>
-        <p class="mt-2">OmniCatch is currently in beta. Trend metrics, pricing data, and projections shown on this platform are for informational and simulation purposes only and should not be considered financial advice. Past or simulated performance is not indicative of future results.</p>
-      </div>
+  <section id="results-section" class="hidden" aria-labelledby="results-heading">
+    <div class="results-head">
+      <h2 id="results-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Ranked Matrix Selections</h2>
+      <span class="results-count font-mono text-[11px]" id="results-count"></span>
     </div>
- </footer>
+    <div id="results-list"></div>
+  </section>
 
-    <script>
-    const SUPABASE_URL = "https://evavclthprtdtimjqjsu.supabase.co/rest/v1/waitlist";
-    const SUPABASE_KEY = "sb_publishable_qjXSIkHzTVST8UOgZz-E2Q_MhyYsCqG";
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1517577473154617486/48I6OhVu-ItoKlGqfx00gSaqzTQB4bG98mq9n-NAoilSNIVq-rAB8flNAT4-TCaCEeZk";
+  <section id="timeline-section" class="hidden" aria-labelledby="timeline-heading">
+    <h2 id="timeline-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Chronological Deployment Blueprint</h2>
+    <p class="caption font-sans" id="timeline-sub" style="margin-top: var(--sp-1); color: var(--ink-dim);"></p>
+    <div class="timeline-scroller" id="timeline-scroller" tabindex="0" aria-label="Swipeable operational roadmap metrics cards"></div>
+    <div class="dots-row" id="timeline-dots" aria-hidden="true"></div>
+  </section>
 
-    const VALID_COMMERCE_DOMAINS = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "icloud.com", "proton.me", "zoho.com"];
+  <section aria-labelledby="pricing-heading">
+    <h2 id="pricing-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Operational Tiers</h2>
+    <p class="caption" style="margin-top: var(--sp-1);">Secure early pricing parameters before cloud scraping automation loops trigger deployment.</p>
     
-    // Upgraded dictionary to now completely accept Rolex and watch terms!
-    const RECOGNIZED_PRODUCTS = new Set([
-      "smart ring", "smart rings", "wireless earbuds", "earbuds", "posture corrector", "magnetic phone mount",
-      "phone mount", "ai camera", "security camera", "backpack", "anti theft backpack", "massager", "scalp massager",
-      "water bottle", "smart bottle", "led lights", "drone", "fitness tracker", "projector", "mechanical keyboard",
-      "rolex", "watch", "watches", "luxury watch", "smart watch"
-    ]);
-
-    let userConfigBudget = 10000;
-
-    // Budget Editor Functionality
-    document.getElementById("toggle-budget-edit-btn").addEventListener("click", function() {
-      const inputEl = document.getElementById("budget-input-field");
-      const textEl = document.getElementById("budget-display-text");
+    <div class="pricing-grid" style="margin-top: var(--sp-5);">
+      <div class="card price-card">
+        <div>
+          <div class="caption font-mono uppercase text-[10px] tracking-widest">Node Alpha / Free</div>
+          <div class="price-amount">₹0</div>
+          <div class="price-sub">Local engine emulator execution baseline</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited matrix simulations</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Local state roadmap stepper render</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 5 persistence bookmarks caches</li>
+          </ul>
+        </div>
+        <button class="btn btn-ghost btn-block btn-sm" disabled>Active System Node</button>
+      </div>
       
-      if (inputEl.classList.contains("hidden")) {
-        inputEl.classList.remove("hidden");
-        this.innerText = "💾 Save";
-      } else {
-        const parsedVal = parseInt(inputEl.value);
-        if (parsedVal > 0) {
-          userConfigBudget = parsedVal;
-          textEl.innerText = `₹${userConfigBudget.toLocaleString()} max investment limit`;
-        }
-        inputEl.classList.add("hidden");
-        this.innerText = "⚙️ Edit Limit";
-        
-        // If results are open, refresh calculations instantly!
-        const inputQuery = document.getElementById("trend-query-input").value.trim();
-        if (inputQuery) runTrendAnalysis();
-      }
-    });
-
-    function maskEmail(email) {
-      const [user, domain] = email.split("@");
-      if (!user || !domain) return "••••••";
-      const visible = user.slice(0, Math.min(2, user.length));
-      return `${visible}${"•".repeat(Math.max(user.length - 2, 2))}@${domain}`;
-    }
-
-    function showFormError(message) {
-      const errBox = document.getElementById("waitlist-error");
-      errBox.textContent = message;
-      errBox.classList.remove("hidden");
-    }
-    function clearFormError() { document.getElementById("waitlist-error").classList.add("hidden"); }
-
-    async function saveToSupabase(email) {
-      const res = await fetch(SUPABASE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${SUPABASE_KEY}`,
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify({ email: email, created_at: new Date().toISOString() })
-      });
-      if (!res.ok) throw new Error("Supabase insert failed");
-      return true;
-    }
-
-    async function sendDiscordNotification(email) {
-      const payload = {
-        embeds: [{
-          title: "🚀 New OmniCatch Waitlist Signup",
-          color: 3447003,
-          fields: [
-            { name: "Email", value: email, inline: true },
-            { name: "Timestamp", value: new Date().toISOString(), inline: false }
-          ]
-        }]
-      };
-      try {
-        await fetch(DISCORD_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) { console.warn(err); }
-    }
-
-    function getStoredEmail() { return localStorage.getItem("omnicatch_member_email"); }
-    function storeEmail(email) { localStorage.setItem("omnicatch_member_email", email); }
+      <div class="card price-card highlight">
+        <span class="price-ribbon">Early Backer</span>
+        <div>
+          <div class="caption font-mono uppercase text-[10px] tracking-widest text-accent-lav">Founding Pass</div>
+          <div class="price-amount">₹99 <sup>one-time</sup></div>
+          <div class="price-sub">Locked early rate pass framework access</div>
+          <ul class="price-features">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Full persistent operational data scopes</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--accent-blue)"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> <span class="price-future">Planned real-time data integrations after launch</span></li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--accent-blue)"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> <span class="price-future">Protected below subsequent ₹499/mo standard model</span></li>
+          </ul>
+        </div>
+        <button class="btn btn-primary btn-block btn-sm" id="btn-preorder">Pre-order Alpha Pass</button>
+      </div>
+    </div>
     
-    function renderWelcomeBack(email) {
-      document.getElementById("waitlist-form").classList.add("hidden");
-      const screen = document.getElementById("welcome-back-screen");
-      screen.classList.remove("hidden");
-      screen.classList.add("fade-up");
-      document.getElementById("welcome-back-email").textContent = maskEmail(email);
-    }
+    <p class="anchor-note">Alpha Backer Pass configuration maps a single ₹99 transaction credit to bypass subsequent ₹499/mo subscription parameters once data feeds link.</p>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const existing = getStoredEmail();
-      if (existing) renderWelcomeBack(existing);
-      
-      const label = document.getElementById("member-count-label");
-      let base = 2847;
-      setInterval(() => {
-        base += Math.floor(Math.random() * 2);
-        label.textContent = `${base.toLocaleString()} members joined`;
-      }, 6000);
-    });
+    <div class="card support-widget">
+      <div>
+        <div style="font-weight: 700; font-size: 0.95rem;">Support Mobile Architecture</div>
+        <div class="support-text">Engineered completely inside an open mobile system structure.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-support">Support My Project</button>
+    </div>
+  </section>
 
-    document.getElementById("waitlist-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearFormError();
-      const emailInput = document.getElementById("waitlist-email");
-      const email = emailInput.value.trim().toLowerCase();
-      const submitBtn = document.getElementById("waitlist-submit-btn");
+  <section aria-labelledby="arch-heading">
+    <h2 id="arch-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Architecture Matrix Map</h2>
+    <p class="caption" style="margin-top: var(--sp-1);">Contrast integrated terminal components against planned remote infrastructure.</p>
+    <div class="card" style="margin-top: var(--sp-5); background: rgba(0,0,0,0.3);">
+      <div class="arch-cols">
+        <div>
+          <div class="arch-col-head"><span class="dot-live-sm" style="background: var(--good);"></span><span class="arch-col-title">Active Local Engines</span></div>
+          <ul class="arch-list arch-active">
+            <li><span class="dot-live-sm"></span>Deterministic scoring logic array</li>
+            <li><span class="dot-live-sm"></span>Centralized runtime state core</li>
+            <li><span class="dot-live-sm"></span>LocalStorage token persistence routing</li>
+          </ul>
+        </div>
+        <div>
+          <div class="arch-col-head"><span class="dot-live-sm" style="background: var(--ink-faint);"></span><span class="arch-col-title">Upcoming Cloud Vectors</span></div>
+          <ul class="arch-list arch-cloud">
+            <li><span class="dot-live-sm"></span>Remote Pydroid scraping cluster sync</li>
+            <li><span class="dot-live-sm"></span>Account profile database persistence</li>
+            <li><span class="dot-live-sm"></span>Automated messaging alerts pipelines</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      const parts = email.split("@");
-      if (parts.length !== 2 || !VALID_COMMERCE_DOMAINS.includes(parts[1])) {
-        showFormError("⚠️ Security Guard: Please register using a valid, verified personal email provider.");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Securing spot...`;
-
-      try {
-        await saveToSupabase(email);
-        await sendDiscordNotification(email);
-        storeEmail(email);
-        renderWelcomeBack(email);
-      } catch (err) {
-        showFormError("We couldn't save your spot right now. Please try again.");
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = "Secure Free Early Access →";
-      }
-    });
-
-    function seedFromString(str) {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) % 100000;
-      return hash;
-    }
-
-    function runTrendAnalysis() {
-      const box = document.getElementById("trend-error-box");
-      box.classList.add("hidden");
-      const input = document.getElementById("trend-query-input").value.trim().toLowerCase();
-      
-      if (!input) {
-        box.textContent = "⚠️ Enter a product idea to analyze.";
-        box.classList.remove("hidden");
-        return;
-      }
-
-      let foundKeyword = null;
-      for (const item of RECOGNIZED_PRODUCTS) {
-        if (input.includes(item)) {
-          foundKeyword = item;
-          break;
-        }
-      }
-
-      if (!foundKeyword) {
-        box.textContent = "⚠️ INSIGHT LIMIT: Low index signal density for this keyword parameters. OmniCatch requires a higher global search volume to compile charts. Try checking 'rolex' or 'smart ring'.";
-        box.classList.remove("hidden");
-        document.getElementById("trend-results").classList.add("hidden");
-        return;
-      }
-
-      const seed = seedFromString(foundKeyword);
-      const volume = Math.round(((seed % 800) * 60 + foundKeyword.length * 340 + 12000) / 10) * 10;
-      const momentum = Math.round((((seed % 470) / 10) + 12) * 10) / 10;
-      const margin = Math.min(65, Math.max(22, 25 + (seed % 30)));
-      
-      // Dynamic Sourcing calculations based on user's live configured investment limit input!
-      const unitCost = Math.round(150 + (seed % 450));
-      const maxAcquisitionUnits = Math.floor(userConfigBudget / unitCost);
-
-      document.getElementById("result-keyword-label").textContent = `"${foundKeyword.toUpperCase()}"`;
-      document.getElementById("metric-volume").textContent = volume.toLocaleString();
-      
-      const momEl = document.getElementById("metric-momentum");
-      momEl.textContent = `+${momentum}% Breakout`;
-      momEl.className = "font-display font-bold text-base sm:text-lg mt-2 text-emerald-400";
-      
-      document.getElementById("metric-margin").textContent = `${margin}%`;
-      document.getElementById("metric-stability").textContent = "💎 Stable Winner";
-      document.getElementById("metric-stability").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
-      
-      // Load interactive calculations into cells!
-      document.getElementById("metric-tenure").textContent = `${maxAcquisitionUnits.toLocaleString()} units`;
-      document.getElementById("metric-risk").textContent = `₹${unitCost}`;
-      document.getElementById("metric-risk").className = "font-display font-bold text-base sm:text-lg mt-2 text-blue-400";
-
-      const chart = document.getElementById("trend-chart-bars");
-      chart.innerHTML = "";
-      let prev = 40 + (seed % 20);
-      for (let i = 0; i < 14; i++) {
-        prev = Math.min(96, Math.max(20, prev + (((seed * (i + 5)) % 19) - 9) * 0.5));
-        const bar = document.createElement("div");
-        bar.className = "flex-1 rounded-sm bar-grow bg-gradient-to-t from-blue-600 to-blue-400";
-        bar.style.height = `${Math.round(prev)}%`;
-        chart.appendChild(bar);
-      }
-
-      document.getElementById("trend-results").classList.remove("hidden");
-      document.getElementById("trend-results").classList.add("fade-up");
-    }
-
-    document.getElementById("analyze-trend-btn").addEventListener("click", runTrendAnalysis);
-    document.getElementById("trend-query-input").addEventListener("keydown", (e) => { if (e.key === "Enter") runTrendAnalysis(); });
-
-    document.querySelectorAll(".faq-trigger").forEach(trig => {
-      trig.addEventListener("click", () => {
-        const content = trig.nextElementSibling;
-        const isOpen = content.classList.contains("open");
-        document.querySelectorAll(".accordion-content.open").forEach(el => {
-          el.classList.remove("open");
-          el.previousElementSibling.querySelector(".accordion-chevron").classList.remove("rotated");
-        });
-        content.classList.toggle("open", !isOpen);
-        trig.querySelector(".accordion-chevron").classList.toggle("rotated", !isOpen);
-      });
-    });
-
-    const modal = document.getElementById("checkout-modal");
-    document.getElementById("unlock-pro-btn").addEventListener("click", () => { modal.classList.remove("hidden"); modal.classList.add("flex"); });
-    document.getElementById("close-checkout-modal").addEventListener("click", () => { modal.classList.add("hidden"); modal.classList.remove("flex"); });
-
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(b => { b.classList.remove("active"); b.classList.add("text-gray-400"); });
-        btn.classList.add("active"); btn.classList.remove("text-gray-400");
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.toggle("hidden", c.dataset.tabContent !== btn.dataset.tab));
-      });
-    });
-
-    document.getElementById("checkout-confirm-btn").addEventListener("click", function() {
-      this.disabled = true; this.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...`;
-      setTimeout(() => {
-        this.innerHTML = "⚠️ Registrations Restricted to Waitlist";
-        this.className = "mt-5 w-full bg-yellow-600/20 border border-yellow-500/40 text-yellow-300 rounded-xl py-3.5 text-sm font-semibold cursor-not-allowed";
-        alert("Pro checkout is in preview mode. Please join the waitlist on the home screen first.");
-      }, 1000);
-    });
-  </script>
-  <footer style="text-align: center; padding: 20px; color: #888; font-size: 12px;">
-    <p>© 2026 OmniCatch. All Rights Reserved.</p>
-    <p><a href="privacy.html" style="color: #00ffcc;">Privacy Policy</a> | <a href="terms.html" style="color: #00ffcc;">Terms of Service</a> | <a href="contact.html" style="color: #00ffcc;">Contact Support</a></p>
+  <footer>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">Ω</div>
+      <div class="brand-name">OmniCatch</div>
+    </div>
+    <div class="footer-links">
+      <a href="refund-policy.html">Pre-order Refund Policy</a>
+      <a href="terms.html">Terms of Operations</a>
+      <a href="privacy.html">Privacy Protocols</a>
+      <a href="contact.html">Technical Contact</a>
+    </div>
+    <div class="footer-meta">Prototype v1.0 | Schema v1.0 | Built with transparency. Simulation Prototype. No live marketplace integrations yet.</div>
   </footer>
+
+</main>
+
+<button class="fab-bookmarks" id="fab-bookmarks" aria-label="Open persistent bookmarks view deck modal container">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 3h12a1 1 0 011 1v17l-7-4-7 4V4a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+  <span class="fab-badge hidden" id="fab-badge">0</span>
+</button>
+
+<div class="modal-overlay" id="waitlist-modal" role="dialog" aria-modal="true" aria-labelledby="waitlist-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div>
+        <h3 id="waitlist-title" class="font-mono text-sm uppercase">Initialize Node Allocation</h3>
+        <p class="caption" style="margin-top: 4px;">Enter verification strings to secure alpha access parameters.</p>
+      </div>
+      <button class="modal-close" id="waitlist-close" aria-label="Close form view modal overlay">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <form id="waitlist-form">
+      <div class="field">
+        <label for="wl-name">Identifier Name</label>
+        <input id="wl-name" type="text" required autocomplete="name" placeholder="Operator name strings…">
+      </div>
+      <div class="field">
+        <label for="wl-email">Communication Routing Email</label>
+        <input id="wl-email" type="email" required autocomplete="email" placeholder="name@domain.com">
+      </div>
+      <div class="field">
+        <label for="wl-interest">Target Data Interest Scope</label>
+        <select id="wl-interest">
+          <option>Planned real-time supplier metrics data</option>
+          <option>Ad-cost acquisition benchmark sets</option>
+          <option>Fulfillment threshold script triggers</option>
+          <option>All core operational cloud upgrades</option>
+        </select>
+      </div>
+      <div id="waitlist-notice-slot"></div>
+      <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-top: var(--sp-5);">Submit Backing Credit Registration</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="bookmarks-modal" role="dialog" aria-modal="true" aria-labelledby="bookmarks-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div>
+        <h3 id="bookmarks-title" class="font-mono text-sm uppercase">Cached Blueprints</h3>
+        <p class="caption" style="margin-top: 4px;">Saved strategy maps indexed on this client matrix node.</p>
+      </div>
+      <button class="modal-close" id="bookmarks-close" aria-label="Dismiss bookmarks deck modal view">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="bookmarks-list"></div>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+
+/* =========================================================
+   1. GLOBAL SYSTEM CONFIGURATION & DICTIONARY TOKENS
+========================================================= */
+const OMNI_CONFIG = Object.freeze({
+  constants: { maxBudget: 10000, baseCurrency: "INR", simulationSource: "OmniCatch Core Engine Simulation Mapping Node" },
+  categoryPool: [
+    { name: 'Wearables & Intelligent Hardware', tags: ['smart ring', 'wearable', 'gadget', 'smart', 'hardware'] },
+    { name: 'Digital Architecture & Notion Assets', tags: ['notion', 'template', 'planner', 'digital', 'kit'] },
+    { name: 'Advanced Curriculums & Education Systems', tags: ['course', 'video course', 'ai video', 'tutorial'] },
+    { name: 'Micro-SaaS & Functional Web Utilities', tags: ['saas', 'micro saas', 'tool', 'app', 'software'] },
+    { name: 'High-Ticket Agency Matrix Operations', tags: ['agency', 'service', 'freelance', 'consulting'] }
+  ],
+  budgetRoutes: [
+    { min: 100, max: 500, recommendedIds: ["digital_templates", "written_media"] },
+    { min: 501, max: 3000, recommendedIds: ["online_courses", "freelance_agency"] },
+    { min: 3001, max: 10000, recommendedIds: ["ecom_dropship", "microsaas_app"] }
+  ],
+  variantNames: ['Direct Import Play Channel', 'Private-Label Angle Route', 'Bundled Value Offer Ecosystem', 'Premium Exclusive Brand Positioning']
+});
+
+/* =========================================================
+   2. ISOLATED EVENT BUS ARCHITECTURE LAYER
+========================================================= */
+function createEventBus(){
+  const listeners = {};
+  return {
+    on(evt, fn){ (listeners[evt] = listeners[evt] || []).push(fn); return () => this.off(evt, fn); },
+    off(evt, fn){ if(!listeners[evt]) return; listeners[evt] = listeners[evt].filter(f => f !== fn); },
+    emit(evt, payload){ (listeners[evt] || []).slice().forEach(fn => { try { fn(payload); } catch(e){ console.error('[omniCore Event Error]', evt, e); } }); }
+  };
+}
+const bus = createEventBus();
+
+/* =========================================================
+   3. CENTRALIZED SINGLE SOURCE OF TRUTH APPLICATION STATE
+========================================================= */
+const AppState = {
+  data: {
+    query: '',
+    budget: 5000,
+    tier: 'free',
+    isLoading: false,
+    results: [],
+    activeResultId: null,
+    bookmarks: [],
+    history: []
+  },
+  set(patch){
+    Object.assign(this.data, patch);
+    bus.emit('state:change', this.data);
+  },
+  get(){ return this.data; }
+};
+
+/* =========================================================
+   4. DETERMINISTIC CALCULATION HASH ROUTINES
+========================================================= */
+function hashString(str){
+  let h = 2166136261;
+  for(let i=0; i<str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0);
+}
+function seededRandom(seed){
+  let s = seed % 2147483647; if (s <= 0) s += 2147483646;
+  return function(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+function rangeFromRand(rand, min, max){ return min + rand() * (max - min); }
+
+/* =========================================================
+   5. DECOUPLED COMPUTATION ENGINE CORE SECTIONS
+========================================================= */
+function pickCategory(query){
+  const cleanStr = query.toLowerCase();
+  for(const cat of OMNI_CONFIG.categoryPool){
+    if (cat.tags.some(t => cleanStr.includes(t))) return cat.name;
+  }
+  return 'General Premium Asset Channel';
+}
+
+function computeScoreAttributes(score){
+  if (score >= 75) return { badge: 'badge-good', text: 'Optimal Node Fit' };
+  if (score >= 50) return { badge: 'badge-warn', text: 'Conditional Verification' };
+  return { badge: 'badge-bad', text: 'High Capital Friction' };
+}
+
+function buildStructuredRoadmap(rand, title, budget){
+  return [
+    {
+      phase: 1, title: 'Asset Sourcing Matrix', objective: `Validate and secure resource nodes for "${title}" inside capital allocations boundaries parameters cleanly.`,
+      checklist: ['Audit 3 matching operational supplier facilities catalogs', 'Acquire sample assets arrays to verify engineering stability metrics', 'Verify MOQ thresholds sit inside calculation constraints parameters safely'],
+      cost: { amount: Math.round(rangeFromRand(rand, budget*0.25, budget*0.40)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,4,10))} days`, success: 'Resource validation constraints cleared and signed'
+    },
+    {
+      phase: 2, title: 'Identity Packaging Deck', objective: `Wrap "${title}" inside an enterprise grade aesthetic envelope to maximize trust indexes immediately.`,
+      checklist: ['Establish centralized system design token configurations', 'Draft high-converting conversion script maps for storefront vectors', 'Deploy responsive landing matrix hooks inside targeted audience channels'],
+      cost: { amount: Math.round(rangeFromRand(rand, budget*0.12, budget*0.22)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,3,7))} days`, success: 'Obsidian storefront node online with closed asset routing paths'
+    },
+    {
+      phase: 3, title: 'Logistics Pipeline Setup', objective: `Configure secure fulfillment automation loops so "${title}" reaches endpoints with zero latency layer friction.`,
+      checklist: ['Establish courier tracking webhook callbacks paths', 'Establish stock cushion parameters inside local asset array limits', 'Simulate order conversion end-to-end trace loops paths safely'],
+      cost: { amount: Math.round(rangeFromRand(rand, budget*0.15, budget*0.25)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,2,6))} days`, success: 'Fulfillment tracing loop test cycles confirmed green'
+    },
+    {
+      phase: 4, title: 'Launch Conversion Engine', objective: `Activate traffic generation matrices into checkout pipelines to extract demand conviction values logs.`,
+      checklist: ['Deploy short vertical sequence video models content', 'Monitor metric performance tags inside local event streams registers', 'Review analytics indicators feedback values logs to evaluate target scaling potentials'],
+      cost: { amount: Math.round(rangeFromRand(rand, budget*0.15, budget*0.30)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,6,12))} days`, success: 'Initial 10 core premium user conversions locked'
+    }
+  ];
+}
+
+const omniCore = {
+  scoringEngine: {
+    calculateRankedMatrix(query, budget){
+      try {
+        if(!query || !query.trim()) return { success: false, data: {}, errors: ['Enter a vector query term to process data models.'] };
+        const cleanQuery = query.trim();
+        const category = pickCategory(cleanQuery);
+        const resultsArray = [];
+
+        const matchedRoute = OMNI_CONFIG.budgetRoutes.find(r => budget >= r.min && budget <= r.max) || { recommendedIds: [] };
+
+        for(let variantIndex=0; variantIndex<4; variantIndex++){
+          const seedStr = `${cleanQuery.toLowerCase()}|${category}|${budget}|v${variantIndex}`;
+          const seed = hashString(seedStr);
+          const rand = seededRandom(seed);
+
+          const momentum = rangeFromRand(rand, -12, 48);
+          const confidence = rangeFromRand(rand, 45, 98);
+          const demand = rangeFromRand(rand, 35, 96);
+          const competition = rangeFromRand(rand, 15, 90);
+          const margin = rangeFromRand(rand, 15, 65);
+          const supplierDifficulty = rangeFromRand(rand, 10, 85);
+          const shippingComplexity = rangeFromRand(rand, 10, 80);
+          const adDifficulty = rangeFromRand(rand, 20, 90);
+
+          const totalScore = Math.max(0, Math.min(100, Math.round(
+            (demand * 0.30) + (confidence * 0.22) + ((100 - competition) * 0.18) + (margin * 0.15) + ((100 - supplierDifficulty) * 0.15)
+          )));
+
+          const variantTitle = `${cleanQuery} — ${OMNI_CONFIG.variantNames[variantIndex]}`;
+
+          const strengths = []; const weaknesses = [];
+          if(demand > 65) strengths.push('High market velocity signals');
+          if(margin > 40) strengths.push('Excellent margin buffer tracking');
+          if(competition < 40) strengths.push('Unsaturated niche corridor');
+          if(competition > 70) weaknesses.push('High saturation competitive field');
+          if(shippingComplexity > 65) weaknesses.push('High logistical shipping overhead');
+          if(margin < 25) weaknesses.push('Compressed profit margin metrics');
+          if(!strengths.length) strengths.push('Safe fit inside current asset caps');
+          if(!weaknesses.length) weaknesses.push('Requires persistent baseline content iterations');
+
+          const explanation = `Computed score maps ${demand.toFixed(0)}% organic market intent alongside ${confidence.toFixed(0)}% trend momentum metrics against ${competition.toFixed(0)}% density variables under a static ₹${budget.toLocaleString('en-IN')} allocation limit path configuration rules.`;
+
+          resultsArray.push({
+            id: `${seed}`, title: variantTitle, category, budgetRange: `₹100 – ₹${budget.toLocaleString('en-IN')}`, score: totalScore,
+            recommendation: totalScore >= 75 ? 'Pursue allocation immediately' : totalScore >= 50 ? 'Perform low cap verification sprints' : 'Deprioritize strategy alignment vector',
+            explanation, strengths, weaknesses, roadmap: buildStructuredRoadmap(rand, variantTitle, budget),
+            metrics: {
+              trendMomentum: Number(momentum.toFixed(1)), trendConfidence: Number(confidence.toFixed(1)), demandScore: Number(demand.toFixed(1)),
+              competitionLevel: Number(competition.toFixed(1)), profitMargin: Number(margin.toFixed(1)), supplierDifficulty: Number(supplierDifficulty.toFixed(1)),
+              shippingComplexity: Number(shippingComplexity.toFixed(1)), advertisingDifficulty: Number(adDifficulty.toFixed(1))
+            }
+          });
+        }
+
+        resultsArray.sort((a,b) => b.score - a.score);
+        return { success: true, data: { items: resultsArray, query: cleanQuery, budget } };
+      } catch(err) {
+        return { success: false, data: {}, errors: ['Critical tracking simulation calculations fault. Check values lines.'] };
+      }
+    }
+  }
+};
+
+/* =========================================================
+   6. LOCAL STORAGE BROWSER CAPABILITY MIDDLEWARE PERSISTENCE
+========================================================= */
+const storageEngine = {
+  getBookmarks(){ try { return JSON.parse(localStorage.getItem('omni_b_v2')) || []; } catch(e){ return []; } },
+  toggleBookmark(item){
+    try {
+      const currentList = this.getBookmarks();
+      const matchPos = currentList.findIndex(b => b.id === item.id);
+      if(matchPos >= 0) currentList.splice(matchPos, 1); else currentList.unshift(item);
+      localStorage.setItem('omni_b_v2', JSON.stringify(currentList));
+      return currentList;
+    } catch(e) { return []; }
+  },
+  isBookmarked(id){ return this.getBookmarks().some(b => b.id === id); },
+  getHistory(){ try { return JSON.parse(localStorage.getItem('omni_h_v2')) || []; } catch(e){ return []; } },
+  pushHistory(entry){
+    try {
+      let list = this.getHistory().filter(h => h.query.toLowerCase() !== entry.query.toLowerCase());
+      list.unshift(entry); list = list.slice(0, 5);
+      localStorage.setItem('omni_h_v2', JSON.stringify(list));
+      return list;
+    } catch(e) { return []; }
+  }
+};
+
+/* =========================================================
+   7. INTERACTIVE DOM RENDERING CONTROL ARCHITECTURE (Pure View Engine)
+========================================================= */
+const el = {
+  searchInput: document.getElementById('search-input'), searchClear: document.getElementById('search-clear'), btnRun: document.getElementById('btn-run'),
+  emptyState: document.getElementById('empty-state'), historyBlock: document.getElementById('history-block'), historyRow: document.getElementById('history-row'),
+  budgetSlider: document.getElementById('budget-slider'), budgetOut: document.getElementById('budget-out'), noticeSlot: document.getElementById('notice-slot'),
+  resultsSection: document.getElementById('results-section'), resultsList: document.getElementById('results-list'), resultsCount: document.getElementById('results-count'),
+  timelineSection: document.getElementById('timeline-section'), timelineSub: document.getElementById('timeline-sub'), timelineScroller: document.getElementById('timeline-scroller'),
+  timelineDots: document.getElementById('timeline-dots'), tierPill: document.getElementById('tier-pill'), fabBadge: document.getElementById('fab-badge'),
+  waitlistModal: document.getElementById('waitlist-modal'), waitlistForm: document.getElementById('waitlist-form'), waitlistNoticeSlot: document.getElementById('waitlist-notice-slot'),
+  bookmarksModal: document.getElementById('bookmarks-modal'), bookmarksList: document.getElementById('bookmarks-list')
+};
+
+function escapeHtml(str){ return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderMetricBarRow(label, value, suffix, pct){
+  return `
+    <div class="metric">
+      <div class="metric-label font-mono">${label}</div>
+      <div class="metric-value font-mono">${value}${suffix||''}</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:${Math.max(5,Math.min(100,pct))}%"></div></div>
+    </div>
+  `;
+}
+
+function renderNotificationCard(type, msg){
+  const isErr = type === 'error';
+  el.noticeSlot.innerHTML = `
+    <div class="notice ${isErr ? 'notice-error':'notice-info'}" role="${isErr?'alert':'status'}">
+      <div class="notice-body font-mono text-[11px]">${escapeHtml(msg)}</div>
+      <button class="notice-close font-mono text-[11px]" aria-label="Dismiss message panel">✕</button>
+    </div>
+  `;
+  el.noticeSlot.querySelector('.notice-close')?.addEventListener('click', () => { el.noticeSlot.innerHTML = ''; });
+}
+
+function renderUIComponentsFromState(state){
+  el.tierPill.textContent = state.tier === 'alpha' ? 'Alpha Backer Pass' : 'Free Starter Node';
+  
+  // Render History elements row matrix lists
+  const hist = storageEngine.getHistory();
+  if(!hist.length) { el.historyBlock.classList.add('hidden'); } else {
+    el.historyBlock.classList.remove('hidden');
+    el.historyRow.innerHTML = hist.map(h => `<button class="hist-chip font-mono" data-history-query="${escapeHtml(h.query)}" data-history-budget="${h.budget}">${escapeHtml(h.query)}</button>`).join('');
+  }
+
+  // Update central floating badge counters indicators maps locations
+  const bookmarkCount = storageEngine.getBookmarks().length;
+  el.fabBadge.textContent = bookmarkCount;
+  el.fabBadge.classList.toggle('hidden', bookmarkCount === 0);
+
+  // Sync Input Elements Text Context Locations Fields safely
+  if (state.query && document.activeElement !== el.searchInput) el.searchInput.value = state.query;
+  el.searchClear.classList.toggle('visible', el.searchInput.value.length > 0);
+}
+
+function renderSimulationResults(items){
+  el.resultsCount.textContent = `// [${items.length} Data Context Variants Found]`;
+  el.resultsList.innerHTML = items.map((item, index) => {
+    const attributeTags = computeScoreAttributes(item.score);
+    const saved = storageEngine.isBookmarked(item.id);
+    return `
+      <div class="card rank-card" data-result-id="${item.id}">
+        <div class="rank-top">
+          <div style="flex:1; min-width:0;">
+            <div class="rank-title-row">
+              <span class="rank-num font-mono">VARIANT 0${index+1} //</span>
+              <span class="badge ${attributeTags.badge}">${attributeTags.text}</span>
+            </div>
+            <h3 style="margin-top:10px;" class="tracking-wide text-white">${escapeHtml(item.title)}</h3>
+            <div class="rank-cat">${escapeHtml(item.category)} · ${escapeHtml(item.budgetRange)}</div>
+          </div>
+          <div class="score-ring" style="--score:${item.score};" aria-label="Score matching value indicator rating out of 100 max"><span>${item.score}</span></div>
+        </div>
+        <p class="rank-explain font-sans">${escapeHtml(item.explanation)}</p>
+        
+        <div class="metric-grid">
+          ${renderMetricBarRow('Trend Velocity Index', (item.metrics.trendMomentum >= 0 ? '+' : '') + item.metrics.trendMomentum, '%', 50 + item.metrics.trendMomentum)}
+          ${renderMetricBarRow('Data Core Conviction', item.metrics.trendConfidence, '%', item.metrics.trendConfidence)}
+          ${renderMetricBarRow('Inbound Query Intent', item.metrics.demandScore, '%', item.metrics.demandScore)}
+          ${renderMetricBarRow('Market Density Friction', item.metrics.competitionLevel, '%', item.metrics.competitionLevel)}
+          ${renderMetricBarRow('Calculated Net Margin', item.metrics.profitMargin, '%', item.metrics.profitMargin)}
+          ${renderMetricBarRow('Supplier Capital Block', item.metrics.supplierDifficulty, '%', item.metrics.supplierDifficulty)}
+          ${renderMetricBarRow('Logistics Complexity Weight', item.metrics.shippingComplexity, '%', item.metrics.shippingComplexity)}
+          ${renderMetricBarRow('Acquisition Cost Barrier', item.metrics.advertisingDifficulty, '%', item.metrics.advertisingDifficulty)}
+        </div>
+
+        <div class="sw-list">
+          ${item.strengths.map(s => `<span class="sw-item sw-strength">// + ${escapeHtml(s)}</span>`).join('')}
+          ${item.weaknesses.map(w => `<span class="sw-item sw-weakness">// − ${escapeHtml(w)}</span>`).join('')}
+        </div>
+
+        <div class="rank-actions">
+          <button class="btn btn-ghost btn-sm font-mono text-[11px]" data-action="bookmark" data-id="${item.id}">${saved ? '★ Index Synced' : '☆ Sync to Local Node'}</button>
+          <button class="btn btn-primary btn-sm font-mono text-[11px]" data-action="roadmap" data-id="${item.id}">Unroll Stepper Execution ➔</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  el.resultsSection.classList.remove('hidden');
+}
+
+function renderTimelineStepsDeck(item){
+  el.timelineSub.textContent = `Processing tracking timeline metrics structures for vector configuration: "${item.title}"`;
+  el.timelineScroller.innerHTML = item.roadmap.map(phase => `
+    <div class="phase-card" data-phase="${phase.phase}">
+      <div class="phase-head">
+        <div class="phase-num">${phase.phase}</div>
+        <div><h3>${escapeHtml(phase.title)}</h3></div>
+      </div>
+      <div class="phase-obj font-sans text-neutral-400">${escapeHtml(phase.objective)}</div>
+      <ul class="phase-checklist">
+        ${phase.checklist.map(c => `<li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${escapeHtml(c)}</span></li>`).join('')}
+      </ul>
+      <div class="phase-meta font-mono text-[11px]">
+        <div class="phase-meta-item">
+          <div class="phase-meta-label">Allocation Cost</div>
+          <div class="phase-meta-value">₹${phase.cost.amount.toLocaleString('en-IN')}</div>
+        </div>
+        <div class="phase-meta-item">
+          <div class="phase-meta-label">Time Loop</div>
+          <div class="phase-meta-value">${escapeHtml(phase.time)}</div>
+        </div>
+      </div>
+      <div class="caption font-mono text-[10px]" style="margin-top:12px; color:var(--good);">✓ Checkpoint: ${escapeHtml(phase.success)}</div>
+    </div>
+  `).join('');
+  
+  el.timelineDots.innerHTML = item.roadmap.map((_, i) => `<span class="dot ${i===0?'active':''}"></span>`).join('');
+  el.timelineSection.classList.remove('hidden');
+  el.timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  // Attach scroll sync handlers to timeline navigation indicator dots arrays lists
+  const cards = Array.from(el.timelineDots.children);
+  el.timelineScroller.onscroll = function() {
+    const blockWidth = el.timelineScroller.firstElementChild ? el.timelineScroller.firstElementChild.offsetWidth + 16 : 1;
+    const currentActiveDotIndex = Math.round(el.timelineScroller.
+      scrollLeft / blockWidth);
+    cards.forEach((d, idx) => d.classList.toggle('active', idx === currentActiveDotIndex));
+  };
+}
+
+function renderBookmarksModalContent(){
+  const list = storageEngine.getBookmarks();
+  if(!list.length) {
+    el.bookmarksList.innerHTML = `<p class="caption font-mono text-center py-6 text-neutral-600">// Local node bookmark registry empty.</p>`;
+    return;
+  }
+  el.bookmarksList.innerHTML = list.map(item => `
+    <div class="card" style="margin-top: var(--sp-3); padding: var(--sp-4); background: rgba(255,255,255,0.01);">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);">
+        <div style="min-width:0;">
+          <h3 style="font-size:0.95rem; font-weight:700;" class="truncate text-white">${escapeHtml(item.title)}</h3>
+          <div class="caption font-mono text-[11px]" style="margin-top:2px;">${escapeHtml(item.category)} · Match Score: ${item.score}</div>
+        </div>
+        <button class="btn btn-ghost btn-sm font-mono text-[10px]" style="min-height:32px; padding:0 12px; border-radius:var(--r-pill);" data-action="unbookmark" data-id="${item.id}">Purge</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   8. APPLICATION LOGIC CONTROLLER COORDINATOR (State Updates)
+========================================================= */
+let lastRunCachedItemsArray = [];
+
+function runMatrixPipelineQuery(queryStr, budgetVal){
+  el.noticeSlot.innerHTML = `<div class="loading-row font-mono text-[11px] text-neutral-400"><span class="spinner" aria-hidden="true"></span> Calibrating framework matrix routing filters parameters…</div>`;
+  AppState.set({ isLoading: true, query: queryStr, budget: budgetVal });
+
+  setTimeout(() => {
+    const engineResponseWrapper = omniCore.scoringEngine.calculateRankedMatrix(queryStr, budgetVal);
+    AppState.set({ isLoading: false });
+    el.noticeSlot.innerHTML = '';
+
+    if(!engineResponseWrapper.success){
+      renderNotificationCard('error', engineResponseWrapper.errors[0] || 'Simulation crash structural tracking error.');
+      return;
+    }
+
+    lastRunCachedItemsArray = engineResponseWrapper.data.items;
+    renderSimulationResults(lastRunCachedItemsArray);
+    storageEngine.pushHistory({ query: engineResponseWrapper.data.query, budget: engineResponseWrapper.data.budget });
+    
+    renderUIComponentsFromState(AppState.get());
+  }, 400);
+}
+ /* =========================================================
+   9. INTERACTIVE BINDINGS & SUBSCRIPTIONS EVENTS ROUTER
+========================================================= */
+el.searchInput.addEventListener('input', () => {
+  el.searchClear.classList.toggle('visible', el.searchInput.value.length > 0);
+});
+el.searchClear.addEventListener('click', () => {
+  el.searchInput.value = ''; el.searchClear.classList.remove('visible'); el.searchInput.focus();
+});
+el.searchInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); triggerExecute(); } });
+el.btnRun.addEventListener('click', triggerExecute);
+
+function triggerExecute(){
+  const q = el.searchInput.value.trim();
+  const b = Number(el.budgetSlider.value);
+  if(!q) { renderNotificationCard('error', 'Query parameter missing. Enter an objective string keyword suggestion chip below to evaluate models.'); return; }
+  runMatrixPipelineQuery(q, b);
+}
+
+// Chip suggestion arrays observers delegation loops
+document.getElementById('empty-state')?.addEventListener('click', (e) => {
+  const chipBtn = e.target.closest('button[data-suggestion]');
+  if (chipBtn) {
+    const val = chipBtn.dataset.suggestion;
+    el.searchInput.value = val; el.searchClear.classList.add('visible');
+    runMatrixPipelineQuery(val, Number(el.budgetSlider.value));
+  }
+});
+
+function updateRangeSliderFillerLayoutMetrics(){
+  const mn = Number(el.budgetSlider.min), mx = Number(el.budgetSlider.max), v = Number(el.budgetSlider.value);
+  const percentFill = ((v - mn) / (mx - mn)) * 100;
+  el.budgetSlider.style.setProperty('--fill', percentFill + '%');
+  el.budgetOut.textContent = v.toLocaleString('en-IN');
+  el.budgetSlider.setAttribute('aria-valuenow', v);
+}
+el.budgetSlider.addEventListener('input', updateRangeSliderFillerLayoutMetrics);
+updateRangeSliderFillerLayoutMetrics();
+
+el.historyRow.addEventListener('click', (e) => {
+  const c = e.target.closest('[data-history-query]'); if(!c) return;
+  el.searchInput.value = c.dataset.historyQuery; el.budgetSlider.value = c.dataset.historyBudget;
+  updateRangeSliderFillerLayoutMetrics();
+  runMatrixPipelineQuery(c.dataset.historyQuery, Number(c.dataset.historyBudget));
+});
+
+el.resultsList.addEventListener('click', (e) => {
+  const buttonTrigger = e.target.closest('[data-action]'); if(!buttonTrigger) return;
+  const idStr = buttonTrigger.dataset.id;
+  const targetItem = lastRunCachedItemsArray.find(i => i.id === idStr); if(!targetItem) return;
+
+  if(buttonTrigger.dataset.action === 'bookmark'){
+    storageEngine.toggleBookmark({ id: targetItem.id, title: targetItem.title, category: targetItem.category, score: targetItem.score });
+    renderUIComponentsFromState(AppState.get());
+    renderSimulationResults(lastRunCachedItemsArray);
+  }
+  if(buttonTrigger.dataset.action === 'roadmap'){
+    renderTimelineStepsDeck(targetItem);
+  }
+});
+
+el.bookmarksList.addEventListener('click', (e) => {
+  const unbookmarkBtn = e.target.closest('[data-action="unbookmark"]'); if(!unbookmarkBtn) return;
+  const synchronizedFilterArray = storageEngine.getBookmarks().filter(b => b.id !== unbookmarkBtn.dataset.id);
+  localStorage.setItem('omni_b_v2', JSON.stringify(synchronizedFilterArray));
+  renderUIComponentsFromState(AppState.get());
+  renderBookmarksModalContent();
+  if (lastRunCachedItemsArray.length > 0) renderSimulationResults(lastRunCachedItemsArray);
+});
+
+/* Modal Interactivity Controls */
+function toggleModalVisibilityMask(modalElement, openState) {
+  if (openState) {
+    modalElement.classList.add('open'); document.body.style.overflow = 'hidden';
+  } else {
+    modalElement.classList.remove('open'); document.body.style.overflow = '';
+  }
+}
+
+document.getElementById('fab-bookmarks').addEventListener('click', () => { renderBookmarksModalContent(); toggleModalVisibilityMask(el.bookmarksModal, true); });
+document.getElementById('bookmarks-close').addEventListener('click', () => toggleModalVisibilityMask(el.bookmarksModal, false));
+el.bookmarksModal.addEventListener('click', (e) => { if(e.target === el.bookmarksModal) toggleModalVisibilityMask(el.bookmarksModal, false); });
+
+document.getElementById('btn-preorder').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, true));
+document.getElementById('btn-support').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, true));
+document.getElementById('waitlist-close').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, false));
+el.waitlistModal.addEventListener('click', (e) => { if(e.target === el.waitlistModal) toggleModalVisibilityMask(el.waitlistModal, false); });
+
+el.waitlistForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const n = document.getElementById('wl-name').value.trim();
+  const em = document.getElementById('wl-email').value.trim();
+  if(!n || !em.includes('@')) {
+    el.waitlistNoticeSlot.innerHTML = `<div class="notice notice-error font-mono text-[11px]">// Verification structure invalid. Recheck entry strings fields.</div>`;
+    return;
+  }
+  
+  try {
+    const list = JSON.parse(localStorage.getItem('omni_w_v2') || '[]');
+    list.push({ name: n, email: em, interest: document.getElementById('wl-interest').value, ts: Date.now() });
+    localStorage.setItem('omni_w_v2', JSON.stringify(list));
+  } catch(err){}
+
+  el.waitlistNoticeSlot.innerHTML = `<div class="notice notice-info font-mono text-[11px]" style="border-color:var(--good); color:var(--good);">// Registration secured. Node keys sent on launch lifecycle windows.</div>`;
+  el.waitlistForm.reset();
+  setTimeout(() => { toggleModalVisibilityMask(el.waitlistModal, false); el.waitlistNoticeSlot.innerHTML = ''; }, 1400);
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){ toggleModalVisibilityMask(el.waitlistModal, false); toggleModalVisibilityMask(el.bookmarksModal, false); }
+});
+
+/* =========================================================
+   10. SYSTEM RUNTIME LIFECYCLE SEED INITIALIZATION
+========================================================= */
+renderUIComponentsFromState(AppState.get());
+bus.on('state:change', (updatedDataSnapshot) => { /* Downstream reactions */ });
+
+})();
+</script>
 </body>
 </html>
-
-       
+                                      
