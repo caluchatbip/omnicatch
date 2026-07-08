@@ -426,7 +426,7 @@
       el.previewCost.textContent = `${ctx.symbol}${Math.round(350 * ctx.multiplier)}`;
     }
 
-    function runSimulationSearch(customQuery = "") {
+        function runSimulationSearch(customQuery = "") {
       const targetQuery = (customQuery || el.searchInput.value).trim().toLowerCase();
       const currentTier = parseInt(el.budgetSlider.value);
       const ctx = getSelectedDetails();
@@ -438,12 +438,18 @@
       setTimeout(() => {
         el.skeletonLoader.classList.add('hidden');
         
-        let pool = SYSTEM_BLUEPRINTS.filter(item => item.tier === currentTier);
+        let pool = [];
+        
+        // Exact matching logic override to prevent wrong card generation
         if (targetQuery) {
           pool = SYSTEM_BLUEPRINTS.filter(item => item.title.toLowerCase().includes(targetQuery) || item.category.toLowerCase().includes(targetQuery));
+        } else {
+          pool = SYSTEM_BLUEPRINTS.filter(item => item.tier === currentTier);
         }
 
-        if (pool.length === 0) pool = [SYSTEM_BLUEPRINTS[0]];
+        if (pool.length === 0) {
+          pool = [SYSTEM_BLUEPRINTS.find(item => item.tier === currentTier) || SYSTEM_BLUEPRINTS[0]];
+        }
 
         el.resultsCount.textContent = `// [${pool.length} Blueprints Isolated]`;
         
