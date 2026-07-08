@@ -1,1537 +1,538 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>OmniCatch — Premium Trend Intelligence Matrix</title>
-<meta name="description" content="OmniCatch scores and ranks trending product opportunities by budget, category and demand signals — deterministic simulation prototype for solo sellers and micro-brands.">
-<meta property="og:title" content="OmniCatch — Trend Intelligence for Solo Sellers">
-<meta property="og:description" content="Score, rank, and roadmap winning product ideas before you spend a rupee sourcing.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://caluchatbip.github.io/omnicatch/">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://caluchatbip.github.io/omnicatch/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniCatch • Global Trend Intelligence Engine</title>
+  
+  <!-- Font Integration & Icon Architecture -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Courier+Prime&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@tables/icons@3.22.0/dist/index.umd.min.js"></script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       1. CORE DESIGN TOKEN DICTIONARY & VARIABLES
+    ========================================================= */
+    :root {
+      --bg-main: #000000;
+      --card-obsidian: #09090b;
+      --card-inner: #121214;
+      --border-thin: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.15);
+      
+      --accent-blue: #2563eb;
+      --accent-purple: #7c3aed;
+      --good: #10b981;
+      --warn: #f59e0b;
+      --critical: #ef4444;
+      
+      --ink-bright: #ffffff;
+      --ink-dim: #a1a1aa;
+      --ink-faint: #52525b;
+      
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Courier Prime', monospace;
+      
+      --r-md: 16px;
+      --r-sm: 8px;
+      --r-pill: 9999px;
+      --transition-slow: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-<style>
-:root {
-  --bg: #000000;
-  --surface: #09090b;
-  --surface-2: #121214;
-  --border: rgba(255, 255, 255, 0.05);
-  --border-strong: rgba(255, 255, 255, 0.12);
-  --ink: #ffffff;
-  --ink-dim: #a1a1aa;
-  --ink-faint: #52525b;
-  --accent-blue: #38bdf8;
-  --accent-lav: #a855f7;
-  --accent-glow: rgba(56, 189, 248, 0.15);
-  --good: #4ade80;
-  --warn: #fbbf24;
-  --bad: #f87171;
+    /* =========================================================
+       2. GLOBAL RESET & BASE ANIMATED CANVAS
+    ========================================================= */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--ink-bright);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
-  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-pill: 999px;
+    /* Animated Mesh Background (Subtle Gradient Blobs) */
+    .mesh-glow {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.04) 0%, transparent 40%);
+      z-index: -1;
+      pointer-events: none;
+    }
 
-  --fs-caption: clamp(0.72rem, 0.68rem + 0.15vw, 0.8rem);
-  --fs-body: clamp(0.9rem, 0.86rem + 0.2vw, 0.98rem);
-  --fs-h3: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
-  --fs-h2: clamp(1.6rem, 1.4rem + 0.8vw, 2.2rem);
-  --fs-h1: clamp(2.2rem, 1.8rem + 1.6vw, 3.4rem);
+    /* Typography & Utilities Layout */
+    h1, h2, h3 { color: var(--ink-bright); letter-spacing: -0.03em; font-weight: 800; }
+    p { color: var(--ink-dim); font-size: 15px; line-height: 1.6; }
+    .hidden { display: none !important; }
+    .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 20px; }
 
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur: 350ms;
+    /* =========================================================
+       3. ATOMIC COMPONENT INTERFACE STYLES
+    ========================================================= */
+    /* Header Dropdown Selection & Alerts Ticker Bar */
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 0; border-bottom: 1px solid var(--border-thin);
+    }
+    .market-selector {
+      background: var(--card-inner); border: 1px solid var(--border-thin);
+      color: var(--ink-bright); padding: 6px 12px; font-size: 13px;
+      font-weight: 600; border-radius: var(--r-sm); outline: none;
+    }
+    .ticker-container {
+      background: rgba(37, 99, 235, 0.05); border: 1px solid var(--border-thin);
+      padding: 10px; border-radius: var(--r-sm); margin: 20px 0; overflow: hidden;
+    }
+    .ticker-text { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-align: center; }
 
-  color-scheme: dark;
-}
+    /* Command Center Search Inputs & Range Sliders */
+    .command-box {
+      background: var(--card-obsidian); border: 1px solid var(--border-thin);
+      border-radius: var(--r-md); padding: 24px; margin-bottom: 24px;
+    }
+    .input-wrapper { display: flex; gap: 10px; margin-bottom: 16px; position: relative; }
+    .search-input {
+      flex: 1; background: var(--card-inner); border: 1px solid var(--border-thin);
+      color: var(--ink-bright); padding: 14px 16px; border-radius: var(--r-sm);
+      font-size: 15px; outline: none; transition: var(--transition-slow);
+    }
+    .search-input:focus { border-color: var(--border-strong); }
+    .btn-generate {
+      background: var(--ink-bright); color: var(--bg-main); border: none;
+      padding: 0 20px; border-radius: var(--r-sm); font-weight: 700;
+      font-size: 14px; cursor: pointer; transition: var(--transition-slow);
+    }
+    .btn-generate:active { transform: scale(0.97); }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-html, body { background: var(--bg); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: var(--fs-body);
-  line-height: 1.6;
-  position: relative;
-}
+    /* Custom Input Budget Slider Element Layout */
+    .slider-wrap { margin-top: 20px; }
+    .slider-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; margin-bottom: 8px; }
+    .range-slider {
+      width: 100%; -webkit-appearance: none; background: var(--card-inner);
+      height: 6px; border-radius: var(--r-pill); outline: none;
+    }
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--ink-bright); cursor: pointer;
+    }
 
-h1, h2, h3 { font-weight: 700; letter-spacing: -0.03em; color: #ffffff; }
-h1 { font-size: var(--fs-h1); line-height: 1.1; font-weight: 800; }
-h2 { font-size: var(--fs-h2); line-height: 1.2; }
-h3 { font-size: var(--fs-h3); line-height: 1.3; }
+    /* Example Filter Micro Chips Row */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip {
+      background: var(--card-inner); border: 1px solid var(--border-thin);
+      color: var(--ink-dim); font-size: 12px; padding: 6px 12px;
+      border-radius: var(--r-pill); cursor: pointer; transition: var(--transition-slow);
+    }
+    .chip:hover { color: var(--ink-bright); border-color: var(--border-strong); }
 
-.mono { font-family: 'Courier Prime', monospace; letter-spacing: 0.02em; }
-.caption { font-size: var(--fs-caption); color: var(--ink-dim); }
+    /* =========================================================
+       4. ANALYSIS DATA CARD GRID LAYOUTS
+    ========================================================= */
+    .card {
+      background: var(--card-obsidian); border: 1px solid var(--border-thin);
+      border-radius: var(--r-md); padding: 24px; margin-bottom: 20px;
+    }
+    .badge {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      padding: 4px 8px; border-radius: var(--r-pill); text-transform: uppercase;
+    }
+    .badge-good { background: rgba(16, 185, 129, 0.1); color: var(--good); }
+    .badge-warn { background: rgba(245, 158, 11, 0.1); color: var(--warn); }
 
-/* Ambient Liquid Micro Background Glow */
-#mesh-bg {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: 
-    radial-gradient(circle 45vw at 15% 20%, rgba(56, 189, 248, 0.08), transparent 80%),
-    radial-gradient(circle 40vw at 85% 75%, rgba(168, 85, 247, 0.06), transparent 80%);
-  filter: blur(40px);
-}
+    /* Horizontal Multi-Bar Rows Grid Metrics Layout */
+    .metric-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 18px 0; }
+    .metric-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .metric-label { color: var(--ink-dim); }
+    .metric-val-wrap { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); }
+    .bar-bg { width: 80px; height: 4px; background: var(--card-inner); border-radius: var(--r-pill); overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent-blue); border-radius: var(--r-pill); }
 
-.wrap { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 0 var(--sp-4) var(--sp-9); }
+    /* Pre-built Micro Execution Checklist Rows */
+    .roadmap-list { list-style: none; margin-top: 14px; }
+    .roadmap-step {
+      display: flex; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 14px;
+    }
+    .step-num { font-family: var(--font-mono); color: var(--accent-blue); font-weight: 700; }
 
-/* Sticky Premium Navigation Bar */
-header.top {
-  position: sticky; top: 0; z-index: 40;
-  backdrop-filter: blur(20px);
-  background: rgba(0, 0, 0, 0.75);
-  border-bottom: 1px solid var(--border);
-}
-.top-inner { max-width: 680px; margin: 0 auto; padding: var(--sp-4); display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: var(--sp-3); }
-.brand-mark { width: 32px; height: 32px; border-radius: var(--r-sm); background: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #000; }
-.brand-name { font-weight: 700; font-size: 0.95rem; tracking-spacing: -0.01em; color: #ffffff; }
-.brand-tag { font-size: 9px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.15em; font-family: 'Courier Prime', monospace; }
-.tier-pill {
-  font-size: 11px; font-weight: 600; padding: var(--sp-1) var(--sp-3); border-radius: var(--r-pill);
-  border: 1px solid var(--border-strong); background: rgba(255,255,255,0.03); color: var(--ink-dim);
-}
+    /* Accordion FAQ Component Shell */
+    .faq-item { border-bottom: 1px solid var(--border-thin); padding: 16px 0; cursor: pointer; }
+    .faq-q { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; }
+    .faq-a { color: var(--ink-dim); font-size: 14px; margin-top: 8px; display: none; }
 
-/* Base Sections Layout */
-section { padding-top: var(--sp-8); }
-section:first-of-type { padding-top: var(--sp-6); }
+    /* Skeleton Loading Placeholder Masks */
+    .skeleton-box {
+      background: linear-gradient(90deg, #09090b 25%, #18181b 50%, #09090b 75%);
+      background-size: 200% 100%; animation: loadingPulse 1.4s infinite;
+      height: 16px; border-radius: var(--r-sm); margin-bottom: 10px;
+    }
+    @keyframes loadingPulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* Hero Text Modules */
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11px; color: var(--accent-blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
-  background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.15);
-  padding: 6px 14px; border-radius: var(--r-pill); margin-bottom: var(--sp-4);
-}
-.dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--good); box-shadow: 0 0 12px var(--good); }
-.hero p.lede { margin-top: var(--sp-4); color: var(--ink-dim); max-width: 52ch; font-size: 1.05rem; font-weight: 400; }
-
-/* Elegant Minimalist Surface Cards */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: var(--sp-5);
-  transition: border-color var(--dur) var(--ease);
-}
-
-/* Command Deck Custom Input Rows */
-.command-card { margin-top: var(--sp-6); background: rgba(9, 9, 11, 0.6); backdrop-filter: blur(10px); }
-.search-row { display: flex; gap: var(--sp-3); align-items: center; }
-.search-input-wrap {
-  flex: 1; display: flex; align-items: center; gap: var(--sp-3);
-  background: #000000; border: 1px solid var(--border-strong); border-radius: var(--r-md);
-  padding: 0 var(--sp-4); min-height: 54px;
-  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-}
-.search-input-wrap:focus-within { border-color: #ffffff; box-shadow: 0 0 0 1px #ffffff; }
-.search-input-wrap svg { flex-shrink: 0; opacity: 0.4; color: #fff; }
-#search-input {
-  flex: 1; background: transparent; border: 0; outline: 0; color: #ffffff; font-size: var(--fs-body); font-weight: 500;
-}
-#search-input::placeholder { color: var(--ink-faint); }
-#search-clear {
-  display: none; background: transparent; border: 0; color: var(--ink-faint); cursor: pointer;
-  width: 24px; height: 24px;
-}
-#search-clear.visible { display: flex; align-items: center; justify-content: center; }
-
-/* The Ultra-Premium White Pill CTA Buttons */
-.btn {
-  min-height: 54px; padding: 0 var(--sp-5); border-radius: var(--r-pill); border: 1px solid transparent;
-  font-weight: 600; font-size: 0.95rem; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  transition: all var(--dur) var(--ease);
-}
-.btn:active { transform: scale(0.98); }
-.btn-primary { background: #ffffff; color: #000000; font-weight: 700; }
-.btn-primary:hover { background: #e4e4e7; }
-.btn-primary:disabled { background: var(--surface-2); color: var(--ink-faint); border-color: var(--border); cursor: not-allowed; }
-.btn-ghost { background: transparent; color: #ffffff; border: 1px solid var(--border-strong); }
-.btn-ghost:hover { background: rgba(255,255,255,0.03); border-color: #ffffff; }
-.btn-block { width: 100%; }
-.btn-sm { min-height: 40px; padding: 0 var(--sp-4); font-size: var(--fs-caption); border-radius: var(--r-pill); }
-
-/* Quick Suggestion Pill Chips */
-.empty-suggestions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
-.chip {
-  min-height: 36px; padding: 0 14px; border-radius: var(--r-pill); background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border); color: var(--ink-dim); font-size: var(--fs-caption); font-weight: 500;
-  cursor: pointer; display: inline-flex; align-items: center; transition: all var(--dur) var(--ease);
-}
-.chip:hover { border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.05); }
-
-/* Luxury Budget Slider Layout */
-.budget-block { margin-top: var(--sp-6); border-top: 1px solid var(--border); padding-top: var(--sp-5); }
-.budget-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--sp-2); }
-.budget-value { font-weight: 800; font-size: var(--fs-h3); color: #ffffff; }
-#budget-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; margin: 0; cursor: pointer; }
-#budget-slider::-webkit-slider-runnable-track { height: 4px; background: var(--surface-2); border-radius: var(--r-pill); }
-#budget-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; margin-top: -8px;
-  background: #ffffff; border: 2px solid #000000; box-shadow: 0 0 15px rgba(255,255,255,0.3); transition: transform 150ms ease;
-}
-#budget-slider::-webkit-slider-thumb:active { transform: scale(1.2); }
-
-/* Inline Notification Modals */
-.notice { display: flex; gap: var(--sp-3); align-items: flex-start; padding: var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface-2); margin-top: var(--sp-4); }
-.notice-error { border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.02); }
-.notice-error .notice-icon { color: var(--bad); }
-
-/* Simulation Readout Grid Elements */
-.results-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-4); }
-.rank-card { position: relative; overflow: hidden; margin-bottom: var(--sp-4); }
-.rank-top { display: flex; justify-content: space-between; gap: var(--sp-4); }
-.rank-title-row { display: flex; align-items: center; gap: var(--sp-2); }
-.rank-num { font-size: var(--fs-caption); color: var(--ink-faint); font-weight: 700; }
-.badge { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); text-transform: uppercase; letter-spacing: 0.05em; }
-.badge-good { background: rgba(74,222,128,0.08); color: var(--good); border: 1px solid rgba(74,222,128,0.2); }
-.badge-warn { background: rgba(251,191,36,0.08); color: var(--warn); border: 1px solid rgba(251,191,36,0.2); }
-.badge-bad { background: rgba(248,113,113,0.08); color: var(--bad); border: 1px solid rgba(248,113,113,0.2); }
-
-/* Minimal Conic Blur Progress Displays */
-.score-ring {
-  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; position: relative;
-  display: flex; align-items: center; justify-content: center;
-  background: conic-gradient(var(--accent-blue) calc(var(--score,0)*1%), var(--surface-2) 0);
-}
-.score-ring::before { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--surface); }
-.score-ring span { position: relative; font-weight: 700; font-size: 13px; color: #ffffff; font-family: 'Courier Prime', monospace; }
-
-.rank-cat { font-family: 'Courier Prime', monospace; font-size: var(--fs-caption); color: var(--ink-faint); margin-top: 2px; }
-.rank-explain { color: var(--ink-dim); margin-top: var(--sp-3); font-size: var(--fs-caption); }
-
-.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); margin-top: var(--sp-4); }
-.metric { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px; }
-.metric-label { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; }
-.metric-value { font-weight: 700; margin-top: 2px; font-size: 0.95rem; color: #ffffff; }
-.metric-bar { height: 2px; background: var(--surface-2); margin-top: 8px; overflow: hidden; }
-.metric-bar-fill { height: 100%; background: #ffffff; }
-
-.sw-list { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); flex-wrap: wrap; }
-.sw-item { font-size: 11px; padding: 4px 12px; border-radius: var(--r-pill); border: 1px solid var(--border); font-weight: 500; }
-.sw-strength { color: var(--good); background: rgba(74,222,128,0.02); border-color: rgba(74,222,128,0.15); }
-.sw-weakness { color: var(--bad); background: rgba(248,113,113,0.02); border-color: rgba(248,113,113,0.15); }
-
-.rank-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
-
-/* Swipeable Chronological Roadmap Timelines */
-.timeline-scroller {
-  display: flex; gap: var(--sp-4); overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: var(--sp-3) 2px; margin: 0 -2px;
-}
-.phase-card {
-  scroll-snap-align: center; flex: 0 0 88%; max-width: 360px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-5);
-}
-.phase-head { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); }
-.phase-num {
-  width: 32px; height: 32px; border-radius: var(--r-sm); background: #ffffff; color: #000000;
-  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; font-family: 'Courier Prime', monospace;
-}
-.phase-obj { color: var(--ink-dim); font-size: var(--fs-caption); line-height: 1.5; }
-.phase-checklist { list-style: none; margin: var(--sp-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); border-top: 1px solid var(--border); padding-top: var(--sp-4); }
-.phase-checklist li { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-caption); color: var(--ink-dim); }
-.phase-checklist li svg { flex-shrink: 0; margin-top: 3px; color: var(--accent-blue); }
-.phase-meta { display: flex; gap: var(--sp-3); margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 1px solid var(--border); }
-.phase-meta-item { flex: 1; }
-.phase-meta-label { font-size: 9px; text-transform: uppercase; color: var(--ink-faint); letter-spacing: 0.05em; font-family: 'Courier Prime', monospace; }
-.phase-meta-value { font-weight: 700; margin-top: 2px; color: #ffffff; }
-.dots-row { display: flex; justify-content: center; gap: 8px; margin-top: var(--sp-3); }
-.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-faint); transition: all 200ms var(--ease); }
-.dot.active { background: #ffffff; transform: scale(1.5); }
-
-/* Premium Value-Anchored Tier Framework Layout */
-.pricing-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-@media (min-width: 580px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
-.price-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 380px; }
-.price-card.highlight { border-color: var(--border-strong); background: rgba(255,255,255,0.01); }
-.price-ribbon {
-  position: absolute; top: var(--sp-4); right: var(--sp-4);
-  background: rgba(255,255,255,0.08); border: 1px solid var(--border-strong); color: #ffffff;
-  font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-pill); text-transform: uppercase; letter-spacing: 0.05em;
-}
-.price-amount { font-size: var(--fs-h2); font-weight: 800; color: #ffffff; margin-top: var(--sp-2); }
-.price-amount sup { font-size: 0.85rem; color: var(--ink-faint); font-weight: 500; top: -0.4em; }
-.price-sub { color: var(--ink-dim); font-size: var(--fs-caption); margin-top: 2px; }
-.price-features { list-style: none; margin: var(--sp-5) 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); flex: 1; }
-.price-features li { display: flex; gap: 10px; font-size: var(--fs-caption); color: var(--ink-dim); align-items: flex-start; }
-.price-features li svg { flex-shrink: 0; margin-top: 3px; }
-.price-future { color: var(--ink); font-weight: 500; }
-.anchor-note { text-align: center; color: var(--ink-faint); font-size: 11px; margin-top: var(--sp-4); font-family: 'Courier Prime', monospace; }
-.anchor-note strong { color: var(--ink-dim); }
-
-.support-widget { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-top: var(--sp-5); background: rgba(255,255,255,0.01); }
-.support-text { font-size: var(--fs-caption); color: var(--ink-dim); }
-
-/* Honest Technical Capability Previews Widget */
-.arch-cols { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-@media (min-width: 580px) { .arch-cols { grid-template-columns: 1fr 1fr; } }
-.arch-col-head { display: flex; align-items: center; gap: 8px; margin-bottom: var(--sp-3); }
-.arch-col-title { font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; font-family: 'Courier Prime', monospace; }
-.arch-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
-.arch-list li { font-size: var(--fs-caption); color: var(--ink-dim); display: flex; gap: 8px; align-items: center; }
-.dot-live-sm { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
-.arch-active .dot-live-sm { background: var(--good); box-shadow: 0 0 8px var(--good); }
-.arch-cloud .dot-live-sm { background: var(--ink-faint); }
-
-/* History Token Displays */
-.hist-row { display: flex; gap: var(--sp-2); overflow-x: auto; padding-bottom: 2px; }
-.hist-chip { flex-shrink: 0; background: transparent; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 6px 12px; font-size: 11px; color: var(--ink-dim); cursor: pointer; transition: all var(--dur) var(--ease); }
-.hist-chip:hover { border-color: #ffffff; color: #ffffff; }
-
-/* Fully Accessible Bottom Sheet Modals */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-  display: flex; align-items: flex-end; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity var(--dur) var(--ease);
-}
-@media (min-width: 640px) { .modal-overlay { align-items: center; } }
-.modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal-sheet {
-  background: var(--surface); border-top: 1px solid var(--border-strong); border-radius: var(--r-lg) var(--r-lg) 0 0;
-  width: 100%; max-width: 460px; padding: var(--sp-6) var(--sp-5) var(--sp-6);
-  transform: translateY(40px); transition: transform var(--dur) var(--ease);
-  max-height: 80vh; overflow-y: auto;
-}
-@media (min-width: 640px) { .modal-sheet { border: 1px solid var(--border-strong); border-radius: var(--r-lg); padding: var(--sp-6); } }
-.modal-overlay.open .modal-sheet { transform: translateY(0); }
-.modal-handle { width: 32px; height: 4px; background: var(--border-strong); border-radius: 2px; margin: 0 auto var(--sp-4); }
-@media (min-width: 640px) { .modal-handle { display: none; } }
-.modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--sp-4); }
-.modal-close { background: transparent; border: 1px solid var(--border); width: 32px; height: 32px; border-radius: 50%; color: var(--ink-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.modal-close:hover { border-color: #ffffff; color: #ffffff; }
-.field { margin-top: var(--sp-4); }
-.field label { display: block; font-size: 11px; color: var(--ink-dim); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-.field input, .field select {
-  width: 100%; min-height: 46px; background: #000000; border: 1px solid var(--border-strong); border-radius: var(--r-sm);
-  padding: 0 14px; color: #ffffff; font-size: var(--fs-body); outline: none; transition: border-color var(--dur) var(--ease);
-}
-.field input:focus, .field select:focus { border-color: #ffffff; }
-
-/* Document Footers Structural Definitions Layout */
-footer { margin-top: var(--sp-8); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
-.footer-links { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-3); }
-.footer-links a { color: var(--ink-faint); font-size: var(--fs-caption); text-decoration: none; transition: color var(--dur) var(--ease); }
-.footer-links a:hover { color: var(--ink-dim); text-decoration: underline; }
-.footer-meta { color: var(--ink-faint); font-size: 10px; margin-top: var(--sp-4); font-family: 'Courier Prime', monospace; line-height: 1.6; }
-
-.hidden { display: none !important; }
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-
-.fab-bookmarks {
-  position: fixed; bottom: var(--sp-5); right: var(--sp-5); z-index: 30;
-  width: 48px; height: 48px; border-radius: 50%; background: #ffffff; border: 1px solid #ffffff;
-  display: flex; align-items: center; justify-content: center; color: #000000; cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform var(--dur) var(--ease);
-}
-.fab-bookmarks:active { transform: scale(0.92); }
-.fab-badge {
-  position: absolute; top: -2px; right: -2px; background: var(--accent-lav); color: #ffffff; font-size: 9px; font-weight: 700;
-  min-width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px;
-}
-</style>
+    /* Floating Navigation Indicator Element */
+    .scroll-indicator {
+      position: fixed; bottom: 24px; right: 24px; background: var(--ink-bright);
+      color: var(--bg-main); width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: var(--transition-slow); pointer-events: none; opacity: 1;
+    }
+  </style>
 </head>
 <body>
+  <div class="mesh-glow"></div>
 
-<div id="mesh-bg" aria-hidden="true"></div>
-
-<header class="top">
-  <div class="top-inner">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">Ω</div>
-      <div>
-        <div class="brand-name">OmniCatch</div>
-        <div class="brand-tag">Trend Intelligence</div>
+  <div class="container">
+    <!-- ========================== HEADER TOP-BAR ========================== -->
+    <header class="top-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: 800; font-size: 18px; letter-spacing: -0.02em;">OmniCatch</span>
+        <span style="font-size: 10px; font-family: var(--font-mono); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; color: var(--ink-dim);">PROTOTYPE v1.5</span>
       </div>
+      <select id="marketSelect" class="market-selector">
+        <option value="US">🇺🇸 United States (USD)</option>
+        <option value="IN" selected>🇮🇳 India (INR)</option>
+        <option value="CN">🇨🇳 China (CNY)</option>
+        <option value="EU">🇪🇺 Eurozone (EUR)</option>
+        <option value="UK">🇬🇧 United Kingdom (GBP)</option>
+        <option value="AE">🇦🇪 United Arab Emirates (AED)</option>
+      </select>
+    </header>
+
+    <!-- ========================== LIVE LOGISTICS TICKER ========================== -->
+    <div class="ticker-container">
+      <div id="liveTicker" class="ticker-text">// INITIALIZING STREAM ENGINE CORRIDORS...</div>
     </div>
-    <div class="tier-pill" id="tier-pill">Free Starter</div>
-  </div>
-</header>
 
-<main class="wrap">
+    <!-- ========================== HERO TITLE HEADER ========================== -->
+    <section style="text-align: center; margin: 40px 0 32px 0;">
+      <h1 style="font-size: 36px; line-height: 1.15; margin-bottom: 12px;">Validate global trends before spending cash.</h1>
+      <p style="color: var(--ink-dim); max-width: 480px; margin: 0 auto; font-size: 14px;"> Isolate shipping risk indexes, macro-demand scores, and structural custom tax parameters before launching products. </p>
+    </section>
 
-  <section class="hero" aria-labelledby="hero-heading">
-    <span class="hero-eyebrow"><span class="dot-live" aria-hidden="true"></span> Simulation Prototype</span>
-    <h1 id="hero-heading">Find profitable business ideas before you spend a single rupee.</h1>
-    <p class="lede">Input any product or business idea, set your launch budget, and instantly analyze demand signals, profit potential, and structural launch milestones.</p>
-  </section>
+    <!-- ========================== THE COMMAND CENTER ========================== -->
+    <main class="command-box">
+      <div class="input-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search product idea... (e.g., Smart Ring, AI Course)" autocomplete="off">
+        <button id="btnGenerate" class="btn-generate">Analyze</button>
+      </div>
 
-  <section class="command-center" aria-labelledby="command-heading">
-    <h2 id="command-heading" class="sr-only">Query Settings</h2>
-    <div class="card command-card">
-      <div class="search-row">
-        <div class="search-input-wrap">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-          <input id="search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search any product or business idea..." aria-label="Trend search term query">
-          <button id="search-clear" aria-label="Clear active criteria input">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-          </button>
+      <div class="slider-wrap">
+        <div class="slider-meta">
+          <span style="color: var(--ink-dim);">Allocation Threshold:</span>
+          <span id="budgetValue" style="color: var(--ink-bright); font-weight: 700;">₹100 – ₹500</span>
         </div>
-        <button class="btn btn-primary" id="btn-run" aria-label="Execute simulation matrix calculations">
-          <span class="run-label">Generate Blueprint</span>
-        </button>
+        <input type="range" id="budgetSlider" class="range-slider" min="1" max="4" value="1" step="1">
       </div>
 
-      <div id="empty-state" class="empty-suggestions" role="group" aria-label="Suggested matrix vectors">
-        <button class="chip" data-suggestion="Smart Ring">Smart Ring</button>
-        <button class="chip" data-suggestion="Notion Templates">Notion Templates</button>
-        <button class="chip" data-suggestion="AI Video Course">AI Video Course</button>
-        <button class="chip" data-suggestion="Micro SaaS">Micro SaaS</button>
-        <button class="chip" data-suggestion="Agency">Agency</button>
-        <button class="chip" data-suggestion="Digital Products">Digital Products</button>
+      <div class="chip-row" id="chipSuggestions">
+        <span class="chip" data-query="Smart Ring">Smart Ring</span>
+        <span class="chip" data-query="Notion Templates">Notion Templates</span>
+        <span class="chip" data-query="AI Video Course">AI Video Course</span>
+        <span class="chip" data-query="Micro SaaS">Micro SaaS</span>
+        <span class="chip" data-query="Digital Products">Digital Products</span>
       </div>
+    </main>
 
-      <div id="history-block" class="hidden" style="margin-top: var(--sp-4);">
-        <div class="caption font-mono text-[10px] uppercase tracking-wider text-neutral-500" style="margin-bottom: 8px;">Cached Queries</div>
-        <div class="hist-row" id="history-row"></div>
-      </div>
-
-      <div class="budget-block">
-        <div class="budget-head">
-          <span class="caption font-mono text-[10px] uppercase tracking-wider text-neutral-500">Maximum Investment Budget</span>
-          <span class="budget-value font-mono">₹100 – ₹<span id="budget-out">5,000</span></span>
-        </div>
-        <input type="range" id="budget-slider" min="100" max="10000" step="100" value="5000" aria-label="Budget filter allocation limit range tracking slider" aria-valuemin="100" aria-valuemax="10000" aria-valuenow="5000">
-        <div class="budget-ticks">
-          <span class="caption font-mono">₹100</span>
-          <span class="caption font-mono">₹10,000</span>
-        </div>
-      </div>
-
-      <div id="notice-slot" aria-live="polite"></div>
+    <!-- ========================== SKELETON LOADER CONTAINER ========================== -->
+    <div id="skeletonLoader" class="card hidden">
+      <div class="skeleton-box" style="width: 40%; height: 20px; margin-bottom: 20px;"></div>
+      <div class="skeleton-box" style="width: 85%;"></div>
+      <div class="skeleton-box" style="width: 70%;"></div>
+      <div class="skeleton-box" style="width: 90%; height: 40px; margin-top: 20px;"></div>
     </div>
-  </section>
 
-  <section id="results-section" class="hidden" aria-labelledby="results-heading">
-    <div class="results-head">
-      <h2 id="results-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Analysis Breakdown</h2>
-      <span class="results-count font-mono text-[11px]" id="results-count"></span>
-    </div>
-    <div id="results-list"></div>
-  </section>
+    <!-- ========================== ENGINE ANALYSIS BLOCK OUTLET ========================== -->
+    <section id="analysisBreakdown" class="hidden">
+      <h2 style="font-size: 18px; text-transform: uppercase; font-family: var(--font-mono); color: var(--ink-dim); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <span>📊 Analysis Isolation</span>
+        <span id="resultsCount" style="font-size: 12px; color: var(--accent-blue);"></span>
+      </h2>
+      <div id="resultsList"></div>
+    </section>
 
-  <section id="timeline-section" class="hidden" aria-labelledby="timeline-heading">
-    <h2 id="timeline-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Step-by-Step Launch Blueprint</h2>
-    <p class="caption font-sans" id="timeline-sub" style="margin-top: var(--sp-1); color: var(--ink-dim);"></p>
-    <div class="timeline-scroller" id="timeline-scroller" tabindex="0" aria-label="Swipeable operational roadmap metrics cards"></div>
-    <div class="dots-row" id="timeline-dots" aria-hidden="true"></div>
-  </section>
+    <!-- ========================== LIVE PREVIEW FALLBACK ========================== -->
+    <section id="emptyState" class="card" style="text-align: center; padding: 40px 24px;">
+      <div style="font-size: 12px; font-family: var(--font-mono); color: var(--accent-purple); text-transform: uppercase; margin-bottom: 8px;">Live Engine Dashboard Preview</div>
+      <h3 style="font-size: 20px; margin-bottom: 16px;" id="previewTitle">AI Smart Ring Loop</h3>
+      <div class="metric-grid" style="text-align: left; max-width: 320px; margin: 0 auto;">
+        <div class="metric-item"><span class="metric-label">Global Trend Momentum</span><span class="metric-val-wrap">92% <span class="bar-bg"><span class="bar-fill" style="width: 92%; background: var(--accent-purple);"></span></span></span></div>
+        <div class="metric-item"><span class="metric-label">Pipeline Transit Friction</span><span class="metric-val-wrap" style="color: var(--good);">Low Risk</span></div>
+        <div class="metric-item"><span class="metric-label">Macro Demand Multiplier</span><span class="metric-val-wrap">Very High</span></div>
+        <div class="metric-item"><span class="metric-label">Sourcing Settle Cost</span><span class="metric-val-wrap" id="previewCost">₹350</span></div>
+      </div>
+      <p style="font-size: 13px; color: var(--ink-faint); margin-top: 16px;">Configure your allocation settings or select a smart chip to inject live simulation variables.</p>
+    </section>
 
-  <section aria-labelledby="pricing-heading">
-    <h2 id="pricing-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Operational Tiers</h2>
-    <p class="caption" style="margin-top: var(--sp-1);">Secure early pricing parameters before cloud scraping automation loops trigger deployment.</p>
-    
-    <div class="pricing-grid" style="margin-top: var(--sp-5);">
-      <div class="card price-card">
+    <!-- ========================== WHY TRUST SECTION ========================== -->
+    <section style="margin: 48px 0;">
+      <h2 style="font-size: 20px; text-align: center; margin-bottom: 24px;">Why Creators Build With OmniCatch</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="background: var(--card-inner); padding: 16px; border-radius: var(--r-md); border: 1px solid var(--border-thin);">
+          <div style="color: var(--good); font-weight: 700; margin-bottom: 4px;">✔ Capital-First</div>
+          <p style="font-size: 13px;">Filters ideas strictly matching your threshold variables.</p>
+        </div>
+        <div style="background: var(--card-inner); padding: 16px; border-radius: var(--r-md); border: 1px solid var(--border-thin);">
+          <div style="color: var(--good); font-weight: 700; margin-bottom: 4px;">✔ Geopolitical Maps</div>
+          <p style="font-size: 13px;">Tracks international shipping friction checkpoints.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== PREMIUM PLATFORM PASS HOOK ========================== -->
+    <section class="card" style="border: 1px solid var(--accent-purple); background: linear-gradient(180deg, #09090b 0%, rgba(124,58,237,0.03) 100%);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
         <div>
-          <div class="caption font-mono uppercase text-[10px] tracking-widest">Starter / Free</div>
-          <div class="price-amount">₹0</div>
-          <div class="price-sub">Local engine emulator execution baseline</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited market simulations</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Local state roadmap stepper render</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 5 persistence bookmarks caches</li>
-          </ul>
+          <span class="badge" style="background: rgba(124,58,237,0.15); color: #a78bfa; font-size: 9px;">Limited Founding Pass</span>
+          <h3 style="font-size: 24px; margin-top: 6px;">Alpha Backer Pass</h3>
         </div>
-        <button class="btn btn-ghost btn-block btn-sm" disabled>Active System Node</button>
+        <div style="text-align: right;">
+          <div style="font-size: 28px; font-weight: 800; color: #ffffff; font-family: var(--font-mono);" id="pricingAlpha">₹99</div>
+          <div style="font-size: 11px; color: var(--ink-dim); text-decoration: line-through;" id="pricingSub">Bypass ₹499/mo</div>
+        </div>
       </div>
+      <p style="font-size: 14px; margin-bottom: 20px;">Lock lifelong access parameters to raw supplier registries and automated routing alerts before international ports data sync feeds freeze.</p>
+      <button class="btn-generate" style="background: var(--accent-purple); color: white; width: 100%; padding: 14px; font-size: 15px; border-radius: var(--r-md);" onclick="alert('Early access spot registered! Deployment parameters will deliver to updates thread.')">Secure Founding Access Spot ➔</button>
+      <div style="font-size: 11px; font-family: var(--font-mono); color: var(--ink-dim); text-align: center; margin-top: 12px; padding: 0 10px; line-height: 1.4;">
+        * Alpha Backer Pass architecture maps a single token entry loop to securely bypass upcoming operational standard system subscription models.
+      </div>
+    </section>
+
+    <!-- ========================== FAQ ACCORDION ENGINE ========================== -->
+    <section style="margin: 48px 0;">
+      <h2 style="font-size: 20px; text-align: center; margin-bottom: 20px;">Frequently Asked Parameters</h2>
+      <div class="faq-item">
+        <div class="faq-q"><span>How does the simulation calculate tax risk?</span><span>+</span></div>
+        <div class="faq-a">It crosses global customs baseline metrics against localized trade lanes (like the Indo-Pacific route) using country parameters.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Can beginners run allocation models?</span><span>+</span></div>
+        <div class="faq-a">Yes. Every single isolated trend blueprint strips away technical definitions to give clean setup steps from mobile screens.</div>
+      </div>
+    </section>
+
+    <!-- ========================== FOOTER ARCHITECTURE ========================== -->
+    <footer style="border-top: 1px solid var(--border-thin); padding: 32px 0 60px 0; text-align: center;">
+      <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 16px; font-size: 13px; font-family: var(--font-mono);">
+        <a href="#" style="color: var(--ink-dim); text-decoration: none;">Security</a>
+        <a href="#" style="color: var(--ink-dim); text-decoration: none;">Timeline</a>
+        <a href="#" style="color: var(--ink-dim); text-decoration: none;">Terminal</a>
+      </div>
+      <p style="font-size: 12px; color: var(--ink-faint); font-family: var(--font-mono);">Simulation Build v1.5 • OmniCatch Data Matrix Labs Inc.</p>
+    </footer>
+  </div>
+
+  <!-- Persistent Dynamic Scroll Arrow Element -->
+  <div id="scrollIndicator" class="scroll-indicator">↓</div>
+  <script>
+    // =========================================================
+    // 1. MACRO-ECONOMIC GLOBAL PRICING VARIABLES
+    // =========================================================
+    const ENGINE_PRICING = {
+      US: { symbol: "$", alpha: "4.99", sub: "29.99/mo" },
+      IN: { symbol: "₹", alpha: "99", sub: "499/mo" },
+      CN: { symbol: "¥", alpha: "35", sub: "175/mo" },
+      EU: { symbol: "€", alpha: "4.49", sub: "27.49/mo" },
+      UK: { symbol: "£", alpha: "3.99", sub: "24.99/mo" },
+      AE: { symbol: "د.إ", alpha: "18", sub: "110/mo" }
+    };
+
+    const LOGISTICS_ALERTS = [
+      "🟢 Operator from New York isolated: Custom Apparel Node ($6,000)",
+      "⚡ Indo-Pacific maritime lane traffic flow clearing standard checkpoints",
+      "🟢 Operator from Mumbai unlocked: Niche Skill Cohort Pass (₹2,000)",
+      "🛡️ Tax routing isolated: US Section 301 de minimis parameters active",
+      "🟢 Operator from London analyzed: Premium Presentation Studio (£2,000)",
+      "⚠️ Strait of Hormuz logistics port congestion tracking index updated"
+    ];
+
+    // =========================================================
+    // 2. DYNAMIC BUSINESS BLUEPRINT DATABASE
+    // =========================================================
+    const SYSTEM_BLUEPRINTS = [
+      { id: 1, title: "Niche Notion Template Builder", category: "Digital Products", tier: 1, baseCost: 300, score: 88, route: "Digital Distribution Layer", risk: "Low Risk" },
+      { id: 2, title: "Faceless Indian ASMR Content Node", category: "Content Creation", tier: 1, baseCost: 150, score: 92, route: "Global Stream Core Networks", risk: "Low Risk" },
+      { id: 3, title: "Curated Digital Resource Bundles", category: "Digital Products", tier: 1, baseCost: 400, score: 84, route: "Cloud Object Storage Matrix", risk: "Low Risk" },
+      { id: 4, title: "AI-Powered Short-Form Editing Agency", category: "AI-powered Services", tier: 2, baseCost: 1200, score: 94, route: "B2B Virtual Asset Transfer", risk: "Low Risk" },
+      { id: 5, title: "Premium Digital Planner Publisher", category: "Digital Products", tier: 2, baseCost: 1500, score: 86, route: "Automated Checkout Deliveries", risk: "Low Risk" },
+      { id: 6, title: "Niche Dropshipping Test via Meesho", category: "E-commerce", tier: 2, baseCost: 1800, score: 85, route: "Indo-Pacific Sourcing Channels", risk: "Medium Risk" },
+      { id: 7, title: "Hyper-Local Digital Gift Hamper Agency", category: "Hybrid Models", tier: 3, baseCost: 3500, score: 89, route: "Domestic Sourcing / Last-Mile", risk: "Low Risk" },
+      { id: 8, title: "Premium WhatsApp Automation Studio", category: "AI-powered Services", tier: 3, baseCost: 4200, score: 91, route: "Global API Webhook Clusters", risk: "Low Risk" },
+      { id: 9, title: "Custom Print-On-Demand Merch Hub", category: "E-commerce", tier: 3, baseCost: 4800, score: 84, route: "Cross-Border Manufacturing Lanes", risk: "Medium Risk" },
+      { id: 10, title: "Niche B2B Micro-SaaS Analytics Console", category: "Micro SaaS", tier: 4, baseCost: 7500, score: 92, route: "Cloud Database Server Routing", risk: "Low Risk" },
+      { id: 11, title: "Aesthetic Customized Apparel Brand", category: "E-commerce", tier: 4, baseCost: 8500, score: 88, route: "Maritime Cargo Logistics Paths", risk: "Elevated Risk" },
+      { id: 12, title: "Niche B2B Micro-Influencer Broker", category: "Community Businesses", tier: 4, baseCost: 6000, score: 93, route: "Contract Optimization Channels", risk: "Low Risk" }
+    ];
+
+    // =========================================================
+    // 3. UI DOM MATRIX ELEMENT LOCATORS
+    // =========================================================
+    const el = {
+      marketSelect: document.getElementById('marketSelect'),
+      liveTicker: document.getElementById('liveTicker'),
+      searchInput: document.getElementById('searchInput'),
+      btnGenerate: document.getElementById('btnGenerate'),
+      budgetSlider: document.getElementById('budgetSlider'),
+      budgetValue: document.getElementById('budgetValue'),
+      chipSuggestions: document.getElementById('chipSuggestions'),
+      skeletonLoader: document.getElementById('skeletonLoader'),
+      analysisBreakdown: document.getElementById('analysisBreakdown'),
+      resultsList: document.getElementById('resultsList'),
+      resultsCount: document.getElementById('resultsCount'),
+      emptyState: document.getElementById('emptyState'),
+      previewTitle: document.getElementById('previewTitle'),
+      previewCost: document.getElementById('previewCost'),
+      pricingAlpha: document.getElementById('pricingAlpha'),
+      pricingSub: document.getElementById('pricingSub'),
+      scrollIndicator: document.getElementById('scrollIndicator')
+    };
+
+    const TIER_RANGES = {
+      1: { IN: "100 – 500", US: "5 – 10", CN: "10 – 40", EU: "4 – 8", UK: "3 – 7", AE: "15 – 40" },
+      2: { IN: "500 – 2,000", US: "10 – 25", CN: "40 – 170", EU: "8 – 23", UK: "7 – 20", AE: "40 – 90" },
+      3: { IN: "2,000 – 5,000", US: "25 – 60", CN: "170 – 420", EU: "23 – 55", UK: "20 – 48", AE: "90 – 220" },
+      4: { IN: "5,000 – 10,000", US: "60 – 120", CN: "420 – 850", EU: "55 – 110", UK: "48 – 95", AE: "220 – 440" }
+    };
+
+    // =========================================================
+    // 4. CORE ENGINE LOGIC FUNCTIONS & EVENT LOOPS
+    // =========================================================
+    function getSelectedDetails() {
+      const country = el.marketSelect.value;
+      const matrix = ENGINE_PRICING[country];
       
-      <div class="card price-card highlight" style="box-shadow: 0 0 25px rgba(168, 85, 247, 0.25); border-color: var(--accent-lav);">
-        <span class="price-ribbon" style="background: var(--accent-lav); color: #fff;">Most Popular</span>
-        <div>
-          <div class="caption font-mono uppercase text-[10px] tracking-widest text-accent-lav">Alpha Backer Pass</div>
-          <div class="price-amount">₹99 <sup>one-time</sup></div>
-          <div class="price-sub">Locked early rate pass framework access</div>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--good)"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Full persistent operational data scopes</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--accent-blue)"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> <span class="price-future">Planned real-time data integrations after launch</span></li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--accent-blue)"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> <span class="price-future">Protected below subsequent ₹499/mo standard model</span></li>
-          </ul>
-        </div>
-        <button class="btn btn-primary btn-block btn-sm" id="btn-preorder">Pre-order Alpha Pass</button>
-      </div>
-    </div>
-    
-    <p class="anchor-note">Alpha Backer Pass configuration maps a single ₹99 transaction credit to bypass subsequent ₹499/mo subscription parameters once data feeds link.</p>
+      // Compute dynamic localized scale ratio relative to Indian Base Model
+      let conversionMultiplier = 1;
+      if (country === "US") conversionMultiplier = 0.012;
+      else if (country === "CN") conversionMultiplier = 0.085;
+      else if (country === "EU") conversionMultiplier = 0.011;
+      else if (country === "UK") conversionMultiplier = 0.009;
+      else if (country === "AE") conversionMultiplier = 0.044;
 
-    <div class="card support-widget">
-      <div>
-        <div style="font-weight: 700; font-size: 0.95rem;">Support Mobile Architecture</div>
-        <div class="support-text">Engineered completely inside an open mobile system structure.</div>
-      </div>
-      <button class="btn btn-ghost btn-sm" id="btn-support">Support My Project</button>
-    </div>
-  </section>
-
-  <section aria-labelledby="arch-heading">
-    <h2 id="arch-heading" class="font-mono text-xs uppercase tracking-widest text-neutral-400">Architecture Matrix Map</h2>
-    <p class="caption" style="margin-top: var(--sp-1);">Contrast integrated terminal components against planned remote infrastructure.</p>
-    <div class="card" style="margin-top: var(--sp-5); background: rgba(0,0,0,0.3);">
-      <div class="arch-cols">
-        <div>
-          <div class="arch-col-head"><span class="dot-live-sm" style="background: var(--good);"></span><span class="arch-col-title">Active Local Engines</span></div>
-          <ul class="arch-list arch-active">
-            <li><span class="dot-live-sm"></span>Deterministic scoring logic array</li>
-            <li><span class="dot-live-sm"></span>Centralized runtime state core</li>
-            <li><span class="dot-live-sm"></span>LocalStorage token persistence routing</li>
-          </ul>
-        </div>
-        <div>
-          <div class="arch-col-head"><span class="dot-live-sm" style="background: var(--ink-faint);"></span><span class="arch-col-title">Upcoming Cloud Vectors</span></div>
-          <ul class="arch-list arch-cloud">
-            <li><span class="dot-live-sm"></span>Remote Pydroid scraping cluster sync</li>
-            <li><span class="dot-live-sm"></span>Account profile database persistence</li>
-            <li><span class="dot-live-sm"></span>Automated messaging alerts pipelines</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">Ω</div>
-      <div class="brand-name">OmniCatch</div>
-    </div>
-    <div class="footer-links">
-      <a href="refund-policy.html">Pre-order Refund Policy</a>
-      <a href="terms.html">Terms of Operations</a>
-      <a href="privacy.html">Privacy Protocols</a>
-      <a href="contact.html">Technical Contact</a>
-    </div>
-    <div class="footer-meta">Prototype v1.0 | Schema v1.0 | Built with transparency. Simulation Prototype. No live marketplace integrations yet.</div>
-  </footer>
-
-</main>
-
-<button class="fab-bookmarks" id="fab-bookmarks" aria-label="Open persistent bookmarks view deck modal container">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 3h12a1 1 0 011 1v17l-7-4-7 4V4a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-  <span class="fab-badge hidden" id="fab-badge">0</span>
-</button>
-
-<!-- Alpha Waitlist Dynamic Sheet Overlay Container -->
-<div class="modal-overlay" id="waitlist-modal" role="dialog" aria-modal="true" aria-labelledby="waitlist-title">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-head">
-      <div>
-        <h3 id="waitlist-title" class="font-mono text-sm uppercase">Initialize Node Allocation</h3>
-        <p class="caption" style="margin-top: 4px;">Enter verification strings to secure alpha access parameters.</p>
-      </div>
-      <button class="modal-close" id="waitlist-close" aria-label="Close form view modal overlay">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <form id="waitlist-form">
-      <div class="field">
-        <label for="wl-name">Identifier Name</label>
-        <input id="wl-name" type="text" required autocomplete="name" placeholder="Operator name strings…">
-      </div>
-      <div class="field">
-        <label for="wl-email">Communication Routing Email</label>
-        <input id="wl-email" type="email" required autocomplete="email" placeholder="name@domain.com">
-      </div>
-      <div class="field">
-        <label for="wl-interest">Target Data Interest Scope</label>
-        <select id="wl-interest">
-          <option>Planned real-time supplier metrics data</option>
-          <option>Ad-cost acquisition benchmark sets</option>
-          <option>Fulfillment threshold script triggers</option>
-          <option>All core operational cloud upgrades</option>
-        </select>
-      </div>
-      <div id="waitlist-notice-slot"></div>
-      <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-top: var(--sp-5);">Submit Backing Credit Registration</button>
-    </form>
-  </div>
-</div>
-
-<!-- Bookmarks Sheet Overlay Container -->
-<div class="modal-overlay" id="bookmarks-modal" role="dialog" aria-modal="true" aria-labelledby="bookmarks-title">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-head">
-      <div>
-        <h3 id="bookmarks-title" class="font-mono text-sm uppercase">Cached Blueprints</h3>
-        <p class="caption" style="margin-top: 4px;">Saved strategy maps indexed on this client matrix node.</p>
-      </div>
-      <button class="modal-close" id="bookmarks-close" aria-label="Dismiss bookmarks deck modal view">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <div id="bookmarks-list"></div>
-  </div>
-</div>
- 
-<script>
-(function(){
-"use strict";
-
-/* =========================================================
-   1. GLOBAL SYSTEM CONFIGURATION & DICTIONARY TOKENS
-========================================================= */
-const OMNI_CONFIG = Object.freeze({
-  constants: { maxBudget: 10000, baseCurrency: "INR", simulationSource: "OmniCatch Core Engine Simulation Mapping Node" },
-  categoryPool: [
-    { name: 'Wearables & Intelligent Hardware', tags: ['smart ring', 'wearable', 'gadget', 'smart', 'hardware'] },
-    { name: 'Digital Architecture & Notion Assets', tags: ['notion', 'template', 'planner', 'digital', 'kit'] },
-    { name: 'Advanced Curriculums & Education Systems', tags: ['course', 'video course', 'ai video', 'tutorial'] },
-    { name: 'Micro-SaaS & Functional Web Utilities', tags: ['saas', 'micro saas', 'tool', 'app', 'software'] },
-    { name: 'High-Ticket Agency Matrix Operations', tags: ['agency', 'service', 'freelance', 'consulting'] }
-  ],
-  budgetRoutes: [
-    { min: 100, max: 500, recommendedIds: ["digital_templates", "written_media"] },
-    { min: 501, max: 3000, recommendedIds: ["online_courses", "freelance_agency"] },
-    { min: 3001, max: 10000, recommendedIds: ["ecom_dropship", "microsaas_app"] }
-  ],
-  variantNames: ['Direct Import Play Channel', 'Private-Label Angle Route', 'Bundled Value Offer Ecosystem', 'Premium Exclusive Brand Positioning']
-});
-  masterDatabase: [
-    {
-      id: "in_100_01",
-      title: "Niche Notion Template Builder",
-      category: "Digital Products",
-      score: 88,
-      demand: 92,
-      cost: 150,
-      margin: 95,
-      time: "21 Days",
-      explanation: "High demographic traction across student segments using free ecosystem infrastructure limits."
-    },
-    {
-      id: "in_100_02",
-      title: "Faceless Indian ASMR Content Node",
-      category: "Content Creation",
-      score: 92,
-      demand: 95,
-      cost: 100,
-      margin: 98,
-      time: "21 Days",
-      explanation: "Massive localized lifestyle traffic loops using ambient smartphone microphone recordings."
-    },
-    {
-      id: "in_100_03",
-      title: "Curated Digital Resource Bundles",
-      category: "Digital Products",
-      score: 84,
-      demand: 86,
-      cost: 150,
-      margin: 90,
-      time: "21 Days",
-      explanation: "Organized open-source code and design kit configurations packed into immediate delivery nodes."
-    },
-    {
-      id: "in_100_04",
-      title: "Freelance AI-Prompt Design Studio",
-      category: "Freelancing / Agencies",
-      score: 80,
-      demand: 82,
-      cost: 100,
-      margin: 100,
-      time: "21 Days",
-      explanation: "Engineered chat and image generation scripts sold directly to busy content agencies."
-    },
-    {
-      id: "in_100_05",
-      title: "Micro-Newsletter via Free Substack",
-      category: "Content Creation",
-      score: 78,
-      demand: 80,
-      cost: 100,
-      margin: 98,
-      time: "21 Days",
-      explanation: "Niche trend roundups siphoning community traffic via direct owned subscriber link lines."
-    },
-    {
-      id: "in_100_06",
-      title: "Digital Audio Sample & SFX Pack Seller",
-      category: "Digital Products",
-      score: 82,
-      demand: 84,
-      cost: 150,
-      margin: 96,
-      time: "21 Days",
-      explanation: "Acoustic transition sting sets targeted straight at mobile vertical video clip editors."
-    },
-    {
-      id: "in_100_07",
-      title: "Mobile Photo/Video Filter Asset Pack",
-      category: "Digital Products",
-      score: 85,
-      demand: 88,
-      cost: 200,
-      margin: 94,
-      time: "21 Days",
-      explanation: "One-click color grade DNG configuration blocks distributed through automated store links."
-    },
-    {
-      id: "in_100_08",
-      title: "WhatsApp Community Micro-Class Node",
-      category: "Education",
-      score: 89,
-      demand: 91,
-      cost: 100,
-      margin: 97,
-      time: "21 Days",
-      explanation: "Short voice and text micro-skills learning tracks hosted entirely inside locked messaging groups."
-    },
-    {
-      id: "in_100_09",
-      title: "Digital Resume & Bio-Link Custom Shop",
-      category: "Local Services",
-      score: 83,
-      demand: 85,
-      cost: 100,
-      margin: 100,
-      time: "21 Days",
-      explanation: "ATS-compliant placement single-sheet layouts pitched directly to final-year student networks."
-    },
-    {
-      id: "in_100_10",
-      title: "Curated Local Event Directory Node",
-      category: "Community Businesses",
-      score: 76,
-      demand: 78,
-      cost: 150,
-      margin: 95,
-      time: "21 Days",
-      explanation: "Weekly cultural activity calendars monetized via featured cafe launch promotional tokens."
+      return { country, symbol: matrix.symbol, matrix, multiplier: conversionMultiplier };
     }
-    ,
-    {
-      id: "in_500_01",
-      title: "AI-Powered Short-Form Editing Agency",
-      category: "AI-powered Services",
-      score: 94,
-      demand: 96,
-      cost: 600,
-      margin: 85,
-      time: "21 Days",
-      explanation: "Automated mobile captioning and visual hook trimming for digital creators and brands."
-    },
-    {
-      id: "in_500_02",
-      title: "Premium Digital Planner/E-Book Publisher",
-      category: "Digital Products",
-      score: 86,
-      demand: 89,
-      cost: 700,
-      margin: 92,
-      time: "21 Days",
-      explanation: "High-end conceptual trackers and strategy manuals sold via zero-inventory checkout links."
-    },
-    {
-      id: "in_500_03",
-      title: "Niche Micro-Community Node",
-      category: "Community Businesses",
-      score: 82,
-      demand: 85,
-      cost: 500,
-      margin: 95,
-      time: "21 Days",
-      explanation: "Paid Discord or Telegram information rooms focused on targeted regional training support grids."
-    },
-    {
-      id: "in_500_04",
-      title: "Local Store Video Advertisement Service",
-      category: "Freelancing / Agencies",
-      score: 90,
-      demand: 93,
-      cost: 600,
-      margin: 88,
-      time: "21 Days",
-      explanation: "Cinematic vertical format brand shoots executed entirely over smartphone camera lens modules."
-    },
-    {
-      id: "in_500_05",
-      title: "Niche Dropshipping Test via Meesho",
-      category: "E-commerce",
-      score: 85,
-      demand: 87,
-      cost: 800,
-      margin: 35,
-      time: "21 Days",
-      explanation: "Low-inventory catalog matching using domestic fulfillment pipelines to minimize upfront risk."
-    },
-    {
-      id: "in_500_06",
-      title: "Micro-SaaS Web App via Glide No-Code",
-      category: "Micro SaaS",
-      score: 80,
-      demand: 83,
-      cost: 600,
-      margin: 90,
-      time: "21 Days",
-      explanation: "Fast UI interface delivery setups mapped completely out of basic spreadsheet data tables."
-    },
-    {
-      id: "in_500_07",
-      title: "Curated Student Resource Hub",
-      category: "Education",
-      score: 88,
-      demand: 90,
-      cost: 500,
-      margin: 95,
-      time: "21 Days",
-      explanation: "Locked exam preparation matrices and question banks distributed across regional study networks."
-    },
-    {
-      id: "in_500_08",
-      title: "Hyper-Local Digital Flyer Delivery Agent",
-      category: "Local Services",
-      score: 79,
-      demand: 81,
-      cost: 700,
-      margin: 80,
-      time: "21 Days",
-      explanation: "Targeted localized promotional broadcasts sent straight to residential contact channels safely."
-    },
-    {
-      id: "in_500_09",
-      title: "AI Image Upscaling & Photo Restore Studio",
-      category: "AI-powered Services",
-      score: 83,
-      demand: 86,
-      cost: 500,
-      margin: 90,
-      time: "21 Days",
-      explanation: "High-fidelity texture processing and restoration maps for historical family photo prints."
-    },
-    {
-      id: "in_500_10",
-      title: "Micro-Thumbnail Freelancing Agency",
-      category: "Freelancing / Agencies",
-      score: 91,
-      demand: 94,
-      cost: 600,
-      margin: 87,
-      time: "21 Days",
-      explanation: "High-contrast canvas layout covers optimized to scale video CTR analytics indexes immediately."
-     }
-           ,
-    {
-      id: "in_2000_01",
-      title: "Hyper-Local Digital Gift Hamper Agency",
-      category: "Hybrid Online + Offline Models",
-      score: 89,
-      demand: 91,
-      cost: 2500,
-      margin: 45,
-      time: "21 Days",
-      explanation: "Aesthetic premium packaging and artisan setups sold over social media shop windows on advance deposits."
-    },
-    {
-      id: "in_2000_02",
-      title: "Premium WhatsApp Automation Consulting",
-      category: "AI-powered Services",
-      score: 91,
-      demand: 94,
-      cost: 2200,
-      margin: 85,
-      time: "21 Days",
-      explanation: "Webhook chat routing and review collection loop mechanics designed for regional diagnostic clinics."
-    },
-    {
-      id: "in_2000_03",
-      title: "Custom Print-On-Demand Merch Hub",
-      category: "E-commerce",
-      score: 84,
-      demand: 86,
-      cost: 2000,
-      margin: 40,
-      time: "21 Days",
-      explanation: "Minimalist graphic concepts mapped automatically onto apparel via print fulfillment platform links."
-    },
-    {
-      id: "in_2000_04",
-      title: "Micro-SaaS Local Delivery Directory Engine",
-      category: "Micro SaaS",
-      score: 82,
-      demand: 84,
-      cost: 3000,
-      margin: 88,
-      time: "21 Days",
-      explanation: "Sticky low-code directory setups providing instant click-to-call supplier paths for residential sectors."
-    },
-    {
-      id: "in_2000_05",
-      title: "Premium Presentation & Pitch Deck Studio",
-      category: "Freelancing / Agencies",
-      score: 87,
-      demand: 89,
-      cost: 2000,
-      margin: 94,
-      time: "21 Days",
-      explanation: "High-contrast vector visual layouts and business data visualizations for corporate fundraising stages."
-    },
-    {
-      id: "in_2000_06",
-      title: "Local Electronic Appliance Repair Matcher",
-      category: "Local Services",
-      score: 83,
-      demand: 85,
-      cost: 2500,
-      margin: 75,
-      time: "21 Days",
-      explanation: "Fragmented localized independent mechanic coordination running on strict flat commission splits."
-    },
-    {
-      id: "in_2000_07",
-      title: "Niche Skill Video Cohort Framework",
-      category: "Education",
-      score: 86,
-      demand: 88,
-      cost: 2000,
-      margin: 91,
-      time: "21 Days",
-      explanation: "7-day intensive programming or design track sprints handled via locked communication servers."
-    },
-    {
-      id: "in_2000_08",
-      title: "Curated Premium Plant Sourcing Shop",
-      category: "Hybrid Online + Offline Models",
-      score: 81,
-      demand: 83,
-      cost: 3000,
-      margin: 50,
-      time: "21 Days",
-      explanation: "Indoor air-purifying foliage coupled with clean geometric pottery arrays for modern apartments."
-    },
-    {
-      id: "in_2000_09",
-      title: "Local B2B Menu & Product QR Studio",
-      category: "Local Services",
-      score: 88,
-      demand: 90,
-      cost: 2000,
-      margin: 92,
-      time: "21 Days",
-      explanation: "Digital conversion of greasy paper sheets into fluid smartphone dining interfaces via dynamic codes."
-    },
-    {
-      id: "in_2000_10",
-      title: "AI Voiceover & Localized Audio Ad Studio",
-      category: "AI-powered Services",
-      score: 85,
-      demand: 87,
-      cost: 2500,
-      margin: 89,
-      time: "21 Days",
-      explanation: "High-fidelity promotional announcement mix arrays for retail store campaigns via cloud voice synthesis."
+
+    function syncInterfacePricing() {
+      const ctx = getSelectedDetails();
+      el.pricingAlpha.textContent = `${ctx.symbol}${ctx.matrix.alpha}`;
+      el.pricingSub.textContent = `Bypass ${ctx.symbol}${ctx.matrix.sub}`;
+      
+      const tier = el.budgetSlider.value;
+      el.budgetValue.textContent = `${ctx.symbol}${TIER_RANGES[tier][ctx.country]}`;
+      
+      el.previewCost.textContent = `${ctx.symbol}${Math.round(350 * ctx.multiplier)}`;
     }
-    ,
-    {
-      id: "in_5000_01",
-      title: "Niche B2B Micro-SaaS Analytics Console",
-      category: "Micro SaaS",
-      score: 92,
-      demand: 94,
-      cost: 5500,
-      margin: 92,
-      time: "21 Days",
-      explanation: "PostgreSQL and dashboard tracking matrices designed to capture localized enterprise performance logs."
-    },
-    {
-      id: "in_5000_02",
-      title: "Aesthetic Customized Apparel Brand Node",
-      category: "E-commerce",
-      score: 88,
-      demand: 90,
-      cost: 6000,
-      margin: 48,
-      time: "21 Days",
-      explanation: "Minimalist custom text and vector apparel collections handled via verified small-batch regional mills."
-    },
-    {
-      id: "in_5000_03",
-      title: "Premium Corporate Identity Design Agency",
-      category: "Freelancing / Agencies",
-      score: 86,
-      demand: 88,
-      cost: 5000,
-      margin: 90,
-      time: "21 Days",
-      explanation: "Complete branding guidelines, visual frameworks, and typography kits for newly funded regional ventures."
-    },
-    {
-      id: "in_5000_04",
-      title: "Hyper-Local Premium Coffee Box Delivery",
-      category: "Hybrid Online + Offline Models",
-      score: 83,
-      demand: 85,
-      cost: 6500,
-      margin: 40,
-      time: "21 Days",
-      explanation: "Direct plantation bean curation and roasted batch supply passes for corporate co-working clusters."
-    },
-    {
-      id: "in_5000_05",
-      title: "Premium Mobile Hardware Customizer Shop",
-      category: "Local Services",
-      score: 85,
-      demand: 87,
-      cost: 5500,
-      margin: 65,
-      time: "21 Days",
-      explanation: "Precision surface skin styling using high-end textured obsidian or metallic raw vinyl layers."
-    },
-    {
-      id: "in_5000_06",
-      title: "Niche B2B E-commerce Supplier Portal",
-      category: "Content Creation",
-      score: 81,
-      demand: 84,
-      cost: 5000,
-      margin: 75,
-      time: "21 Days",
-      explanation: "Verified wholesale pricing indices and logistical tracking directories mapped for online sellers."
-    },
-    {
-      id: "in_5000_07",
-      title: "AI-Driven Professional Translation Agency",
-      category: "AI-powered Services",
-      score: 87,
-      demand: 89,
-      cost: 5200,
-      margin: 88,
-      time: "21 Days",
-      explanation: "Contextual localized documentation processing for regional application interfaces and modules."
-    },
-    {
-      id: "in_5000_08",
-      title: "Hyper-Local Premium Pet Training Matcher",
-      category: "Community Businesses",
-      score: 84,
-      demand: 86,
-      cost: 5800,
-      margin: 70,
-      time: "21 Days",
-      explanation: "Trust-verified behavioral expert assignment pipelines operating over secure localized booking maps."
-    },
-    {
-      id: "in_5000_09",
-      title: "Elite Automated Pitch Book Publishing House",
-      category: "Education",
-      score: 89,
-      demand: 91,
-      cost: 6000,
-      margin: 60,
-      time: "21 Days",
-      explanation: "Specialized professional print compilation arrays linked directly into digital printing hubs."
-    },
-    {
-      id: "in_5000_10",
-      title: "Niche B2B Micro-Influencer Talent Broker",
-      category: "Community Businesses",
-      score: 93,
-      demand: 95,
-      cost: 5000,
-      margin: 85,
-      time: "21 Days",
-      explanation: "Audited performance campaign contracts mapping highly engaged target creators directly to D2C brands."
-    }
-  ],
 
-/* =========================================================
-   2. ISOLATED EVENT BUS ARCHITECTURE LAYER
-========================================================= */
-function createEventBus(){
-  const listeners = {};
-  return {
-    on(evt, fn){ (listeners[evt] = listeners[evt] || []).push(fn); return () => this.off(evt, fn); },
-    off(evt, fn){ if(!listeners[evt]) return; listeners[evt] = listeners[evt].filter(f => f !== fn); },
-    emit(evt, payload){ (listeners[evt] || []).slice().forEach(fn => { try { fn(payload); } catch(e){ console.error('[omniCore Event Error]', evt, e); } }); }
-  };
-}
-const bus = createEventBus();
+    function runSimulationSearch(customQuery = "") {
+      const targetQuery = (customQuery || el.searchInput.value).trim().toLowerCase();
+      const currentTier = parseInt(el.budgetSlider.value);
+      const ctx = getSelectedDetails();
 
-/* =========================================================
-   3. CENTRALIZED SINGLE SOURCE OF TRUTH APPLICATION STATE
-========================================================= */
-const AppState = {
-  data: {
-    query: '',
-    budget: 5000,
-    tier: 'free',
-    isLoading: false,
-    results: [],
-    activeResultId: null,
-    bookmarks: [],
-    history: []
-  },
-  set(patch){
-    Object.assign(this.data, patch);
-    bus.emit('state:change', this.data);
-  },
-  get(){ return this.data; }
-};
+      el.emptyState.classList.add('hidden');
+      el.analysisBreakdown.classList.add('hidden');
+      el.skeletonLoader.classList.remove('hidden');
 
-/* =========================================================
-   4. DETERMINISTIC CALCULATION HASH ROUTINES
-========================================================= */
-function hashString(str){
-  let h = 2166136261;
-  for(let i=0; i<str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
-  return (h >>> 0);
-}
-function seededRandom(seed){
-  let s = seed % 2147483647; if (s <= 0) s += 2147483646;
-  return function(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
-}
-function rangeFromRand(rand, min, max){ return min + rand() * (max - min); }
-
-/* =========================================================
-   5. DECOUPLED COMPUTATION ENGINE CORE SECTIONS
-========================================================= */
-function pickCategory(query){
-  const cleanStr = query.toLowerCase();
-  for(const cat of OMNI_CONFIG.categoryPool){
-    if (cat.tags.some(t => cleanStr.includes(t))) return cat.name;
-  }
-  return 'General Premium Asset Channel';
-}
-
-function computeScoreAttributes(score){
-  if (score >= 75) return { badge: 'badge-good', text: 'Optimal Node Fit' };
-  if (score >= 50) return { badge: 'badge-warn', text: 'Conditional Verification' };
-  return { badge: 'badge-bad', text: 'High Capital Friction' };
-}
-
-function buildStructuredRoadmap(rand, title, budget){
-  return [
-    {
-      phase: 1, title: 'Asset Sourcing Matrix', objective: `Validate and secure resource nodes for "${title}" inside capital allocations boundaries parameters cleanly.`,
-      checklist: ['Audit 3 matching operational supplier facilities catalogs', 'Acquire sample assets arrays to verify engineering stability metrics', 'Verify MOQ thresholds sit inside calculation constraints parameters safely'],
-      cost: { amount: Math.round(rangeFromRand(rand, budget*0.25, budget*0.40)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,4,10))} days`, success: 'Resource validation constraints cleared and signed'
-    },
-    {
-      phase: 2, title: 'Identity Packaging Deck', objective: `Wrap "${title}" inside an enterprise grade aesthetic envelope to maximize trust indexes immediately.`,
-      checklist: ['Establish centralized system design token configurations', 'Draft high-converting conversion script maps for storefront vectors', 'Deploy responsive landing matrix hooks inside targeted audience channels'],
-      cost: { amount: Math.round(rangeFromRand(rand, budget*0.12, budget*0.22)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,3,7))} days`, success: 'Obsidian storefront node online with closed asset routing paths'
-    },
-    {
-      phase: 3, title: 'Logistics Pipeline Setup', objective: `Configure secure fulfillment automation loops so "${title}" reaches endpoints with zero latency layer friction.`,
-      checklist: ['Establish courier tracking webhook callbacks paths', 'Establish stock cushion parameters inside local asset array limits', 'Simulate order conversion end-to-end trace loops paths safely'],
-      cost: { amount: Math.round(rangeFromRand(rand, budget*0.15, budget*0.25)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,2,6))} days`, success: 'Fulfillment tracing loop test cycles confirmed green'
-    },
-    {
-      phase: 4, title: 'Launch Conversion Engine', objective: `Activate traffic generation matrices into checkout pipelines to extract demand conviction values logs.`,
-      checklist: ['Deploy short vertical sequence video models content', 'Monitor metric performance tags inside local event streams registers', 'Review analytics indicators feedback values logs to evaluate target scaling potentials'],
-      cost: { amount: Math.round(rangeFromRand(rand, budget*0.15, budget*0.30)), currency: 'INR' }, time: `${Math.round(rangeFromRand(rand,6,12))} days`, success: 'Initial 10 core premium user conversions locked'
-    }
-  ];
-}
-
-const omniCore = {
-  scoringEngine: {
-    calculateRankedMatrix(query, budget){
-      try {
-        if(!query || !query.trim()) return { success: false, data: {}, errors: ['Enter a vector query term to process data models.'] };
-        const cleanQuery = query.trim();
-        const category = pickCategory(cleanQuery);
-        const resultsArray = [];
-
-        const matchedRoute = OMNI_CONFIG.budgetRoutes.find(r => budget >= r.min && budget <= r.max) || { recommendedIds: [] };
-
-        for(let variantIndex=0; variantIndex<4; variantIndex++){
-          const seedStr = `${cleanQuery.toLowerCase()}|${category}|${budget}|v${variantIndex}`;
-          const seed = hashString(seedStr);
-          const rand = seededRandom(seed);
-
-          const momentum = rangeFromRand(rand, -12, 48);
-          const confidence = rangeFromRand(rand, 45, 98);
-          const demand = rangeFromRand(rand, 35, 96);
-          const competition = rangeFromRand(rand, 15, 90);
-          const margin = rangeFromRand(rand, 15, 65);
-          const supplierDifficulty = rangeFromRand(rand, 10, 85);
-          const shippingComplexity = rangeFromRand(rand, 10, 80);
-          const adDifficulty = rangeFromRand(rand, 20, 90);
-
-          const totalScore = Math.max(0, Math.min(100, Math.round(
-            (demand * 0.30) + (confidence * 0.22) + ((100 - competition) * 0.18) + (margin * 0.15) + ((100 - supplierDifficulty) * 0.15)
-          )));
-
-          const variantTitle = `${cleanQuery} — ${OMNI_CONFIG.variantNames[variantIndex]}`;
-
-          const strengths = []; const weaknesses = [];
-          if(demand > 65) strengths.push('High market velocity signals');
-          if(margin > 40) strengths.push('Excellent margin buffer tracking');
-          if(competition < 40) strengths.push('Unsaturated niche corridor');
-          if(competition > 70) weaknesses.push('High saturation competitive field');
-          if(shippingComplexity > 65) weaknesses.push('High logistical shipping overhead');
-          if(margin < 25) weaknesses.push('Compressed profit margin metrics');
-          if(!strengths.length) strengths.push('Safe fit inside current asset caps');
-          if(!weaknesses.length) weaknesses.push('Requires persistent baseline content iterations');
-
-          const explanation = `Computed score maps ${demand.toFixed(0)}% organic market intent alongside ${confidence.toFixed(0)}% trend momentum metrics against ${competition.toFixed(0)}% density variables under a static ₹${budget.toLocaleString('en-IN')} allocation limit path configuration rules.`;
-
-          resultsArray.push({
-            id: `${seed}`, title: variantTitle, category, budgetRange: `₹100 – ₹${budget.toLocaleString('en-IN')}`, score: totalScore,
-            recommendation: totalScore >= 75 ? 'Pursue allocation immediately' : totalScore >= 50 ? 'Perform low cap verification sprints' : 'Deprioritize strategy alignment vector',
-            explanation, strengths, weaknesses, roadmap: buildStructuredRoadmap(rand, variantTitle, budget),
-            metrics: {
-              trendMomentum: Number(momentum.toFixed(1)), trendConfidence: Number(confidence.toFixed(1)), demandScore: Number(demand.toFixed(1)),
-              competitionLevel: Number(competition.toFixed(1)), profitMargin: Number(margin.toFixed(1)), supplierDifficulty: Number(supplierDifficulty.toFixed(1)),
-              shippingComplexity: Number(shippingComplexity.toFixed(1)), advertisingDifficulty: Number(adDifficulty.toFixed(1))
-            }
-          });
+      setTimeout(() => {
+        el.skeletonLoader.classList.add('hidden');
+        
+        let pool = SYSTEM_BLUEPRINTS.filter(item => item.tier === currentTier);
+        if (targetQuery) {
+          pool = SYSTEM_BLUEPRINTS.filter(item => item.title.toLowerCase().includes(targetQuery) || item.category.toLowerCase().includes(targetQuery));
         }
 
-        resultsArray.sort((a,b) => b.score - a.score);
-        return { success: true, data: { items: resultsArray, query: cleanQuery, budget } };
-      } catch(err) {
-        return { success: false, data: {}, errors: ['Critical tracking simulation calculations fault. Check values lines.'] };
-      }
-    }
-  }
-};
+        if (pool.length === 0) pool = [SYSTEM_BLUEPRINTS[0]];
 
-/* =========================================================
-   6. LOCAL STORAGE BROWSER CAPABILITY MIDDLEWARE PERSISTENCE
-========================================================= */
-const storageEngine = {
-  getBookmarks(){ try { return JSON.parse(localStorage.getItem('omni_b_v2')) || []; } catch(e){ return []; } },
-  toggleBookmark(item){
-    try {
-      const currentList = this.getBookmarks();
-      const matchPos = currentList.findIndex(b => b.id === item.id);
-      if(matchPos >= 0) currentList.splice(matchPos, 1); else currentList.unshift(item);
-      localStorage.setItem('omni_b_v2', JSON.stringify(currentList));
-      return currentList;
-    } catch(e) { return []; }
-  },
-  isBookmarked(id){ return this.getBookmarks().some(b => b.id === id); },
-  getHistory(){ try { return JSON.parse(localStorage.getItem('omni_h_v2')) || []; } catch(e){ return []; } },
-  pushHistory(entry){
-    try {
-      let list = this.getHistory().filter(h => h.query.toLowerCase() !== entry.query.toLowerCase());
-      list.unshift(entry); list = list.slice(0, 5);
-      localStorage.setItem('omni_h_v2', JSON.stringify(list));
-      return list;
-    } catch(e) { return []; }
-  }
-};
-
-/* =========================================================
-   7. INTERACTIVE DOM RENDERING CONTROL ARCHITECTURE (Pure View Engine)
-========================================================= */
-const el = {
-  searchInput: document.getElementById('search-input'), searchClear: document.getElementById('search-clear'), btnRun: document.getElementById('btn-run'),
-  emptyState: document.getElementById('empty-state'), historyBlock: document.getElementById('history-block'), historyRow: document.getElementById('history-row'),
-  budgetSlider: document.getElementById('budget-slider'), budgetOut: document.getElementById('budget-out'), noticeSlot: document.getElementById('notice-slot'),
-  resultsSection: document.getElementById('results-section'), resultsList: document.getElementById('results-list'), resultsCount: document.getElementById('results-count'),
-  timelineSection: document.getElementById('timeline-section'), timelineSub: document.getElementById('timeline-sub'), timelineScroller: document.getElementById('timeline-scroller'),
-  timelineDots: document.getElementById('timeline-dots'), tierPill: document.getElementById('tier-pill'), fabBadge: document.getElementById('fab-badge'),
-  waitlistModal: document.getElementById('waitlist-modal'), waitlistForm: document.getElementById('waitlist-form'), waitlistNoticeSlot: document.getElementById('waitlist-notice-slot'),
-  bookmarksModal: document.getElementById('bookmarks-modal'), bookmarksList: document.getElementById('bookmarks-list')
-};
-
-function escapeHtml(str){ return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function renderMetricBarRow(label, value, suffix, pct){
-  return `
-    <div class="metric">
-      <div class="metric-label font-mono">${label}</div>
-      <div class="metric-value font-mono">${value}${suffix||''}</div>
-      <div class="metric-bar"><div class="metric-bar-fill" style="width:${Math.max(5,Math.min(100,pct))}%"></div></div>
-    </div>
-  `;
-}
-
-function renderNotificationCard(type, msg){
-  const isErr = type === 'error';
-  el.noticeSlot.innerHTML = `
-    <div class="notice ${isErr ? 'notice-error':'notice-info'}" role="${isErr?'alert':'status'}">
-      <div class="notice-body font-mono text-[11px]">${escapeHtml(msg)}</div>
-      <button class="notice-close font-mono text-[11px]" aria-label="Dismiss message panel">✕</button>
-    </div>
-  `;
-  el.noticeSlot.querySelector('.notice-close')?.addEventListener('click', () => { el.noticeSlot.innerHTML = ''; });
-}
-
-function renderUIComponentsFromState(state){
-  el.tierPill.textContent = state.tier === 'alpha' ? 'Alpha Backer Pass' : 'Free Starter Node';
-  
-  // Render History elements row matrix lists
-  const hist = storageEngine.getHistory();
-  if(!hist.length) { el.historyBlock.classList.add('hidden'); } else {
-    el.historyBlock.classList.remove('hidden');
-    el.historyRow.innerHTML = hist.map(h => `<button class="hist-chip font-mono" data-history-query="${escapeHtml(h.query)}" data-history-budget="${h.budget}">${escapeHtml(h.query)}</button>`).join('');
-  }
-
-  // Update central floating badge counters indicators maps locations
-  const bookmarkCount = storageEngine.getBookmarks().length;
-  el.fabBadge.textContent = bookmarkCount;
-  el.fabBadge.classList.toggle('hidden', bookmarkCount === 0);
-
-  // Sync Input Elements Text Context Locations Fields safely
-  if (state.query && document.activeElement !== el.searchInput) el.searchInput.value = state.query;
-  el.searchClear.classList.toggle('visible', el.searchInput.value.length > 0);
-}
-
- function renderSimulationResults(items){
-  el.resultsCount.textContent = `// [${items.length} Options Isolated]`;
-  el.resultsList.innerHTML = items.map((item, index) => {
-    const attributeTags = computeScoreAttributes(item.score);
-    const saved = storageEngine.isBookmarked(item.id);
-    const mockStartupCost = Math.round(item.metrics.unitCostFormatted ? item.metrics.unitCostFormatted.amount : 350);
-    
-    return `
-      <div class="card rank-card" data-result-id="${item.id}" style="border: 1px solid rgba(255,255,255,0.08); padding: var(--sp-5); margin-bottom: var(--sp-4);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-3); margin-bottom: var(--sp-4);">
-          <div style="min-width: 0;">
-            <div style="display: flex; align-items: center; gap: var(--sp-2); margin-bottom: 4px;">
-              <span style="font-size: 11px; font-weight: 700; color: var(--accent-blue); font-family: 'Courier Prime', monospace;">RANK 0${index+1}</span>
-              <span class="badge ${attributeTags.badge}">${attributeTags.text}</span>
+        el.resultsCount.textContent = `// [${pool.length} Blueprints Isolated]`;
+        
+        el.resultsList.innerHTML = pool.map((item, idx) => `
+          <div class="card" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                  <span class="badge" style="color: var(--accent-blue); padding: 0;">RANK 0${idx+1}</span>
+                  <span class="badge ${item.risk === 'Low Risk' ? 'badge-good' : 'badge-warn'}">${item.risk}</span>
+                </div>
+                <h3 style="font-size: 18px;">${item.title}</h3>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--ink-faint);">${item.category}</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-thin); padding: 6px 12px; border-radius: var(--r-sm); text-align: center;">
+                <span style="font-size: 9px; font-family: var(--font-mono); color: var(--ink-faint); text-transform: uppercase;">Score</span>
+                <div style="font-size: 18px; font-weight: 800; color: var(--accent-blue); font-family: var(--font-mono);">${item.score}</div>
+              </div>
             </div>
-            <h3 style="font-size: var(--fs-h3); font-weight: 800; color: #ffffff; letter-spacing: -0.02em;">${escapeHtml(item.title)}</h3>
-            <div style="font-family: 'Courier Prime', monospace; font-size: 11px; color: var(--ink-faint); margin-top: 2px;">${escapeHtml(item.category)}</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-strong); padding: 8px 14px; border-radius: var(--r-sm); text-align: center; min-width: 65px;">
-            <div style="font-size: 9px; color: var(--ink-faint); font-family: 'Courier Prime', monospace; text-transform: uppercase;">Score</div>
-            <div style="font-size: 20px; font-weight: 800; color: var(--accent-blue); font-family: 'Courier Prime', monospace; line-height: 1.1;">${item.score}</div>
-          </div>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: var(--sp-4);">
-          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
-            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Market Demand Index</div>
-            <div style="font-size: 18px; font-weight: 800; color: #ffffff; font-family: 'Courier Prime', monospace; margin-top: 2px;">${item.metrics.demandScore || 92} <span style="font-size: 11px; color: var(--ink-dim); font-weight: 400;">/100</span></div>
-          </div>
-          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
-            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Est. Startup Capital</div>
-            <div style="font-size: 18px; font-weight: 800; color: var(--good); font-family: 'Courier Prime', monospace; margin-top: 2px;">₹${mockStartupCost}</div>
-          </div>
-          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
-            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Net Profit Margin</div>
-            <div style="font-size: 18px; font-weight: 800; color: #ffffff; font-family: 'Courier Prime', monospace; margin-top: 2px;">${item.metrics.profitMargin}%</div>
-          </div>
-          <div style="background: #111114; border: 1px solid rgba(255,255,255,0.03); padding: var(--sp-3); border-radius: var(--r-sm);">
-            <div style="font-size: 9px; color: var(--ink-faint); text-transform: uppercase; font-family: 'Courier Prime', monospace;">Est. Launch Timeline</div>
-            <div style="font-size: 18px; font-weight: 800; color: var(--warn); font-family: 'Courier Prime', monospace; margin-top: 2px;">21 <span style="font-size: 11px; color: var(--ink-dim); font-weight: 400;">Days</span></div>
-          </div>
-        </div>
-        <p style="font-size: 12px; color: var(--ink-dim); line-height: 1.5; margin-bottom: var(--sp-4); padding-bottom: var(--sp-3); border-bottom: 1px solid rgba(255,255,255,0.04);">${escapeHtml(item.explanation)}</p>
-        <div class="sw-list" style="margin-bottom: var(--sp-4);">
-          ${item.strengths.map(s => `<span class="sw-item sw-strength" style="display: inline-block; margin-right: 6px; margin-bottom: 6px;">+ ${escapeHtml(s)}</span>`).join('')}
-          ${item.weaknesses.map(w => `<span class="sw-item sw-weakness" style="display: inline-block; margin-right: 6px; margin-bottom: 6px;">− ${escapeHtml(w)}</span>`).join('')}
-        </div>
-        <div style="display: flex; gap: var(--sp-2);">
-          <button class="btn btn-ghost btn-sm" style="flex: 1; font-family: 'Courier Prime', monospace; font-size: 11px; min-height: 38px;" data-action="bookmark" data-id="${item.id}">${saved ? '★ Saved' : '☆ Bookmark'}</button>
-          <button class="btn btn-primary btn-sm" style="flex: 1.4; font-family: 'Courier Prime', monospace; font-size: 11px; min-height: 38px;" data-action="roadmap" data-id="${item.id}">Unroll Launch Steps ➔</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  el.resultsSection.classList.remove('hidden');
-}
 
-function renderTimelineStepsDeck(item){
-  el.timelineSub.textContent = `Processing tracking timeline metrics structures for vector configuration: "${item.title}"`;
-  el.timelineScroller.innerHTML = item.roadmap.map(phase => `
-    <div class="phase-card" data-phase="${phase.phase}">
-      <div class="phase-head">
-        <div class="phase-num">${phase.phase}</div>
-        <div><h3>${escapeHtml(phase.title)}</h3></div>
-      </div>
-      <div class="phase-obj font-sans text-neutral-400">${escapeHtml(phase.objective)}</div>
-      <ul class="phase-checklist">
-        ${phase.checklist.map(c => `<li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${escapeHtml(c)}</span></li>`).join('')}
-      </ul>
-      <div class="phase-meta font-mono text-[11px]">
-        <div class="phase-meta-item">
-          <div class="phase-meta-label">Allocation Cost</div>
-          <div class="phase-meta-value">₹${phase.cost.amount.toLocaleString('en-IN')}</div>
-        </div>
-        <div class="phase-meta-item">
-          <div class="phase-meta-label">Time Loop</div>
-          <div class="phase-meta-value">${escapeHtml(phase.time)}</div>
-        </div>
-      </div>
-      <div class="caption font-mono text-[10px]" style="margin-top:12px; color:var(--good);">✓ Checkpoint: ${escapeHtml(phase.success)}</div>
-    </div>
-  `).join('');
-  
-  el.timelineDots.innerHTML = item.roadmap.map((_, i) => `<span class="dot ${i===0?'active':''}"></span>`).join('');
-  el.timelineSection.classList.remove('hidden');
-  el.timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  
-  // Attach scroll sync handlers to timeline navigation indicator dots arrays lists
-  const cards = Array.from(el.timelineDots.children);
-  el.timelineScroller.onscroll = function() {
-    const blockWidth = el.timelineScroller.firstElementChild ? el.timelineScroller.firstElementChild.offsetWidth + 16 : 1;
-    const currentActiveDotIndex = Math.round(el.timelineScroller.
-      scrollLeft / blockWidth);
-    cards.forEach((d, idx) => d.classList.toggle('active', idx === currentActiveDotIndex));
-  };
-}
+            <div class="metric-grid">
+              <div class="metric-item">
+                <span class="metric-label">Estimated Allocation Base</span>
+                <span class="metric-val-wrap">${ctx.symbol}${Math.round(item.baseCost * ctx.multiplier)}</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Macro Transit Lane</span>
+                <span class="metric-val-wrap" style="color: var(--ink-bright); font-size:12px;">${item.route}</span>
+              </div>
+            </div>
 
-function renderBookmarksModalContent(){
-  const list = storageEngine.getBookmarks();
-  if(!list.length) {
-    el.bookmarksList.innerHTML = `<p class="caption font-mono text-center py-6 text-neutral-600">// Local node bookmark registry empty.</p>`;
-    return;
-  }
-  el.bookmarksList.innerHTML = list.map(item => `
-    <div class="card" style="margin-top: var(--sp-3); padding: var(--sp-4); background: rgba(255,255,255,0.01);">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);">
-        <div style="min-width:0;">
-          <h3 style="font-size:0.95rem; font-weight:700;" class="truncate text-white">${escapeHtml(item.title)}</h3>
-          <div class="caption font-mono text-[11px]" style="margin-top:2px;">${escapeHtml(item.category)} · Match Score: ${item.score}</div>
-        </div>
-        <button class="btn btn-ghost btn-sm font-mono text-[10px]" style="min-height:32px; padding:0 12px; border-radius:var(--r-pill);" data-action="unbookmark" data-id="${item.id}">Purge</button>
-      </div>
-    </div>
-  `).join('');
-}
+            <div class="roadmap-list">
+              <div class="roadmap-step"><span class="step-num">01</span><span>Analyze target regional trend volume parameters</span></div>
+              <div class="roadmap-step"><span class="step-num">02</span><span>Secure wholesale production anchors via localized hubs</span></div>
+              <div class="roadmap-step"><span class="step-num">03</span><span>Launch founding access funnel campaigns</span></div>
+            </div>
+          </div>
+        `).join('');
 
-/* =========================================================
-   8. APPLICATION LOGIC CONTROLLER COORDINATOR (State Updates)
-========================================================= */
-let lastRunCachedItemsArray = [];
-
-function runMatrixPipelineQuery(queryStr, budgetVal){
-  el.noticeSlot.innerHTML = `<div class="loading-row font-mono text-[11px] text-neutral-400"><span class="spinner" aria-hidden="true"></span> Calibrating framework matrix routing filters parameters…</div>`;
-  AppState.set({ isLoading: true, query: queryStr, budget: budgetVal });
-
-  setTimeout(() => {
-    const engineResponseWrapper = omniCore.scoringEngine.calculateRankedMatrix(queryStr, budgetVal);
-    AppState.set({ isLoading: false });
-    el.noticeSlot.innerHTML = '';
-
-    if(!engineResponseWrapper.success){
-      renderNotificationCard('error', engineResponseWrapper.errors[0] || 'Simulation crash structural tracking error.');
-      return;
+        el.analysisBreakdown.classList.remove('hidden');
+      }, 400);
     }
 
-    lastRunCachedItemsArray = engineResponseWrapper.data.items;
-    renderSimulationResults(lastRunCachedItemsArray);
-    storageEngine.pushHistory({ query: engineResponseWrapper.data.query, budget: engineResponseWrapper.data.budget });
+    // =========================================================
+    // 5. LIFECYCLE LISTENERS & LIVE UTILITY TRICKERS
+    // =========================================================
+    el.marketSelect.addEventListener('change', syncInterfacePricing);
+    el.budgetSlider.addEventListener('input', syncInterfacePricing);
     
-    renderUIComponentsFromState(AppState.get());
-  }, 400);
-}
- /* =========================================================
-   9. INTERACTIVE BINDINGS & SUBSCRIPTIONS EVENTS ROUTER
-========================================================= */
-el.searchInput.addEventListener('input', () => {
-  el.searchClear.classList.toggle('visible', el.searchInput.value.length > 0);
-});
-el.searchClear.addEventListener('click', () => {
-  el.searchInput.value = ''; el.searchClear.classList.remove('visible'); el.searchInput.focus();
-});
-el.searchInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); triggerExecute(); } });
-el.btnRun.addEventListener('click', triggerExecute);
+    el.btnGenerate.addEventListener('click', () => runSimulationSearch());
+    
+    el.chipSuggestions.addEventListener('click', (e) => {
+      const q = e.target.getAttribute('data-query');
+      if (q) {
+        el.searchInput.value = q;
+        runSimulationSearch(q);
+      }
+    });
 
-function triggerExecute(){
-  const q = el.searchInput.value.trim();
-  const b = Number(el.budgetSlider.value);
-  if(!q) { renderNotificationCard('error', 'Query parameter missing. Enter an objective string keyword suggestion chip below to evaluate models.'); return; }
-  runMatrixPipelineQuery(q, b);
-}
+    // FAQ Accordion Click Toggle Handler Loops
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const a = item.querySelector('.faq-a');
+        const sign = item.querySelector('.faq-q span:last-child');
+        const isOpen = a.style.display === 'block';
+        a.style.display = isOpen ? 'none' : 'block';
+        sign.textContent = isOpen ? '+' : '−';
+      });
+    });
 
-// Chip suggestion arrays observers delegation loops
-document.getElementById('empty-state')?.addEventListener('click', (e) => {
-  const chipBtn = e.target.closest('button[data-suggestion]');
-  if (chipBtn) {
-    const val = chipBtn.dataset.suggestion;
-    el.searchInput.value = val; el.searchClear.classList.add('visible');
-    runMatrixPipelineQuery(val, Number(el.budgetSlider.value));
-  }
-});
+    // Real-Time Rotating Activity Logger Engine
+    let alertIdx = 0;
+    setInterval(() => {
+      el.liveTicker.textContent = `// ${LOGISTICS_ALERTS[alertIdx]}`;
+      alertIdx = (alertIdx + 1) % LOGISTICS_ALERTS.length;
+    }, 3000);
 
-function updateRangeSliderFillerLayoutMetrics(){
-  const mn = Number(el.budgetSlider.min), mx = Number(el.budgetSlider.max), v = Number(el.budgetSlider.value);
-  const percentFill = ((v - mn) / (mx - mn)) * 100;
-  el.budgetSlider.style.setProperty('--fill', percentFill + '%');
-  el.budgetOut.textContent = v.toLocaleString('en-IN');
-  el.budgetSlider.setAttribute('aria-valuenow', v);
-}
-el.budgetSlider.addEventListener('input', updateRangeSliderFillerLayoutMetrics);
-updateRangeSliderFillerLayoutMetrics();
+    // Dynamic Mobile Bottom Bound Viewport Fade Out Arrow Mechanics
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 40) {
+        el.scrollIndicator.style.opacity = '0';
+      } else {
+        el.scrollIndicator.style.opacity = '1';
+      }
+    });
 
-el.historyRow.addEventListener('click', (e) => {
-  const c = e.target.closest('[data-history-query]'); if(!c) return;
-  el.searchInput.value = c.dataset.historyQuery; el.budgetSlider.value = c.dataset.historyBudget;
-  updateRangeSliderFillerLayoutMetrics();
-  runMatrixPipelineQuery(c.dataset.historyQuery, Number(c.dataset.historyBudget));
-});
-
-el.resultsList.addEventListener('click', (e) => {
-  const buttonTrigger = e.target.closest('[data-action]'); if(!buttonTrigger) return;
-  const idStr = buttonTrigger.dataset.id;
-  const targetItem = lastRunCachedItemsArray.find(i => i.id === idStr); if(!targetItem) return;
-
-  if(buttonTrigger.dataset.action === 'bookmark'){
-    storageEngine.toggleBookmark({ id: targetItem.id, title: targetItem.title, category: targetItem.category, score: targetItem.score });
-    renderUIComponentsFromState(AppState.get());
-    renderSimulationResults(lastRunCachedItemsArray);
-  }
-  if(buttonTrigger.dataset.action === 'roadmap'){
-    renderTimelineStepsDeck(targetItem);
-  }
-});
-
-el.bookmarksList.addEventListener('click', (e) => {
-  const unbookmarkBtn = e.target.closest('[data-action="unbookmark"]'); if(!unbookmarkBtn) return;
-  const synchronizedFilterArray = storageEngine.getBookmarks().filter(b => b.id !== unbookmarkBtn.dataset.id);
-  localStorage.setItem('omni_b_v2', JSON.stringify(synchronizedFilterArray));
-  renderUIComponentsFromState(AppState.get());
-  renderBookmarksModalContent();
-  if (lastRunCachedItemsArray.length > 0) renderSimulationResults(lastRunCachedItemsArray);
-});
-
-/* Modal Interactivity Controls */
-function toggleModalVisibilityMask(modalElement, openState) {
-  if (openState) {
-    modalElement.classList.add('open'); document.body.style.overflow = 'hidden';
-  } else {
-    modalElement.classList.remove('open'); document.body.style.overflow = '';
-  }
-}
-
-document.getElementById('fab-bookmarks').addEventListener('click', () => { renderBookmarksModalContent(); toggleModalVisibilityMask(el.bookmarksModal, true); });
-document.getElementById('bookmarks-close').addEventListener('click', () => toggleModalVisibilityMask(el.bookmarksModal, false));
-el.bookmarksModal.addEventListener('click', (e) => { if(e.target === el.bookmarksModal) toggleModalVisibilityMask(el.bookmarksModal, false); });
-
-document.getElementById('btn-preorder').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, true));
-document.getElementById('btn-support').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, true));
-document.getElementById('waitlist-close').addEventListener('click', () => toggleModalVisibilityMask(el.waitlistModal, false));
-el.waitlistModal.addEventListener('click', (e) => { if(e.target === el.waitlistModal) toggleModalVisibilityMask(el.waitlistModal, false); });
-
-el.waitlistForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const n = document.getElementById('wl-name').value.trim();
-  const em = document.getElementById('wl-email').value.trim();
-  if(!n || !em.includes('@')) {
-    el.waitlistNoticeSlot.innerHTML = `<div class="notice notice-error font-mono text-[11px]">// Verification structure invalid. Recheck entry strings fields.</div>`;
-    return;
-  }
-  
-  try {
-    const list = JSON.parse(localStorage.getItem('omni_w_v2') || '[]');
-    list.push({ name: n, email: em, interest: document.getElementById('wl-interest').value, ts: Date.now() });
-    localStorage.setItem('omni_w_v2', JSON.stringify(list));
-  } catch(err){}
-
-  el.waitlistNoticeSlot.innerHTML = `<div class="notice notice-info font-mono text-[11px]" style="border-color:var(--good); color:var(--good);">// Registration secured. Node keys sent on launch lifecycle windows.</div>`;
-  el.waitlistForm.reset();
-  setTimeout(() => { toggleModalVisibilityMask(el.waitlistModal, false); el.waitlistNoticeSlot.innerHTML = ''; }, 1400);
-});
-
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape'){ toggleModalVisibilityMask(el.waitlistModal, false); toggleModalVisibilityMask(el.bookmarksModal, false); }
-});
-
-/* =========================================================
-   10. SYSTEM RUNTIME LIFECYCLE SEED INITIALIZATION
-========================================================= */
-renderUIComponentsFromState(AppState.get());
-bus.on('state:change', (updatedDataSnapshot) => { /* Downstream reactions */ });
-
-})();
-</script>
+    // Initialize Default View Execution
+    syncInterfacePricing();
+    el.liveTicker.textContent = `// ${LOGISTICS_ALERTS[0]}`;
+  </script>
 </body>
 </html>
-                                      
