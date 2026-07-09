@@ -729,8 +729,8 @@ const uiEngine = (() => {
           <div>
             <label for="country-select" class="block text-xs text-sec mb-2">Country</label>
             <select id="country-select" class="w-full px-4 py-2.5 rounded-md text-sm bg-[var(--bg-elevated)] border border-[var(--border)]" style="color:var(--text-primary)" aria-label="Country">
-              ${CONFIG.countries.map(c => `<option value="${c}" ${s.country === c ? "selected" : ""}>${c}</option>`).join("")}
-            </select>
+               ${Object.keys(CONFIG.countries).map(k => `<option value="${CONFIG.countries[k].name}" ${s.country === CONFIG.countries[k].name ? "selected" : ""}>${CONFIG.countries[k].name}</option>`).join("")}
+              </select>
           </div>
           <div class="sm:col-span-2">
             ${Components.Slider({ id: "budget-slider", min: 0, max: 50000, value: s.budget, label: "Budget (₹)" })}
