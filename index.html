@@ -99,7 +99,37 @@ const CONFIG = {
   categories: ["Digital Products","Freelancing","Micro SaaS","AI Tools","Education","Creator Economy","E-commerce","Local Services","Mobile Apps","Agency"]
 };
 Object.freeze(CONFIG.countries); // Lock data contract integrity
+// =====================================================
+// BUDGET TIER MATRIX (Rule 3 & Rule 4)
+// =====================================================
+CONFIG.budgetTiers = [
+  { id: 1, label: "₹100 (Learn & Validate)", minBudget: 100, maxBudget: 499, complexity: "Very Low", risk: "Minimal", team: "Solo Bootstrapper", timeline: "24-48 Hours", categories: ["Digital Products", "Freelancing"], tools: "Notion Free, Carrd, Google AI Studio" },
+  { id: 2, label: "₹500 (Digital Products)", minBudget: 500, maxBudget: 999, complexity: "Low", risk: "Low", team: "Solo Bootstrapper", timeline: "3-5 Days", categories: ["Digital Products", "Creator Economy"], tools: "Canva Pro, Linktree, Google Workspace" },
+  { id: 3, label: "₹1,000 (Freelancing)", minBudget: 1000, maxBudget: 2499, complexity: "Low", risk: "Low", team: "Solo Bootstrapper", timeline: "5-7 Days", categories: ["Freelancing", "Agency"], tools: "Fiverr/Upwork Account, Premium Templates" },
+  { id: 4, label: "₹2,500 (Content Business)", minBudget: 2500, maxBudget: 4999, complexity: "Low", risk: "Medium", team: "Solo + Micro Contractors", timeline: "1 Week", categories: ["Creator Economy", "Education"], tools: "Paid Domain, ConvertKit, Make.com" },
+  { id: 5, label: "₹5,000 (Micro SaaS)", minBudget: 5000, maxBudget: 9999, complexity: "Medium", risk: "Medium", team: "Solo Founder", timeline: "2-4 Weeks", categories: ["Micro SaaS", "AI Tools"], tools: "Shopify Starter, Supabase Free Tier, OpenAI API" },
+  { id: 6, label: "₹10,000 (Small E-commerce)", minBudget: 10000, maxBudget: 24999, complexity: "Medium", risk: "Medium", team: "Solo + Design Support", timeline: "3-4 Weeks", categories: ["E-commerce", "Dropshipping"], tools: "Shopify Basic, Paid Plugins, Meta Ads Core" },
+  { id: 7, label: "₹25,000 (Growth Setup)", minBudget: 25000, maxBudget: 49999, complexity: "Medium", risk: "High", team: "Small Core Team (1-2)", timeline: "1 Month", categories: ["E-commerce", "Micro SaaS", "Agency"], tools: "Custom Webflow, Automated CRM, Ad Platforms" },
+  { id: 8, label: "₹50,000 (Team Expansion)", minBudget: 50000, maxBudget: 100000, complexity: "High", risk: "High", team: "Founders + Tech Freelancers", timeline: "4-6 Weeks", categories: ["AI Tools", "Mobile Apps", "Micro SaaS"], tools: "AWS/Vercel Pro, Headless CMS, Segment Data Analytics" }
+];
+Object.freeze(CONFIG.budgetTiers);
 
+// =====================================================
+// BUDGET TIER ENGINE (Rule 2)
+// =====================================================
+const budgetTierEngine = (() => {
+  function getProfileBySlider(val) {
+    // Slider value (0-50000) ko hamare 8 naye structural tiers mai divide karega (Rule 1 translation)
+    const index = Math.min(Math.floor((val / 50000) * CONFIG.budgetTiers.length), CONFIG.budgetTiers.length - 1);
+    return makeResult(true, CONFIG.budgetTiers[index]);
+  }
+  function getProfileById(id) {
+    const tier = CONFIG.budgetTiers.find(t => t.id === id) || CONFIG.budgetTiers[0];
+    return makeResult(true, tier);
+  }
+  return { getProfileBySlider, getProfileById };
+})();
+    
 /* ---------------------- RETURN CONTRACT HELPER ---------------------- */
 function makeResult(success, data = {}, errors = [], warnings = []) {
   return { success, data, errors, warnings };
