@@ -782,10 +782,33 @@ const uiEngine = (() => {
     const r = s.lastResult;
     const top5 = r.recommendations.slice(0, 5);
     const kpis = buildKpis(r);
-    return `
+         return `
       <div class="mt-8 space-y-8">
         ${renderDisclaimerBanner()}
         ${renderExecutiveSummary(r)}
+        
+        ${(() => {
+          const keys = Object.keys(CONFIG.countries);
+          const matchKey = keys.find(k => CONFIG.countries[k].name === r.country) || "IN";
+          const prof = CONFIG.countries[matchKey];
+          return Components.Card({
+            extraClass: "my-4",
+            content: `
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-xs font-semibold uppercase tracking-wide text-sec">🌍 Country Intelligence Model</h4>
+                ${Components.Badge({ label: "Simulation Live", tone: "warning" })}
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div><span class="text-mut">Active Segment:</span> <strong class="text-sec">${r.country} (${prof.currencySymbol} ${prof.currency})</strong></div>
+                <div><span class="text-mut">Digital Adoption Index:</span> <strong class="text-sec">${prof.digitalAdoption}%</strong></div>
+                <div><span class="text-mut">Market Maturity:</span> <strong class="text-sec">${prof.ecommerceMaturity}/100</strong></div>
+                <div><span class="text-mut">Payment Preference:</span> <strong class="text-sec">${prof.paymentPreference}</strong></div>
+                <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">Recommended Business Verticals:</span> <strong class="accent">${prof.recommendedCategories.join(", ")}</strong></div>
+              </div>
+            `
+          });
+        })()}
+
         <div>
           <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Key metrics</h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
