@@ -342,16 +342,36 @@ const scoringEngine = (() => {
     const competitionJitter = seededValue(seed + "comp", -8, 8);
     const marginJitter = seededValue(seed + "margin", -6, 6);
 
-    const demand = clamp(entry.baseDemand + demandJitter, 5, 99);
-    const competition = clamp(entry.baseCompetition + competitionJitter, 5, 99);
+    const profile = getCountryProfile(country);
+    const modifiers = applyCountryModifiers(entry, profile, seed);
+    const demand = modifiers.demand;
+    const competition = modifiers.competition;
+    
     const estimatedMargin = clamp(entry.baseMargin + marginJitter, 5, 95);
 
     const budgetFit = budgetFitScore(entry.budgetRange, budget);
     // Composite score: demand up, competition down, margin up, budget fit up
     const composite = (demand * 0.35) + ((100 - competition) * 0.25) + (estimatedMargin * 0.25) + (budgetFit * 0.15);
-
-    return { demand, competition, estimatedMargin, budgetFit, composite: Math.round(composite) };
+  // =====================================================
+  // COUNTRY SCORING ADJUSTMENTS
+  // =====================================================
+  function getCountryProfile(countryName) {
+    const keys = Object.keys(CONFIG.countries);
+    const matchKey = keys.find(k => CONFIG.countries[k].name === countryName);
+    return matchKey ? CONFIG.countries[matchKey] : CONFIG.countries["IN"];
   }
+
+  function applyCountryModifiers(entry, profile, seed) {
+    const jDemand = seededValue(seed + "c_dem", -5, 5);
+    const jComp = seededValue(seed + "c_cmp", -6, 6);
+    const demand = clamp((entry.baseDemand * profile.purchasingPowerIndex / 100) + jDemand, 5, 99);
+    const competition = clamp((entry.baseCompetition * profile.averageCPM) + jComp, 5, 99);
+    return { demand, competition };
+  }
+
+  return { scoreBusiness, clamp, getCountryProfile, applyCountryModifiers };
+})();
+  
 
   function budgetFitScore(range, budget) {
     const [min, max] = range;
