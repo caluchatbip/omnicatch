@@ -838,7 +838,31 @@ const uiEngine = (() => {
             `
           });
         })()}
-
+        ${(() => {
+          const sliderEl = document.getElementById("budget-slider");
+          const sliderVal = sliderEl ? Number(sliderEl.value) : 15000;
+          const tier = budgetTierEngine.getProfileBySlider(sliderVal).data;
+          return Components.Card({
+            extraClass: "my-4 border-l-4",
+            attrs: `style="border-left-color:var(--accent)"`,
+            content: `
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-xs font-semibold uppercase tracking-wide text-sec">💼 Budget Intelligence & Capability Card</h4>
+                ${Components.Badge({ label: "Maturity Track", tone: "success" })}
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div><span class="text-mut">Current Tier Target:</span> <strong class="text-sec">${tier.label}</strong></div>
+                <div><span class="text-mut">Execution Complexity:</span> <strong class="text-sec">${tier.complexity}</strong></div>
+                <div><span class="text-mut">Team Architecture:</span> <strong class="text-sec">${tier.team}</strong></div>
+                <div><span class="text-mut">Launch Velocity:</span> <strong class="text-sec">${tier.timeline}</strong></div>
+                <div><span class="text-mut">Risk Horizon:</span> <strong class="text-sec">${tier.risk}</strong></div>
+                <div><span class="text-mut">Stack Recommendation:</span> <strong class="text-sec">${tier.tools}</strong></div>
+                <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">High-Yield Verticals:</span> <strong class="accent">${tier.categories.join(", ")}</strong></div>
+              </div>
+            `
+          });
+        })()}
+        
         <div>
           <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Key metrics</h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -1127,13 +1151,15 @@ function bindEvents() {
   const budgetSlider = document.getElementById("budget-slider");
   if (budgetSlider) {
     const out = document.getElementById("budget-slider-out");
-    const paint = () => { if (out) out.textContent = `₹${Number(budgetSlider.value).toLocaleString("en-IN")}`; };
+     const paint = () => { if (out) out.textContent = budgetTierEngine.getProfileBySlider(Number(budgetSlider.value)).data.label; };
     paint();
-    budgetSlider.addEventListener("input", () => {
-      paint();
-      stateEngine.setState({ budget: Number(budgetSlider.value) });
-      analyticsEngine.track("budgetChanged", { budget: Number(budgetSlider.value) });
-    });
+     budgetSlider.addEventListener("input", () => {
+  // Rule 1: Slider ab sirf ek UI control hai, engine decide karega actual tier budget
+  const tierProfile = budgetTierEngine.getProfileBySlider(Number(budgetSlider.value)).data;
+  if (out) out.textContent = tierProfile.label;
+  stateEngine.setState({ budget: tierProfile.minBudget });
+  analyticsEngine.track("budgetChanged", { budget: tierProfile.minBudget, tierId: tierProfile.id });
+});
   }
 
   document.getElementById("country-select")?.addEventListener("change", e => {
