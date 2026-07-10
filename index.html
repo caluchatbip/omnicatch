@@ -858,8 +858,9 @@ const uiEngine = (() => {
                 <div><span class="text-mut">Launch Velocity:</span> <strong class="text-sec">${tier.timeline}</strong></div>
                 <div><span class="text-mut">Risk Horizon:</span> <strong class="text-sec">${tier.risk}</strong></div>
                 <div><span class="text-mut">Stack Recommendation:</span> <strong class="text-sec">${tier.tools}</strong></div>
-                <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">High-Yield Verticals:</span> <strong class="accent">${tier.categories.join(", ")}</strong></div>
-              </div>
+                 <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">High-Yield Verticals:</span> <strong class="accent">${tier.categories.join(", ")}</strong></div>
+<div class="col-span-2 pt-1"><span class="text-mut">Recommended Learning Path:</span> <strong class="text-success">${tier.recommendedLearningPath.join(" → ")}</strong></div>
+</div>
             `
           });
         })()}
