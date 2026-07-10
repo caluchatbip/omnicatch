@@ -135,6 +135,59 @@ const budgetTierEngine = (() => {
 function makeResult(success, data = {}, errors = [], warnings = []) {
   return { success, data, errors, warnings };
 }
+  // =====================================================
+// BUSINESS SCHEMA v2.1
+// =====================================================
+
+// =====================================================
+// BUSINESS DATABASE VALIDATOR
+// =====================================================
+const businessValidatorEngine = (() => {
+  function validateDatabase(db) {
+    const errors = [];
+    const knownIds = new Set();
+    const requiredFields = [
+      "id", "title", "category", "subcategory", "description", "budgetTierRange",
+      "startupCostBaseINR", "startupCostUSD", "recurringCostBaseINR", "recurringCostUSD",
+      "difficulty", "marketDemandBase", "competitionBase", "scalabilityBase",
+      "estimatedMarginBase", "estimatedTimelineBase", "requiredSkills", "recommendedCountries",
+      "riskFactors", "advantages", "disadvantages", "idealFor", "businessModel",
+      "incomeType", "requiredTools", "roadmapId", "version", "metadata"
+    ];
+
+    db.forEach((entry, index) => {
+      const entryId = entry.id || `Index-${index}`;
+      
+      // 1. Check Required Fields
+      requiredFields.forEach(field => {
+        if (entry[field] === undefined) {
+          errors.push(`[Schema Error] Item ${entryId} is missing required property: "${field}"`);
+        }
+      });
+
+      // 2. Check Duplicate Identifiers
+      if (entry.id) {
+        if (knownIds.has(entry.id)) {
+          errors.push(`[Integrity Error] Duplicate Business ID detected: "${entry.id}"`);
+        }
+        knownIds.add(entry.id);
+      }
+
+      // 3. Validate Budget Tier Struct Boundaries
+      if (entry.budgetTierRange && (!Array.isArray(entry.budgetTierRange) || entry.budgetTierRange.length !== 2)) {
+        errors.push(`[Validation Error] Item ${entryId} budgetTierRange must be an array of exactly [Min, Max]`);
+      }
+    });
+
+    if (errors.length > 0) {
+      console.error("OmniCatch Database Validation Failed!", errors);
+      return makeResult(false, { errorCount: errors.length }, errors);
+    }
+    return makeResult(true, { validatedCount: db.length });
+  }
+  return { validateDatabase };
+})();
+    
   /* ==================================================================
    STATE — single immutable-by-convention store
    ================================================================== */
@@ -261,24 +314,76 @@ const analyticsEngine = (() => {
   return { track };
 })();
 
-/* ==================================================================
-   BUSINESS DATABASE — every entry follows one identical schema
-   ================================================================== */
+ // =====================================================
+// BUSINESS SCHEMA v2.1 COMPLIANT PRODUCTION DATA SOURCE
+// =====================================================
 const BUSINESS_DB = [
-  { id:"bz-01", title:"Notion Template Vault", category:"Digital Products", budgetRange:[500,5000], difficulty:"Low", launchTime:"1-2 weeks", baseMargin:70, baseCompetition:55, baseDemand:60, tags:["templates","notion","productivity","digital download"] },
-  { id:"bz-02", title:"Micro SaaS Waitlist Tool", category:"Micro SaaS", budgetRange:[3000,20000], difficulty:"Medium", launchTime:"4-8 weeks", baseMargin:80, baseCompetition:45, baseDemand:55, tags:["saas","waitlist","tool","indie"] },
-  { id:"bz-03", title:"AI Prompt Pack Store", category:"AI Tools", budgetRange:[500,4000], difficulty:"Low", launchTime:"1 week", baseMargin:75, baseCompetition:70, baseDemand:65, tags:["ai","prompts","gpt","digital"] },
-  { id:"bz-04", title:"Cohort-Based Exam Prep", category:"Education", budgetRange:[2000,15000], difficulty:"Medium", launchTime:"3-6 weeks", baseMargin:60, baseCompetition:50, baseDemand:70, tags:["education","exam","cohort","students"] },
-  { id:"bz-05", title:"Faceless Shorts Channel", category:"Creator Economy", budgetRange:[1000,8000], difficulty:"Medium", launchTime:"2-4 weeks", baseMargin:40, baseCompetition:80, baseDemand:75, tags:["youtube","shorts","faceless","content"] },
-  { id:"bz-06", title:"Smart Wearables Dropship", category:"E-commerce", budgetRange:[10000,50000], difficulty:"High", launchTime:"6-10 weeks", baseMargin:30, baseCompetition:75, baseDemand:68, tags:["wearable","ring","smart ring","dropship","gadget"] },
-  { id:"bz-07", title:"Local Business GBP Optimization", category:"Local Services", budgetRange:[0,3000], difficulty:"Low", launchTime:"1 week", baseMargin:85, baseCompetition:40, baseDemand:50, tags:["local","gbp","seo","freelance"] },
-  { id:"bz-08", title:"Habit Tracker Mobile App", category:"Mobile Apps", budgetRange:[5000,25000], difficulty:"Medium", launchTime:"5-9 weeks", baseMargin:55, baseCompetition:65, baseDemand:58, tags:["mobile","app","habit","freemium"] },
-  { id:"bz-09", title:"One-Person Design Agency", category:"Agency", budgetRange:[0,5000], difficulty:"Medium", launchTime:"2-3 weeks", baseMargin:65, baseCompetition:60, baseDemand:52, tags:["agency","design","canva","freelance"] },
-  { id:"bz-10", title:"Fiverr Gig Arbitrage", category:"Freelancing", budgetRange:[0,2000], difficulty:"Low", launchTime:"3-5 days", baseMargin:50, baseCompetition:85, baseDemand:60, tags:["freelance","fiverr","arbitrage","gig"] },
-  { id:"bz-11", title:"Devotional AI Music Channel", category:"Creator Economy", budgetRange:[0,3000], difficulty:"Low", launchTime:"1-2 weeks", baseMargin:35, baseCompetition:60, baseDemand:48, tags:["music","ai music","devotional","youtube"] },
-  { id:"bz-12", title:"Amazon KDP Low-Content Books", category:"Digital Products", budgetRange:[0,2000], difficulty:"Low", launchTime:"1 week", baseMargin:45, baseCompetition:78, baseDemand:42, tags:["kdp","books","low content","amazon"] }
+  {
+    id: "bz-01",
+    title: "Notion Template Vault",
+    category: "Digital Products",
+    subcategory: "Notion Templates",
+    description: "Design and market customized workspaces, trackers, and productivity setups for creator economies.",
+    budgetTierRange: [1, 3],
+    startupCostBaseINR: 500,
+    startupCostUSD: 6,
+    recurringCostBaseINR: 0,
+    recurringCostUSD: 0,
+    difficulty: "Low",
+    marketDemandBase: 65,
+    competitionBase: 55,
+    scalabilityBase: 85,
+    estimatedMarginBase: 95,
+    estimatedTimelineBase: "1-2 weeks",
+    requiredSkills: ["Notion Architecture", "Audience Building", "UI Layout Design"],
+    recommendedCountries: ["India", "United States", "United Kingdom"],
+    riskFactors: ["Low barrier to entry creates highly crowded sub-markets", "Complete platform feature reliance on Notion"],
+    advantages: ["Near-zero ongoing manufacturing overhead", "Highly scalable asset delivery mechanics"],
+    disadvantages: ["High copyright and templates piracy risk", "Requires continuous traffic generation strategies"],
+    idealFor: "Freelancer",
+    businessModel: "Product",
+    incomeType: "One-time",
+    requiredTools: ["Notion", "Canva", "Gumroad", "GitHub Pages"],
+    roadmapId: "rm-digital-low",
+    version: "2.1",
+    metadata: { schemaVersion: "2.1", createdBy: "Bipon Core", simulationReady: true, lastUpdated: 1782631800000, prototypeOnly: true }
+  },
+  {
+    id: "bz-02",
+    title: "Micro SaaS Waitlist Widget",
+    category: "Micro SaaS",
+    subcategory: "AI Automation Tools",
+    description: "Provide single-purpose, embeddable launch countdown tools and automated referral widgets for software launches.",
+    budgetTierRange: [5, 8],
+    startupCostBaseINR: 5000,
+    startupCostUSD: 60,
+    recurringCostBaseINR: 1200,
+    recurringCostUSD: 15,
+    difficulty: "Medium",
+    marketDemandBase: 70,
+    competitionBase: 42,
+    scalabilityBase: 92,
+    estimatedMarginBase: 88,
+    estimatedTimelineBase: "3-5 weeks",
+    requiredSkills: ["Frontend Frameworks", "API Endpoint Security", "Data Lifecycle Design"],
+    recommendedCountries: ["United States", "Singapore", "Germany"],
+    riskFactors: ["Significant churn after customer initial product launch cycle finishes", "API exploit surfaces require regular patching"],
+    advantages: ["Predictable monthly contract renewals", "High operating margin ratios at structural scale"],
+    disadvantages: ["Requires dedicated developer monitoring tools", "Customer support scaling demands over time"],
+    idealFor: "Developer",
+    businessModel: "SaaS",
+    incomeType: "Recurring",
+    requiredTools: ["VS Code", "Supabase", "Vercel", "Google AI Studio"],
+    roadmapId: "rm-saas-medium",
+    version: "2.1",
+    metadata: { schemaVersion: "2.1", createdBy: "Bipon Core", simulationReady: true, lastUpdated: 1782631800000, prototypeOnly: true }
+  }
 ];
+Object.freeze(BUSINESS_DB);
 
+// Automatically execute schema assertions upon client startup
+businessValidatorEngine.validateDatabase(BUSINESS_DB);
+  
 /* ==================================================================
    DETERMINISTIC HASH — powers the simulation engine.
    Same inputs → same outputs, always. No Math.random() anywhere.
