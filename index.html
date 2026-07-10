@@ -140,12 +140,22 @@ function makeResult(success, data = {}, errors = [], warnings = []) {
 // =====================================================
 
 // =====================================================
-// BUSINESS DATABASE VALIDATOR
+// BUSINESS DATABASE VALIDATOR (Enhanced v0.5.3)
 // =====================================================
 const businessValidatorEngine = (() => {
+  // Allowed values for future-proof validation loops
+  const VALID_CATEGORIES = new Set(["Digital Products", "Freelancing", "Micro SaaS", "AI Tools", "Education", "Creator Economy", "E-commerce", "Local Services", "Mobile Apps", "Agency"]);
+  const VALID_MODELS = new Set(["Service", "Product", "SaaS", "Subscription", "Marketplace", "Affiliate", "Education", "Creator"]);
+  const VALID_INCOME_TYPES = new Set(["One-time", "Monthly", "Recurring", "Commission", "Advertising", "Hybrid"]);
+
   function validateDatabase(db) {
+    const validRecords = [];
+    const invalidRecords = [];
     const errors = [];
+    const warnings = [];
     const knownIds = new Set();
+    const knownTitles = new Set();
+
     const requiredFields = [
       "id", "title", "category", "subcategory", "description", "budgetTierRange",
       "startupCostBaseINR", "startupCostUSD", "recurringCostBaseINR", "recurringCostUSD",
@@ -156,38 +166,94 @@ const businessValidatorEngine = (() => {
     ];
 
     db.forEach((entry, index) => {
+      let hasError = false;
       const entryId = entry.id || `Index-${index}`;
-      
-      // 1. Check Required Fields
+
+      // 1. Missing Fields Check
       requiredFields.forEach(field => {
-        if (entry[field] === undefined) {
-          errors.push(`[Schema Error] Item ${entryId} is missing required property: "${field}"`);
+        if (entry[field] === undefined || entry[field] === null) {
+          errors.push(`[Error] Record ${entryId} is missing property: "${field}"`);
+          hasError = true;
         }
       });
 
-      // 2. Check Duplicate Identifiers
+      // 2. Structural Integrity & Value Boundary Rules
       if (entry.id) {
         if (knownIds.has(entry.id)) {
-          errors.push(`[Integrity Error] Duplicate Business ID detected: "${entry.id}"`);
+          errors.push(`[Error] Duplicate Identifier: "${entry.id}"`);
+          hasError = true;
         }
         knownIds.add(entry.id);
       }
 
-      // 3. Validate Budget Tier Struct Boundaries
-      if (entry.budgetTierRange && (!Array.isArray(entry.budgetTierRange) || entry.budgetTierRange.length !== 2)) {
-        errors.push(`[Validation Error] Item ${entryId} budgetTierRange must be an array of exactly [Min, Max]`);
+      if (entry.title) {
+        if (knownTitles.has(entry.title)) {
+          warnings.push(`[Warning] Duplicate Title detected: "${entry.title}"`);
+        }
+        knownTitles.add(entry.title);
+      }
+
+      if (entry.startupCostBaseINR < 0 || entry.recurringCostBaseINR < 0 || entry.startupCostUSD < 0 || entry.recurringCostUSD < 0) {
+        errors.push(`[Error] Record ${entryId} contains negative cost definitions`);
+        hasError = true;
+      }
+
+      // 3. String Enum Constraints Verification
+      if (entry.category && !VALID_CATEGORIES.has(entry.category)) {
+        errors.push(`[Error] Record ${entryId} has unknown category: "${entry.category}"`);
+        hasError = true;
+      }
+
+      if (entry.businessModel && !VALID_MODELS.has(entry.businessModel)) {
+        errors.push(`[Error] Record ${entryId} has unknown businessModel: "${entry.businessModel}"`);
+        hasError = true;
+      }
+
+      if (entry.incomeType && !VALID_INCOME_TYPES.has(entry.incomeType)) {
+        errors.push(`[Error] Record ${entryId} has unknown incomeType: "${entry.incomeType}"`);
+        hasError = true;
+      }
+
+      // 4. Empty Array Validations
+      ["requiredSkills", "recommendedCountries", "riskFactors", "advantages", "disadvantages", "requiredTools"].forEach(arrField => {
+        if (Array.isArray(entry[arrField]) && entry[arrField].length === 0) {
+          errors.push(`[Error] Record ${entryId} contains empty array: "${arrField}"`);
+          hasError = true;
+        }
+      });
+
+      // Split record into appropriate pipeline bucket
+      if (hasError) {
+        invalidRecords.push(entry);
+      } else {
+        validRecords.push(entry);
       }
     });
 
-    if (errors.length > 0) {
-      console.error("OmniCatch Database Validation Failed!", errors);
-      return makeResult(false, { errorCount: errors.length }, errors);
-    }
-    return makeResult(true, { validatedCount: db.length });
+    // Calculate Data Health Score out of 100%
+    const totalRecords = db.length;
+    const healthScore = totalRecords > 0 ? Math.round((validRecords.length / totalRecords) * 100) : 0;
+
+    // Display The Validation Report Dashboard Logs (Rule Contract)
+    console.log("=====================================================");
+    console.log("DATABASE VALIDATION REPORT");
+    console.log("=====================================================");
+    console.log(`* Records Processed : ${totalRecords}`);
+    console.log(`* Records Passed    : ${validRecords.length}`);
+    console.log(`* Records Failed    : ${invalidRecords.length}`);
+    console.log(`* Database Health   : ${healthScore}%`);
+    console.log("=====================================================");
+
+    return makeResult(errors.length === 0, {
+      validRecords,
+      invalidRecords,
+      healthScore
+    }, errors, warnings);
   }
+
   return { validateDatabase };
 })();
-    
+      
   /* ==================================================================
    STATE — single immutable-by-convention store
    ================================================================== */
@@ -1403,7 +1469,11 @@ function toggleBookmark(id) {
 /* ==================================================================
    INITIALIZATION
    ================================================================== */
-function init() {
+function init(  const report = businessValidatorEngine.validateDatabase(BUSINESS_DB);
+  if (!report.success) {
+    stateEngine.setState({ notification: { message: `Database Health Warning: ${report.data.healthScore}% Valid`, tone: "danger" } });
+  }
+    ) {
   themeEngine.init();
   routingEngine.init();
   const country = storageEngine.get("country").data.value || "India";
