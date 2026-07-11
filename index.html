@@ -1469,21 +1469,37 @@ function toggleBookmark(id) {
 /* ==================================================================
    INITIALIZATION
    ================================================================== */
-function init(  const report = businessValidatorEngine.validateDatabase(BUSINESS_DB);
-  if (!report.success) {
-    stateEngine.setState({ notification: { message: `Database Health Warning: ${report.data.healthScore}% Valid`, tone: "danger" } });
-  }
-    ) {
-  themeEngine.init();
-  routingEngine.init();
+ function init() {
+  // Execute database evaluation and log metrics smoothly into centralized app state
+  const validationResult = businessValidatorEngine.validateDatabase(BUSINESS_DB);
+  
   const country = storageEngine.get("country").data.value || "India";
   const recentSearches = (storageEngine.get("recentSearches").data.value || []).filter(Boolean);
   const history = storageEngine.get("history").data.value || [];
   const bookmarks = storageEngine.get("bookmarks").data.value || [];
-  stateEngine.setState({ country, recentSearches, history, bookmarks });
+
+  stateEngine.setState({
+    databaseReport: validationResult.data.reportSummary,
+    country,
+    recentSearches,
+    history,
+    bookmarks
+  });
+
+  // Output formal verification summary report directly to the development environment
+  console.log("=====================================================");
+  console.log("DATABASE VALIDATION REPORT");
+  console.log("=====================================================");
+  console.log(`* Status Locked     : ${validationResult.success ? "PASSED" : "FAILED"}`);
+  console.log(`* Integrity Score   : ${validationResult.data.reportSummary.healthScore}%`);
+  console.log("=====================================================");
+
+  themeEngine.init();
+  routingEngine.init();
   stateEngine.subscribe(() => {}); // reserved for future cross-module reactions
   uiEngine.render();
-}
+ }
+  
 
 document.addEventListener("DOMContentLoaded", init);
 </script>
