@@ -380,6 +380,135 @@ const analyticsEngine = (() => {
   return { track };
 })();
 
+  // =====================================================
+// WEIGHT PROFILES
+// =====================================================
+const SCORING_PROFILES = {
+  Balanced: { demand: 0.25, competition: 0.20, margin: 0.20, scalability: 0.15, budgetFit: 0.10, countryFit: 0.10 },
+  Growth: { demand: 0.35, competition: 0.10, margin: 0.15, scalability: 0.25, budgetFit: 0.05, countryFit: 0.10 },
+  LowRisk: { demand: 0.15, competition: 0.35, margin: 0.15, scalability: 0.10, budgetFit: 0.15, countryFit: 0.10 },
+  HighMargin: { demand: 0.20, competition: 0.15, margin: 0.40, scalability: 0.10, budgetFit: 0.05, countryFit: 0.10 },
+  StudentFriendly: { demand: 0.20, competition: 0.20, margin: 0.10, scalability: 0.10, budgetFit: 0.30, countryFit: 0.10 }
+};
+Object.freeze(SCORING_PROFILES);
+
+const DEBUG_SCORING = true; // Development configuration audit flag
+
+// =====================================================
+// SCORING ENGINE
+// =====================================================
+
+// =====================================================
+// SCORE CALCULATION PIPELINE
+// =====================================================
+const scoringEngine = (() => {
+  // In-memory caching engine to prevent duplicate analytical passes
+  const _scoreCache = new Map();
+
+  function calculateOpportunityScore(business, activeBudget, activeCountry, profileName = "Balanced") {
+    const profile = SCORING_PROFILES[profileName] || SCORING_PROFILES.Balanced;
+    
+    // Generate unique structural key parameter signature for cache lookup operations
+    const cacheKey = `${business.id}_${activeBudget}_${activeCountry}_${profileName}`;
+    if (_scoreCache.has(cacheKey)) {
+      return _scoreCache.get(cacheKey);
+    }
+
+    // Layer 1 & 3: Raw Metric Extraction & 0-100 Normalization Pipelines
+    const rawMetrics = {
+      demand: business.marketDemandBase,
+      competition: 100 - business.competitionBase, // Invert friction so higher value equals lower competition threat
+      margin: business.estimatedMarginBase,
+      scalability: business.scalabilityBase,
+      budgetFit: calculateBudgetFitFactor(business.budgetTierRange, activeBudget),
+      countryFit: business.recommendedCountries.includes(activeCountry) ? 100 : 40
+    };
+
+    // Layer 2: Compute Weighted Layer Values
+    let overallScore = 0;
+    const debuggingMap = {};
+
+    Object.keys(profile).forEach(metricKey => {
+      const weight = profile[metricKey];
+      const normalizedValue = rawMetrics[metricKey];
+      const partialScore = normalizedValue * weight;
+      
+      overallScore += partialScore;
+      debuggingMap[metricKey] = {
+        raw: business[metricKey + "Base"] !== undefined ? business[metricKey + "Base"] : normalizedValue,
+        normalized: normalizedValue,
+        weight: weight,
+        contribution: parseFloat(partialScore.toFixed(2))
+      };
+    });
+
+    overallScore = Math.round(overallScore);
+
+    // Layer 4: Structured Reasoning & Confidence Analysis Generation
+    const evaluationReport = generateStructuredReasoning(rawMetrics, overallScore);
+
+    const productionPayload = {
+      overallScore: overallScore,
+      confidence: `${evaluationReport.confidenceValue}%`,
+      strengths: evaluationReport.strengthsList,
+      weaknesses: evaluationReport.weaknessesList
+    };
+
+    // Wrap with diagnostic debug layers if flag conditions match
+    const finalEnvelope = DEBUG_SCORING ? {
+      ...productionPayload,
+      _debugDiagnostics: {
+        activeProfile: profileName,
+        metricsTimeline: debuggingMap,
+        rawCalculationsBase: rawMetrics
+      }
+    } : productionPayload;
+
+    // Persist computation directly into internal memory cache
+    _scoreCache.set(cacheKey, makeResult(true, finalEnvelope));
+    return _scoreCache.get(cacheKey);
+  }
+
+  function calculateBudgetFitFactor(range, currentBudget) {
+    const currentTierProfile = budgetTierEngine.getProfileBySlider(currentBudget).data;
+    const currentTierId = currentTierProfile.id;
+    const [minTier, maxTier] = range;
+
+    if (currentTierId >= minTier && currentTierId <= maxTier) return 100;
+    if (currentTierId < minTier) return Math.max(100 - (minTier - currentTierId) * 25, 10);
+    return Math.max(100 - (currentTierId - maxTier) * 15, 30);
+  }
+
+  function generateStructuredReasoning(normalized, finalScore) {
+    const strengthsList = [];
+    const weaknessesList = [];
+
+    if (normalized.demand >= 70) strengthsList.push("Strong market demand velocity identified");
+    else if (normalized.demand < 50) weaknessesList.push("Soft baseline consumer volume signals");
+
+    if (normalized.competition >= 60) strengthsList.push("Favorable market density landscape");
+    else weaknessesList.push("High alternative implementation crowding index");
+
+    if (normalized.margin >= 80) strengthsList.push("Exceptional operating profit margins");
+    
+    if (normalized.budgetFit >= 80) strengthsList.push("Excellent startup capitalization alignment");
+    else weaknessesList.push("Requires capital outside active maturity runway steps");
+
+    if (normalized.scalability >= 75) strengthsList.push("High residual organic scale potential");
+
+    // Dynamic confidence factor evaluation formula
+    const confidenceValue = Math.round(Math.min(Math.max(finalScore + 5, 50), 98));
+
+    return { strengthsList, weaknessesList, confidenceValue };
+  }
+
+  function clearScoringCache() {
+    _scoreCache.clear();
+  }
+
+  return { calculateOpportunityScore, clearScoringCache };
+})();
+                           
  // =====================================================
 // BUSINESS SCHEMA v2.1 COMPLIANT PRODUCTION DATA SOURCE
 // =====================================================
