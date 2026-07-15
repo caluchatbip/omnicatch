@@ -1031,580 +1031,102 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;",  '"': "&quot;", "'": "&#39;" }[m]));
 }
 
-  /* ==================================================================
-   UI ENGINE — the ONLY module allowed to touch the DOM
-   ================================================================== */
+   // =====================================================
+// UI ORCHESTRATION ENGINE (Task 5 Architecture)
+// =====================================================
 const uiEngine = (() => {
-  const root = document.getElementById("app");
+  // Central core components mapping definitions
+  const ELEMENT_IDS = {
+    rootView: "app-root",
+    mainDisplay: "recommendations-container",
+    notificationArea: "global-toast-bar",
+    loaderOverlay: "system-loader"
+  };
 
   function render() {
-    const s = stateEngine.getState();
-    root.innerHTML = `
-      ${renderHeader(s)}
-      <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
-        ${renderTabs(s)}
-        <div class="mt-6 fade-in">${renderActiveTab(s)}</div>
-      </main>
-      ${s.activeModal ? renderModal(s) : ""}
-      ${s.notification ? Components.Notification(s.notification) : ""}
-    `;
-    bindEvents();
-    if (s.lastResult) renderTrendChart(s.lastResult);
-  }
+    const currentState = stateEngine.getState();
+    
+    // 1. Orchestrate Loading States Safely
+    toggleSystemLoader(currentState.isAnalyzing);
 
-  /* ---------- Header ---------- */
-  function renderHeader(s) {
-    return `
-    <header class="border-b divider sticky top-0 z-30" style="background:var(--bg);backdrop-filter:blur(8px)">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md flex items-center justify-center text-white font-bold text-sm" style="background:var(--accent)">O</div>
-          <span class="font-semibold tracking-tight">${CONFIG.appName}</span>
-          ${Components.Badge({ label: "Prototype", tone: "warning" })}
-        </div>
-        <button id="theme-toggle" class="text-mut hover:text-[var(--text-primary)] text-sm" aria-label="Toggle theme">
-          ${s.theme === "dark" ? "☀️" : "🌙"}
-        </button>
-      </div>
-    </header>`;
-  }
-
-  /* ---------- Tabs ---------- */
-  function renderTabs(s) {
-    const tabs = [
-      ["dashboard", "Dashboard"], ["roadmap", "Roadmap"], ["pricing", "Pricing"],
-      ["bookmarks", `Bookmarks (${s.bookmarks.length})`], ["history", "History"], ["architecture", "Architecture"]
-    ];
-    return `
-      <nav class="flex gap-1 overflow-x-auto pt-6 -mx-1 px-1" role="tablist" aria-label="Sections">
-        ${tabs.map(([id, label]) => `
-          <button role="tab" aria-selected="${s.activeTab === id}" data-nav-tab="${id}"
-            class="px-3.5 py-2 text-sm rounded-md whitespace-nowrap transition-colors"
-            style="${s.activeTab === id ? "background:var(--accent-dim);color:var(--accent);font-weight:600" : "color:var(--text-secondary)"}">
-            ${label}
-          </button>`).join("")}
-      </nav>`;
-  }
-
-  function renderActiveTab(s) {
-    switch (s.activeTab) {
-      case "roadmap": return renderRoadmapTab(s);
-      case "pricing": return renderPricingTab(s);
-      case "bookmarks": return renderBookmarksTab(s);
-      case "history": return renderHistoryTab(s);
-      case "architecture": return renderArchitectureTab(s);
-      default: return renderDashboardTab(s);
+    // 2. Handle Global Error Notifications Interceptions
+    if (currentState.notification) {
+      triggerGlobalNotification(currentState.notification.message, currentState.notification.tone);
     }
-  }
 
-  /* ---------- Dashboard ---------- */
-  function renderDashboardTab(s) {
-    return `
-      ${renderSearchPanel(s)}
-      ${s.isAnalyzing ? renderAnalyzingSkeleton() : (s.lastResult ? renderResults(s) : renderEmptyState())}
-    `;
-  }
+    // 3. Process Recommendations View Mapping
+    const displayTarget = document.getElementById(ELEMENT_IDS.mainDisplay);
+    if (!displayTarget) return;
 
-  function renderSearchPanel(s) {
-    return Components.Card({
-      padding: "p-5 sm:p-6",
-      content: `
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div class="sm:col-span-2">
-            <label for="query-input" class="block text-xs text-sec mb-2">What are you exploring?</label>
-            ${Components.Input({ id: "query-input", placeholder: "e.g. smart rings, AI tools, faceless content...", value: s.query, attrs: 'aria-label="Search query"' })}
-            <div class="flex flex-wrap gap-1.5 mt-2">
-              ${s.recentSearches.slice(0, 5).map(q => `<button data-recent-search="${escapeHtml(q)}" class="text-xs px-2.5 py-1 rounded-full text-sec hover:text-[var(--text-primary)]" style="background:var(--bg-elevated);border:1px solid var(--border)">${escapeHtml(q)}</button>`).join("")}
-            </div>
-          </div>
-          <div>
-            <label for="category-select" class="block text-xs text-sec mb-2">Category</label>
-            <select id="category-select" class="w-full px-4 py-2.5 rounded-md text-sm bg-[var(--bg-elevated)] border border-[var(--border)]" style="color:var(--text-primary)" aria-label="Category">
-              <option value="All" ${s.activeCategory === "All" ? "selected" : ""}>All categories</option>
-              ${CONFIG.categories.map(c => `<option value="${c}" ${s.activeCategory === c ? "selected" : ""}>${c}</option>`).join("")}
-            </select>
-          </div>
-          <div>
-            <label for="country-select" class="block text-xs text-sec mb-2">Country</label>
-            <select id="country-select" class="w-full px-4 py-2.5 rounded-md text-sm bg-[var(--bg-elevated)] border border-[var(--border)]" style="color:var(--text-primary)" aria-label="Country">
-               ${Object.keys(CONFIG.countries).map(k => `<option value="${CONFIG.countries[k].name}" ${s.country === CONFIG.countries[k].name ? "selected" : ""}>${CONFIG.countries[k].name}</option>`).join("")}
-              </select>
-          </div>
-          <div class="sm:col-span-2">
-            ${Components.Slider({ id: "budget-slider", min: 0, max: 50000, value: s.budget, label: "Budget (₹)" })}
-          </div>
-          <div class="sm:col-span-2 flex justify-end">
-            ${Components.Button({ label: "Analyze", attrs: 'id="analyze-btn"', size: "lg" })}
-          </div>
-        </div>
-      `
-    });
-  }
-
-  function renderEmptyState() {
-    return `
-      <div class="text-center py-16">
-        <div class="text-4xl mb-3">🔍</div>
-        <p class="text-sec text-sm">Enter a query and press Analyze to generate a simulated trend report.</p>
-      </div>`;
-  }
-
-  function renderAnalyzingSkeleton() {
-    return `
-      <div class="mt-6 grid sm:grid-cols-4 gap-4">
-        ${Array.from({ length: 8 }).map(() => Components.Card({ content: Components.SkeletonLoader({ lines: 2 }) })).join("")}
-      </div>`;
-  }
-
-  function renderResults(s) {
-    const r = s.lastResult;
-    const top5 = r.recommendations.slice(0, 5);
-    const kpis = buildKpis(r);
-         return `
-      <div class="mt-8 space-y-8">
-        ${renderDisclaimerBanner()}
-        ${renderExecutiveSummary(r)}
-        
-        ${(() => {
-          const keys = Object.keys(CONFIG.countries);
-          const matchKey = keys.find(k => CONFIG.countries[k].name === r.country) || "IN";
-          const prof = CONFIG.countries[matchKey];
-          return Components.Card({
-            extraClass: "my-4",
-            content: `
-              <div class="flex items-center justify-between mb-3">
-                <h4 class="text-xs font-semibold uppercase tracking-wide text-sec">🌍 Country Intelligence Model</h4>
-                ${Components.Badge({ label: "Simulation Live", tone: "warning" })}
-              </div>
-              <div class="grid grid-cols-2 gap-3 text-xs">
-                <div><span class="text-mut">Active Segment:</span> <strong class="text-sec">${r.country} (${prof.currencySymbol} ${prof.currency})</strong></div>
-                <div><span class="text-mut">Digital Adoption Index:</span> <strong class="text-sec">${prof.digitalAdoption}%</strong></div>
-                <div><span class="text-mut">Market Maturity:</span> <strong class="text-sec">${prof.ecommerceMaturity}/100</strong></div>
-                <div><span class="text-mut">Payment Preference:</span> <strong class="text-sec">${prof.paymentPreference}</strong></div>
-                <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">Recommended Business Verticals:</span> <strong class="accent">${prof.recommendedCategories.join(", ")}</strong></div>
-              </div>
-            `
-          });
-        })()}
-        ${(() => {
-          const sliderEl = document.getElementById("budget-slider");
-          const sliderVal = sliderEl ? Number(sliderEl.value) : 15000;
-          const tier = budgetTierEngine.getProfileBySlider(sliderVal).data;
-          return Components.Card({
-            extraClass: "my-4 border-l-4",
-            attrs: `style="border-left-color:var(--accent)"`,
-            content: `
-              <div class="flex items-center justify-between mb-3">
-                <h4 class="text-xs font-semibold uppercase tracking-wide text-sec">💼 Budget Intelligence & Capability Card</h4>
-                ${Components.Badge({ label: "Maturity Track", tone: "success" })}
-              </div>
-              <div class="grid grid-cols-2 gap-3 text-xs">
-                <div><span class="text-mut">Current Tier Target:</span> <strong class="text-sec">${tier.label}</strong></div>
-                <div><span class="text-mut">Execution Complexity:</span> <strong class="text-sec">${tier.complexity}</strong></div>
-                <div><span class="text-mut">Team Architecture:</span> <strong class="text-sec">${tier.team}</strong></div>
-                <div><span class="text-mut">Launch Velocity:</span> <strong class="text-sec">${tier.timeline}</strong></div>
-                <div><span class="text-mut">Risk Horizon:</span> <strong class="text-sec">${tier.risk}</strong></div>
-                <div><span class="text-mut">Stack Recommendation:</span> <strong class="text-sec">${tier.tools}</strong></div>
-                 <div class="col-span-2 pt-2 border-t divider"><span class="text-mut">High-Yield Verticals:</span> <strong class="accent">${tier.categories.join(", ")}</strong></div>
-<div class="col-span-2 pt-1"><span class="text-mut">Recommended Learning Path:</span> <strong class="text-success">${tier.recommendedLearningPath.join(" → ")}</strong></div>
-</div>
-            `
-          });
-        })()}
-        
-        <div>
-          <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Key metrics</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            ${kpis.map(k => Components.MetricCard(k)).join("")}
-          </div>
-        </div>
-        <div class="grid lg:grid-cols-2 gap-6">
-          <div>
-            <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Simulated trend</h3>
-            ${Components.Card({ content: `<canvas id="trend-canvas" width="500" height="220" role="img" aria-label="Simulated trend chart"></canvas>` })}
-          </div>
-          <div>
-            <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Budget allocation</h3>
-            ${renderBudgetAllocation(s.budget)}
-          </div>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold mb-3 text-sec uppercase tracking-wide">Top 5 recommendations</h3>
-          <div class="space-y-3">
-            ${top5.map(rec => renderRecommendationCard(rec)).join("")}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderDisclaimerBanner() {
-    return `
-      <div class="flex items-start gap-2 px-4 py-3 rounded-md text-xs" style="background:var(--accent-dim);color:var(--accent)">
-        <span>ⓘ</span>
-        <span>All figures below are <strong>simulated estimates</strong> generated deterministically from your inputs — not live market data, not real scraping, not a marketplace API.</span>
-      </div>`;
-  }
-
-  function renderExecutiveSummary(r) {
-    const best = r.recommendations[0];
-    return Components.Card({
-      content: `
-        <h3 class="font-semibold mb-2">Executive summary</h3>
-        <p class="text-sm text-sec leading-relaxed">
-          For "<strong>${escapeHtml(r.query || "your query")}</strong>" in <strong>${r.category === "All" ? "all categories" : r.category}</strong> at a ₹${r.budget.toLocaleString("en-IN")} budget in ${r.country},
-          the simulation ranks <strong>${escapeHtml(best.title)}</strong> highest, with a composite opportunity score of ${best.metadata.compositeScore}/100 — driven by
-          ${best.demand > 60 ? "solid demand" : "moderate demand"} and ${best.competition < 60 ? "manageable" : "high"} competition. This is a directional prototype signal, treat it as a starting hypothesis to validate, not a guarantee.
-        </p>
-      `
-    });
-  }
-
-  function buildKpis(r) {
-    const avg = key => Math.round(r.recommendations.reduce((a, b) => a + b[key], 0) / r.recommendations.length);
-    const best = r.recommendations[0];
-    return [
-      { label: "Opportunities found", value: r.recommendations.length },
-      { label: "Top score", value: `${best.metadata.compositeScore}/100`, tone: "success" },
-      { label: "Avg demand", value: `${avg("demand")}/100` },
-      { label: "Avg competition", value: `${avg("competition")}/100`, tone: avg("competition") > 65 ? "warning" : "neutral" },
-      { label: "Avg margin", value: `${avg("estimatedMargin")}%`, tone: "success" },
-      { label: "Budget", value: `₹${r.budget.toLocaleString("en-IN")}` },
-      { label: "Country", value: r.country },
-      { label: "Best fit", value: `${best.metadata.budgetFit}%` }
-    ];
-  }
-
-  function renderBudgetAllocation(budget) {
-    const alloc = [
-      { label: "Validation", pct: 15, color: "var(--accent)" },
-      { label: "MVP / Build", pct: 40, color: "var(--success)" },
-      { label: "Acquisition", pct: 35, color: "var(--warning)" },
-      { label: "Buffer", pct: 10, color: "var(--text-muted)" }
-    ];
-    return Components.Card({
-      content: `
-        <div class="space-y-3">
-          ${alloc.map(a => `
-            <div>
-              <div class="flex justify-between text-xs mb-1"><span class="text-sec">${a.label}</span><span class="text-mut">₹${Math.round(budget * a.pct / 100).toLocaleString("en-IN")}</span></div>
-              <div class="h-2 rounded-full" style="background:var(--bg-elevated)">
-                <div class="h-2 rounded-full" style="width:${a.pct}%;background:${a.color}"></div>
-              </div>
-            </div>`).join("")}
-        </div>
-      `
-    });
-  }
-
-  function renderRecommendationCard(rec) {
-    return Components.Card({
-      content: `
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1">
-            <div class="flex items-center gap-2 flex-wrap mb-1">
-              <h4 class="font-medium text-sm">${escapeHtml(rec.title)}</h4>
-              ${Components.Badge({ label: rec.category, tone: "accent" })}
-              ${Components.Badge({ label: "Simulation", tone: "warning" })}
-            </div>
-            <p class="text-xs text-sec mb-2">${rec.explanation}</p>
-            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-mut">
-              <span>Demand ${rec.demand}/100</span>
-              <span>Competition ${rec.competition}/100</span>
-              <span>Margin ${rec.estimatedMargin}%</span>
-              <span>${rec.difficulty} difficulty</span>
-              <span>${rec.launchTime}</span>
-            </div>
-          </div>
-          <div class="flex flex-col items-end gap-2 shrink-0">
-            <div class="text-lg font-semibold accent">${rec.metadata.compositeScore}</div>
-            <button data-bookmark-id="${rec.id}" class="text-xs text-mut hover:text-[var(--text-primary)]" aria-label="Bookmark ${escapeHtml(rec.title)}">☆ Save</button>
-            <button data-view-roadmap="${rec.id}" class="text-xs accent hover:underline">Roadmap →</button>
-          </div>
-        </div>
-      `
-    });
-  }
-
-  /* ---------- Roadmap tab ---------- */
-  function renderRoadmapTab(s) {
-    if (!s.lastResult) return `<div class="text-center py-16 text-sec text-sm">Run an analysis on the Dashboard tab to see a roadmap.</div>`;
-    const rec = s.roadmapFocusId
-      ? s.lastResult.recommendations.find(r => r.id === s.roadmapFocusId)
-      : s.lastResult.recommendations[0];
-    return `
-      <div class="mb-5 flex items-center gap-2 flex-wrap">
-        <span class="text-sm text-sec">Roadmap for:</span>
-        <select id="roadmap-select" class="text-sm px-3 py-1.5 rounded-md bg-[var(--bg-elevated)] border border-[var(--border)]" style="color:var(--text-primary)">
-          ${s.lastResult.recommendations.map(r => `<option value="${r.id}" ${r.id === rec.id ? "selected" : ""}>${escapeHtml(r.title)}</option>`).join("")}
-        </select>
-      </div>
-      <div class="space-y-1">
-        ${rec.roadmap.map(p => Components.TimelineCard(p)).join("")}
-      </div>
-    `;
-  }
-
-  /* ---------- Pricing tab ---------- */
-  function renderPricingTab() {
-    const tiers = pricingEngine.getTiers().data.tiers;
-    return `
-      <div class="grid sm:grid-cols-3 gap-4">
-        ${tiers.map(t => `
-          <div class="surface p-6 flex flex-col ${t.highlighted ? "ring-1" : ""}" style="${t.highlighted ? "border-color:var(--accent)" : ""}">
-            ${t.highlighted ? Components.Badge({ label: "Most popular", tone: "accent" }) : ""}
-            <h3 class="font-semibold text-lg mt-2">${t.name}</h3>
-            <div class="text-3xl font-bold my-3">₹${t.price}<span class="text-sm font-normal text-mut">/${t.period}</span></div>
-            <ul class="text-sm text-sec space-y-2 mb-6 flex-1">
-              ${t.features.map(f => `<li class="flex gap-2"><span class="accent">✓</span>${f}</li>`).join("")}
-            </ul>
-            ${Components.Button({ label: t.cta, variant: t.highlighted ? "primary" : "secondary", attrs: `data-pricing-cta="${t.id}"` })}
-          </div>
-        `).join("")}
-      </div>
-      <p class="text-xs text-mut mt-6">Paid tiers are not yet live — "Join waitlist" records interest locally in this prototype only, no payment is processed.</p>
-    `;
-  }
-
-  /* ---------- Bookmarks tab ---------- */
-  function renderBookmarksTab(s) {
-    if (!s.bookmarks.length) return `<div class="text-center py-16 text-sec text-sm">No bookmarks yet. Save recommendations from the Dashboard tab.</div>`;
-    return `<div class="space-y-3">${s.bookmarks.map(renderRecommendationCard).join("")}</div>`;
-  }
-  /* ---------- History tab ---------- */
-  function renderHistoryTab(s) {
-    if (!s.history.length) return `<div class="text-center py-16 text-sec text-sm">Your last ${CONFIG.limits.history} analyses will appear here.</div>`;
-    return `<div class="space-y-3">${s.history.map(h => Components.Card({
-      content: `
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-sm font-medium">${escapeHtml(h.query || "(all categories)")} <span class="text-mut">· ${h.category}</span></div>
-            <div class="text-xs text-mut">₹${h.budget.toLocaleString("en-IN")} · ${h.country} · ${new Date(h.generatedAt).toLocaleString("en-IN")}</div>
-          </div>
-          <button data-rerun-history="${h.generatedAt}" class="text-xs accent hover:underline">Re-run →</button>
-        </div>
-      `
-    })).join("")}</div>`;
-  }
-
-  /* ---------- Architecture tab ---------- */
-  function renderArchitectureTab() {
-    const modules = [
-      ["themeEngine", "Dark/light theme persistence and application"],
-      ["stateEngine", "Single centralized immutable state store"],
-      ["eventBus", "Decoupled pub/sub between modules"],
-      ["searchEngine", "Fuzzy, synonym-aware, typo-tolerant matching"],
-      ["routingEngine", "Hash-based tab navigation"],
-      ["scoringEngine", "Deterministic composite scoring"],
-      ["roadmapEngine", "4-phase roadmap generation"],
-      ["pricingEngine", "Static tier configuration"],
-      ["storageEngine", "Safe localStorage read/write wrapper"],
-      ["analyticsEngine", "Local-only event tracking"],
-      ["uiEngine", "The only module permitted to touch the DOM"]
-    ];
-    return `
-      <div class="grid sm:grid-cols-2 gap-3 mb-6">
-        ${modules.map(([name, desc]) => Components.Accordion({ id: name, title: `omniCore.${name}`, bodyHtml: `<p>${desc}</p>` })).join("")}
-      </div>
-      ${Components.Card({
-        content: `
-          <h3 class="font-semibold mb-2">What this prototype is honest about</h3>
-          <ul class="text-sm text-sec space-y-1.5 list-disc list-inside">
-            <li>All demand/competition/margin figures are <strong>deterministic simulations</strong>, not scraped or live data.</li>
-            <li>There is currently <strong>no backend</strong> — waitlist and pre-order actions save to this browser's localStorage only.</li>
-            <li>No real AI agents, marketplace APIs, or web scraping run behind this interface.</li>
-          </ul>
-        `
-      })}
-    `;
-  }
-
-  /* ---------- Modal rendering ---------- */
-  function renderModal(s) {
-    if (s.activeModal.type === "waitlist") {
-      return Components.Modal({
-        id: "waitlist", title: "Join the waitlist",
-        bodyHtml: `
-          <p class="text-sm text-sec mb-4">This saves your interest locally in this prototype. There is no live backend yet, so nothing is sent anywhere.</p>
-          ${Components.Input({ id: "waitlist-email", placeholder: "you@email.com", attrs: 'type="email" aria-label="Email"' })}
-        `,
-        footerHtml: `${Components.Button({ label: "Cancel", variant: "ghost", attrs: 'data-modal-close="waitlist"' })}${Components.Button({ label: "Save interest", attrs: 'id="waitlist-submit"' })}`
-      });
+    // Check for standard empty state parameters
+    if (!currentState.lastResult || currentState.lastResult.length === 0) {
+      displayTarget.innerHTML = generateEmptyStateTemplate();
+      return;
     }
-    return "";
+
+    // Render operational pipeline output matrix
+    displayTarget.innerHTML = generateRecommendationsGrid(currentState.lastResult, currentState);
   }
 
-  /* ---------- Trend chart (canvas, no external chart lib) ---------- */
-  function renderTrendChart(result) {
-    const canvas = document.getElementById("trend-canvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const w = canvas.width, h = canvas.height, pad = 24;
-    ctx.clearRect(0, 0, w, h);
-    const styles = getComputedStyle(document.documentElement);
-    const gridColor = styles.getPropertyValue("--border").trim();
-    const lineColor = styles.getPropertyValue("--accent").trim();
+  function toggleSystemLoader(show) {
+    const loader = document.getElementById(ELEMENT_IDS.loaderOverlay);
+    if (!loader) return;
+    loader.style.display = show ? "flex" : "none";
+    loader.setAttribute("aria-hidden", (!show).toString());
+  }
 
-    // deterministic 12-point trend derived from top recommendation id + query
-    const rec = result.recommendations[0];
-    const points = Array.from({ length: 12 }, (_, i) =>
-      seededValue(`${rec.id}|trend|${i}|${result.query}`, 20, 95)
-    );
-    const maxV = 100, minV = 0;
-    const stepX = (w - pad * 2) / (points.length - 1);
+  function triggerGlobalNotification(message, tone = "info") {
+    const bar = document.getElementById(ELEMENT_IDS.notificationArea);
+    if (!bar) return;
+    
+    bar.className = `notification-toast tone-${tone}`;
+    bar.innerText = message;
+    bar.style.opacity = "1";
+    
+    // Auto clear safety loop to prevent stale notification states
+    setTimeout(() => {
+      bar.style.opacity = "0";
+      stateEngine.setState({ notification: null });
+    }, 4000);
+  }
 
-    // grid
-    ctx.strokeStyle = gridColor; ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const y = pad + ((h - pad * 2) / 4) * i;
-      ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w - pad, y); ctx.stroke();
-    }
-    // line
-    ctx.strokeStyle = lineColor; ctx.lineWidth = 2; ctx.beginPath();
-    points.forEach((v, i) => {
-      const x = pad + stepX * i;
-      const y = h - pad - ((v - minV) / (maxV - minV)) * (h - pad * 2);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-    // dots
-    ctx.fillStyle = lineColor;
-    points.forEach((v, i) => {
-      const x = pad + stepX * i;
-      const y = h - pad - ((v - minV) / (maxV - minV)) * (h - pad * 2);
-      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
-    });
+  function generateEmptyStateTemplate() {
+    return `
+      <div class="ui-empty-state" role="status">
+        <p class="empty-title">No Recommendations Available</p>
+        <p class="empty-subtitle">Adjust your target budget or operational region filter parameters to analyze options.</p>
+      </div>
+    `;
+  }
+
+  function generateRecommendationsGrid(results, state) {
+    return results.map(item => {
+      // Consume the standardized version 0.6.1 scoring contract dynamically
+      const evaluation = scoringEngine.calculateOpportunityScore(item, state.budget, state.country).data;
+      
+      return `
+        <div class="business-card-node" tabindex="0">
+          <div class="card-header">
+            <h3>${item.title}</h3>
+            <span class="badge-score">${evaluation.overallScore}/100</span>
+          </div>
+          <p class="card-desc">${item.description}</p>
+          <div class="metrics-pill-row">
+            <span>💡 Confidence: ${evaluation.confidence}</span>
+            <span>📊 Profile: ${evaluation.profile.name}</span>
+          </div>
+          <div class="reasoning-block">
+            <strong>Strengths:</strong>
+            <ul>${evaluation.strengths.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>
+        </div>
+      `;
+    }).join("");
   }
 
   return { render };
 })();
 
-/* ==================================================================
-   EVENTS — wires DOM interactions to engines. No business logic here.
-   ================================================================== */
-function bindEvents() {
-  const s = stateEngine.getState();
-
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    themeEngine.toggle();
-    uiEngine.render();
-  });
-
-  document.querySelectorAll("[data-nav-tab]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      routingEngine.navigate(btn.dataset.navTab);
-      uiEngine.render();
-    });
-  });
-
-  const budgetSlider = document.getElementById("budget-slider");
-  if (budgetSlider) {
-    const out = document.getElementById("budget-slider-out");
-     const paint = () => { if (out) out.textContent = budgetTierEngine.getProfileBySlider(Number(budgetSlider.value)).data.label; };
-    paint();
-     budgetSlider.addEventListener("input", () => {
-  // Rule 1: Slider ab sirf ek UI control hai, engine decide karega actual tier budget
-  const tierProfile = budgetTierEngine.getProfileBySlider(Number(budgetSlider.value)).data;
-  if (out) out.textContent = tierProfile.label;
-  stateEngine.setState({ budget: tierProfile.minBudget });
-  analyticsEngine.track("budgetChanged", { budget: tierProfile.minBudget, tierId: tierProfile.id });
-});
-  }
-
-  document.getElementById("country-select")?.addEventListener("change", e => {
-    stateEngine.setState({ country: e.target.value });
-    storageEngine.set("country", e.target.value);
-    analyticsEngine.track("countryChanged", { country: e.target.value });
-  });
-
-  document.getElementById("category-select")?.addEventListener("change", e => {
-    stateEngine.setState({ activeCategory: e.target.value });
-  });
-
-  document.getElementById("query-input")?.addEventListener("keydown", e => {
-    if (e.key === "Enter") triggerAnalysis();
-  });
-
-  document.getElementById("analyze-btn")?.addEventListener("click", triggerAnalysis);
-
-  document.querySelectorAll("[data-recent-search]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const q = btn.dataset.recentSearch;
-      stateEngine.setState({ query: q });
-      triggerAnalysis(q);
-    });
-  });
-
-  document.querySelectorAll("[data-bookmark-id]").forEach(btn => {
-    btn.addEventListener("click", () => toggleBookmark(btn.dataset.bookmarkId));
-  });
-
-  document.querySelectorAll("[data-view-roadmap]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      stateEngine.setState({ roadmapFocusId: btn.dataset.viewRoadmap });
-      analyticsEngine.track("roadmapOpened", { id: btn.dataset.viewRoadmap });
-      routingEngine.navigate("roadmap");
-      uiEngine.render();
-    });
-  });
-
-  document.getElementById("roadmap-select")?.addEventListener("change", e => {
-    stateEngine.setState({ roadmapFocusId: e.target.value });
-    uiEngine.render();
-  });
-
-  document.querySelectorAll("[data-rerun-history]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const h = stateEngine.getState().history.find(x => String(x.generatedAt) === btn.dataset.rerunHistory);
-      if (!h) return;
-      stateEngine.setState({ query: h.query, budget: h.budget, country: h.country, activeCategory: h.category });
-      routingEngine.navigate("dashboard");
-      triggerAnalysis(h.query);
-    });
-  });
-
-  document.querySelectorAll("[data-pricing-cta]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      analyticsEngine.track("pricingViewed", { tier: btn.dataset.pricingCta });
-      if (btn.dataset.pricingCta === "free") return;
-      stateEngine.setState({ activeModal: { type: "waitlist" } });
-      uiEngine.render();
-    });
-  });
-
-  document.getElementById("waitlist-submit")?.addEventListener("click", () => {
-    const emailInput = document.getElementById("waitlist-email");
-    const email = emailInput?.value?.trim();
-    if (!email || !email.includes("@")) {
-      emailInput?.focus();
-      return;
-    }
-    const list = storageEngine.get("oc_waitlist").data.value || [];
-    storageEngine.set("oc_waitlist", [...list, { email, ts: Date.now() }]);
-    stateEngine.setState({ activeModal: null, notification: { message: "Saved locally — no backend is connected yet.", tone: "success" } });
-    uiEngine.render();
-    setTimeout(() => { stateEngine.setState({ notification: null }); uiEngine.render(); }, 3500);
-  });
-
-  document.querySelectorAll("[data-modal-close]").forEach(btn => {
-    btn.addEventListener("click", () => { stateEngine.setState({ activeModal: null }); uiEngine.render(); });
-  });
-  document.querySelectorAll("[data-modal-backdrop]").forEach(el => {
-    el.addEventListener("click", e => { if (e.target === el) { stateEngine.setState({ activeModal: null }); uiEngine.render(); } });
-  });
-
-  document.querySelectorAll("[data-accordion-toggle]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.accordionToggle;
-      const body = document.querySelector(`[data-accordion-body="${id}"]`);
-      const icon = document.querySelector(`[data-accordion-icon="${id}"]`);
-      const isOpen = !body.classList.contains("hidden");
-      body.classList.toggle("hidden");
-      icon.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
-      btn.setAttribute("aria-expanded", String(!isOpen));
-    });
-  });
-}
 
 function triggerAnalysis(forcedQuery) {
   const s = stateEngine.getState();
